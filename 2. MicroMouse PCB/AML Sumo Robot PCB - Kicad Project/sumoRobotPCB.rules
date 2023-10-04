@@ -1,0 +1,87 @@
+
+(rules PCB sumoRobotPCB
+  (snap_angle 
+    fortyfive_degree
+  )
+  (autoroute_settings
+    (fanout off)
+    (autoroute on)
+    (postroute on)
+    (vias on)
+    (via_costs 50)
+    (plane_via_costs 5)
+    (start_ripup_costs 100)
+    (start_pass_no 2222)
+    (layer_rule F.Cu
+      (active on)
+      (preferred_direction horizontal)
+      (preferred_direction_trace_costs 1.0)
+      (against_preferred_direction_trace_costs 2.4)
+    )
+    (layer_rule B.Cu
+      (active on)
+      (preferred_direction vertical)
+      (preferred_direction_trace_costs 1.0)
+      (against_preferred_direction_trace_costs 1.7)
+    )
+  )
+  (rule
+    (width 250.0)
+    (clear 200.2)
+    (clear 125.0 (type smd_to_turn_gap))
+    (clear 50.0 (type smd_smd))
+  )
+  (padstack "Via[0-1]_800:400_um"
+    (shape
+      (circle F.Cu 800.0 0.0 0.0)
+    )
+    (shape
+      (circle B.Cu 800.0 0.0 0.0)
+    )
+    (attach off)
+  )
+  (via 
+    "Via[0-1]_800:400_um" "Via[0-1]_800:400_um" default
+  )
+  (via 
+    "Via[0-1]_800:400_um-kicad_default" "Via[0-1]_800:400_um" "kicad_default"
+  )
+  (via_rule
+    default "Via[0-1]_800:400_um"
+  )
+  (via_rule
+    "kicad_default" "Via[0-1]_800:400_um-kicad_default"
+  )
+  (class default
+    (clearance_class default)
+    (via_rule default)
+    (rule
+      (width 250.0)
+    )
+    (circuit 
+      (use_layer F.Cu B.Cu)
+    )
+  )
+  (class "kicad_default"
+    "Net-(D1-K)" "Net-(D1-A)" "Net-(D3-K)" GND +5V /SCL /SDA "/SHT_L0X_FL"
+    "/SHT_L0X_FF" "/SHT_L0X_FR" "/SHT_L0X_RR" "/SHT_L0X_BR" "/SHT_L0X_BL" "/SHT_L0X_RL" "/IR_FL" "/IR_FR"
+    "/IR_BR" "/IR_BL" /A9 /LPWM1 /RPWM1 /LPWM2 /RPWM2 "unconnected-(XA1-3.3V-Pad3V3)"
+    "unconnected-(XA1-5V-Pad5V1)" "unconnected-(XA1-SPI_5V-Pad5V2)" "unconnected-(XA1-5V-Pad5V3)" "unconnected-(XA1-5V-Pad5V4)" "unconnected-(XA1-PadA0)" "unconnected-(XA1-PadA1)" "unconnected-(XA1-PadA2)" "unconnected-(XA1-PadA3)"
+    "unconnected-(XA1-PadA4)" "unconnected-(XA1-PadA5)" "unconnected-(XA1-PadA6)" "unconnected-(XA1-PadA7)" "unconnected-(XA1-PadA8)" "unconnected-(XA1-PadA10)" "unconnected-(XA1-PadA11)" "unconnected-(XA1-PadA12)"
+    "unconnected-(XA1-PadA13)" "unconnected-(XA1-PadA14)" "unconnected-(XA1-PadA15)" "unconnected-(XA1-PadAREF)" "unconnected-(XA1-D0{slash}RX0-PadD0)" "unconnected-(XA1-D1{slash}TX0-PadD1)" "unconnected-(XA1-PadD8)" "unconnected-(XA1-PadD9)"
+    "unconnected-(XA1-PadD10)" "unconnected-(XA1-PadD11)" "unconnected-(XA1-PadD12)" "unconnected-(XA1-PadD13)" "unconnected-(XA1-D14{slash}TX3-PadD14)" "unconnected-(XA1-D15{slash}RX3-PadD15)" /RX /TX
+    "unconnected-(XA1-D20{slash}SDA-PadD20)" "unconnected-(XA1-D21{slash}SCL-PadD21)" "unconnected-(XA1-PadD23)" "unconnected-(XA1-PadD25)" "unconnected-(XA1-PadD27)" "unconnected-(XA1-PadD29)" "unconnected-(XA1-PadD31)" "unconnected-(XA1-PadD33)"
+    "unconnected-(XA1-PadD35)" "unconnected-(XA1-PadD36)" "unconnected-(XA1-PadD37)" "unconnected-(XA1-PadD38)" "unconnected-(XA1-PadD39)" "unconnected-(XA1-PadD40)" "unconnected-(XA1-PadD41)" "unconnected-(XA1-PadD42)"
+    "unconnected-(XA1-PadD43)" "unconnected-(XA1-PadD44)" "unconnected-(XA1-PadD45)" "unconnected-(XA1-PadD46)" "unconnected-(XA1-PadD47)" "unconnected-(XA1-PadD48)" "unconnected-(XA1-PadD49)" "unconnected-(XA1-D50_MISO-PadD50)"
+    "unconnected-(XA1-D51_MOSI-PadD51)" "unconnected-(XA1-D52_SCK-PadD52)" "unconnected-(XA1-D53_CS-PadD53)" "unconnected-(XA1-GND-PadGND2)" "unconnected-(XA1-GND-PadGND3)" "unconnected-(XA1-SPI_GND-PadGND4)" "unconnected-(XA1-GND-PadGND5)" "unconnected-(XA1-GND-PadGND6)"
+    "unconnected-(XA1-IOREF-PadIORF)" "unconnected-(XA1-SPI_MISO-PadMISO)" "unconnected-(XA1-SPI_MOSI-PadMOSI)" "unconnected-(XA1-RESET-PadRST1)" "unconnected-(XA1-SPI_RESET-PadRST2)" "unconnected-(XA1-SPI_SCK-PadSCK)" /RESET "Net-(D4-A)"
+    (clearance_class "kicad_default")
+    (via_rule kicad_default)
+    (rule
+      (width 250.0)
+    )
+    (circuit 
+      (use_layer F.Cu B.Cu)
+    )
+  )
+)

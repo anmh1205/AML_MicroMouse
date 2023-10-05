@@ -156,17 +156,17 @@ void setup()
   //   break;
   // }
 
+  // AML_Keyboard_readKeyLoop();
   digitalWrite(13, 1);
   // delay(700); // Theo luật thi đấu, cơ mà giờ đang test nên không cần
   // printLCD("              ");
   // AML_IRSensor_setup();
 
-  // AML_Keyboard_readKeyLoop();
   // AML_MotorControl_PWM(255, 255);
 
   Input = 0;
-  Setpoint = 50;
-  myPID.SetOutputLimits(-100, 100);
+  Setpoint = 0;
+  myPID.SetOutputLimits(-30, 30);
   myPID.SetMode(AUTOMATIC);
 }
 
@@ -215,9 +215,9 @@ void tune()
   }
   Serial.print("Kp: ");
   Serial.print(Kp);
-  Serial.print("   Ki: ");
+  Serial.print("  Ki: ");
   Serial.print(Ki);
-  Serial.print("   Kd: ");
+  Serial.print("  Kd: ");
   Serial.print(Kd);
 }
 
@@ -227,14 +227,23 @@ void pidFunction()
 
   // Input = sensorValue[Laser_RL] - sensorValue[Laser_RR];
   // Input = sensorValue[Laser_RL];
-  Input = laserKF.updateEstimate(sensorValue[Laser_RL]);
+  sensorValue[Laser_FL] = laserKF.updateEstimate(sensorValue[Laser_FL]);
+  sensorValue[Laser_FR] = laserKF.updateEstimate(sensorValue[Laser_FR]);
+  Input = (sensorValue[Laser_FL] - sensorValue[Laser_FR]);
   myPID.Compute();
-  // AML_MotorControl_PWM(255 - Output, 255 + Output);
 
-  Serial.print("   Input: ");
+  Serial.print("  FL: ");
+  Serial.print(sensorValue[Laser_FL]);
+  Serial.print("  FR: ");
+  Serial.print(sensorValue[Laser_FR]);
+  Serial.print("  Input: ");
   Serial.print(Input);
-  Serial.print("   Output: ");
-  Serial.println(Output);
+  Serial.print("  Output: ");
+  Serial.print(Output);
+  Serial.print("  PWML: ");
+  Serial.print(50 - Output);
+  Serial.print("  PWMR: ");
+  Serial.println(50 + Output);
 }
 
 void loop()
@@ -245,8 +254,8 @@ void loop()
 
   // AML_LaserSensor_readAllTest(sensorValue);
   // func(minSensorValue()); // Gọi hàm được trỏ
-
   tune();
   pidFunction();
   AML_Keyboard_readResetKey(); // Quét nút
+  // delay(00);
 }

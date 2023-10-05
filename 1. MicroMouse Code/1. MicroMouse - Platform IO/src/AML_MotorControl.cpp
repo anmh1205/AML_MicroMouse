@@ -59,41 +59,48 @@ void AML_MotorControl_ESC(int speedL, int speedR)
 }
 
 // Xuất xung điều khiển động cơ: Truyền giá trị dương đi tiến, giá trị âm đi lùi
+// void AML_MotorControl_PWM(int pwmL, int pwmR)
+// {
+//   if (pwmL > 0) // L tiến
+//   {
+//     analogWrite(LPWM1, pwmL);
+//     analogWrite(RPWM1, 0);
+//   }
+//   else if (pwmL < 0) // L lùi
+//   {
+//     analogWrite(LPWM1, 0);
+//     analogWrite(RPWM1, abs(pwmL));
+//   }
+//   else if (pwmL == 0) // L đứng yên
+//   {
+//     analogWrite(LPWM1, 0);
+//     analogWrite(RPWM1, 0);
+//   }
+
+//   if (pwmR > 0) // R tiến
+//   {
+//     analogWrite(LPWM2, pwmR);
+//     analogWrite(RPWM2, 0);
+//   }
+//   else if (pwmR < 0) // R lùi
+//   {
+//     analogWrite(LPWM2, 0);
+//     analogWrite(RPWM2, abs(pwmR));
+//   }
+//   else if (pwmR == 0) // R đứng yên
+//   {
+//     analogWrite(LPWM2, 0);
+//     analogWrite(RPWM2, 0);
+//   }
+// }
+
 void AML_MotorControl_PWM(int pwmL, int pwmR)
 {
-  if (pwmL > 0) // L tiến
-  {
-    analogWrite(LPWM1, pwmL);
-    analogWrite(RPWM1, 0);
-  }
-  else if (pwmL < 0) // L lùi
-  {
-    analogWrite(LPWM1, 0);
-    analogWrite(RPWM1, abs(pwmL));
-  }
-  else if (pwmL == 0) // L đứng yên
-  {
-    analogWrite(LPWM1, 0);
-    analogWrite(RPWM1, 0);
-  }
-
-  if (pwmR > 0) // R tiến
-  {
-    analogWrite(LPWM2, pwmR);
-    analogWrite(RPWM2, 0);
-  }
-  else if (pwmR < 0) // R lùi
-  {
-    analogWrite(LPWM2, 0);
-    analogWrite(RPWM2, abs(pwmR));
-  }
-  else if (pwmR == 0) // R đứng yên
-  {
-    analogWrite(LPWM2, 0);
-    analogWrite(RPWM2, 0);
-  }
+  analogWrite(LPWM1, max(pwmL, 0));
+  analogWrite(RPWM1, max(-pwmL, 0));
+  analogWrite(LPWM2, max(pwmR, 0));
+  analogWrite(RPWM2, max(-pwmR, 0));
 }
-
 
 void AML_MotorControl_setupL298()
 {

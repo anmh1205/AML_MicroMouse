@@ -32,7 +32,7 @@ int AML_Keyboard_getKey(int inputValue)
     }
   }
   
-  return k;
+  return -1;
 }
 
 // Đọc nút cho đến khi phát hiện bấm nút
@@ -48,7 +48,7 @@ int AML_Keyboard_readKeyLoop()
 
     if (key != oldkey) // if keypress is detected
     {
-      delay(5); // wait for debounce time
+      delay(50); // wait for debounce time
       adc_key_in = analogRead(0); // read the value from the sensor
       key = AML_Keyboard_getKey(adc_key_in); // convert into key press
 

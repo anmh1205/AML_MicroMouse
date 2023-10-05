@@ -43,7 +43,6 @@ int AML_laserSensorValue[8];
 // bật từng laser lên để cài địa chỉ bằng chân XSHUT
 void AML_LaserSensor_setup()
 {
-  int index = 0;
   pinMode(SHT_L0X_FL, OUTPUT);
   pinMode(SHT_L0X_FF, OUTPUT);
   pinMode(SHT_L0X_FR, OUTPUT);
@@ -152,24 +151,24 @@ void AML_LaserSensor_setup()
 
   Serial.println(12);
 
-  // // reduce timing budget to 20 ms (default is about 33 ms)
-  FL.setMeasurementTimingBudget(20);
-  FF.setMeasurementTimingBudget(20);
-  FR.setMeasurementTimingBudget(20);
-  RR.setMeasurementTimingBudget(20);
-  BR.setMeasurementTimingBudget(20);
-  BL.setMeasurementTimingBudget(20);
-  RL.setMeasurementTimingBudget(20);
+  // // reduce timing budget to 10 ms (default is about 33 ms)
+  FL.setMeasurementTimingBudget(10);
+  FF.setMeasurementTimingBudget(10);
+  FR.setMeasurementTimingBudget(10);
+  RR.setMeasurementTimingBudget(10);
+  BR.setMeasurementTimingBudget(10);
+  BL.setMeasurementTimingBudget(10);
+  RL.setMeasurementTimingBudget(10);
 
-  FL.startContinuous(10);
-  FF.startContinuous(10);
-  FR.startContinuous(10);
-  RR.startContinuous(10);
-  BR.startContinuous(10);
-  BL.startContinuous(10);
-  RL.startContinuous(10);
+  FF.startContinuous();
+  FR.startContinuous();
+  RR.startContinuous();
+  BR.startContinuous();
+  BL.startContinuous();
+  RL.startContinuous();
+  FL.startContinuous();
 
-  Serial.println(13);
+  Serial.println("Laser sensor inited...");
 }
 
 // Đọc cảm biến có số thứ tự là số truyền vào hàm
@@ -179,81 +178,6 @@ float AML_LaserSensor_readSingle(int laserNumber)
   return AML_laserSensorValue[laserNumber];
 }
 
-// Đọc laser (không ghi ra serial)
-// void AML_LaserSensor_readAll(int *userArrayAddress)
-// {
-//   int index = 0;
-
-//   // dùng ++index khù khoằm này để copy patse cho nhanh, đỡ phải gõ
-//   AML_laserSensorValue[++index] = FL.readRangeContinuousMillimeters();
-//   *(userArrayAddress + index) = FL.readRangeContinuousMillimeters();
-
-//   AML_laserSensorValue[++index] = FF.readRangeContinuousMillimeters();
-//   *(userArrayAddress + index) = FF.readRangeContinuousMillimeters();
-
-//   AML_laserSensorValue[++index] = FR.readRangeContinuousMillimeters();
-//   *(userArrayAddress + index) = FR.readRangeContinuousMillimeters();
-
-//   AML_laserSensorValue[++index] = RR.readRangeContinuousMillimeters();
-//   *(userArrayAddress + index) = RR.readRangeContinuousMillimeters();
-
-//   AML_laserSensorValue[++index] = BR.readRangeContinuousMillimeters();
-//   *(userArrayAddress + index) = BR.readRangeContinuousMillimeters();
-
-//   AML_laserSensorValue[++index] = BL.readRangeContinuousMillimeters();
-//   *(userArrayAddress + index) = BL.readRangeContinuousMillimeters();
-
-//   AML_laserSensorValue[++index] = RL.readRangeContinuousMillimeters();
-//   *(userArrayAddress + index) = RL.readRangeContinuousMillimeters();
-// }
-
-// Hàm này giống hệt readLaserSensor(), khác mỗi cái có ghi ra serial để xem giá trị
-// void AML_LaserSensor_readAllTest(int *userArrayAddress)
-// {
-//     int index = 0;
-
-//     AML_laserSensorValue[++index] = FL.readRangeContinuousMillimeters();
-//     *(userArrayAddress + index) = FL.readRangeContinuousMillimeters();
-//     Serial.print(AML_laserSensorValue[index]);
-
-//     Serial.print("   ");
-
-//     AML_laserSensorValue[++index] = FF.readRangeContinuousMillimeters();
-//     *(userArrayAddress + index) = FF.readRangeContinuousMillimeters();
-//     Serial.print(AML_laserSensorValue[index]);
-
-//     Serial.print("   ");
-
-//     AML_laserSensorValue[++index] = FR.readRangeContinuousMillimeters();
-//     *(userArrayAddress + index) = FR.readRangeContinuousMillimeters();
-//     Serial.print(AML_laserSensorValue[index]);
-
-//     Serial.print("   ");
-
-//     AML_laserSensorValue[++index] = RR.readRangeContinuousMillimeters();
-//     *(userArrayAddress + index) = RR.readRangeContinuousMillimeters();
-//     Serial.print(AML_laserSensorValue[index]);
-
-//     Serial.print("   ");
-
-//     AML_laserSensorValue[++index] = BR.readRangeContinuousMillimeters();
-//     *(userArrayAddress + index) = BR.readRangeContinuousMillimeters();
-//     Serial.print(AML_laserSensorValue[index]);
-
-//     Serial.print("   ");
-
-//     AML_laserSensorValue[++index] = BL.readRangeContinuousMillimeters();
-//     *(userArrayAddress + index) = BL.readRangeContinuousMillimeters();
-//     Serial.print(AML_laserSensorValue[index]);
-
-//     Serial.print("   ");
-
-//     AML_laserSensorValue[++index] = RL.readRangeContinuousMillimeters();
-//     *(userArrayAddress + index) = RL.readRangeContinuousMillimeters();
-//     Serial.print(AML_laserSensorValue[index]);
-
-//     Serial.println("   ");
-// }
 
 // Đọc laser (không ghi ra serial)
 void AML_LaserSensor_readAll(int *userArrayAddress)
@@ -276,43 +200,36 @@ void AML_LaserSensor_readAll(int *userArrayAddress)
 // Hàm này giống hệt readLaserSensor(), khác mỗi cái có ghi ra serial để xem giá trị
 void AML_LaserSensor_readAllTest(int *userArrayAddress)
 {
-  AML_laserSensorValue[0] = FL.readRangeContinuousMillimeters();
   *(userArrayAddress + 0) = FL.readRangeContinuousMillimeters();
   Serial.print(AML_laserSensorValue[0]);
 
   Serial.print("   ");
 
-  AML_laserSensorValue[1] = FF.readRangeContinuousMillimeters();
   *(userArrayAddress + 1) = FF.readRangeContinuousMillimeters();
   Serial.print(AML_laserSensorValue[1]);
 
   Serial.print("   ");
 
-  AML_laserSensorValue[2] = FR.readRangeContinuousMillimeters();
   *(userArrayAddress + 2) = FR.readRangeContinuousMillimeters();
   Serial.print(AML_laserSensorValue[2]);
 
   Serial.print("   ");
 
-  AML_laserSensorValue[3] = RR.readRangeContinuousMillimeters();
   *(userArrayAddress + 3) = RR.readRangeContinuousMillimeters();
   Serial.print(AML_laserSensorValue[3]);
 
   Serial.print("   ");
 
-  AML_laserSensorValue[4] = BR.readRangeContinuousMillimeters();
   *(userArrayAddress + 4) = BR.readRangeContinuousMillimeters();
   Serial.print(AML_laserSensorValue[4]);
 
   Serial.print("   ");
 
-  AML_laserSensorValue[5] = BL.readRangeContinuousMillimeters();
   *(userArrayAddress + 5) = BL.readRangeContinuousMillimeters();
   Serial.print(AML_laserSensorValue[5]);
 
   Serial.print("   ");
 
-  AML_laserSensorValue[6] = RL.readRangeContinuousMillimeters();
   *(userArrayAddress + 6) = RL.readRangeContinuousMillimeters();
   Serial.print(AML_laserSensorValue[6]);
 

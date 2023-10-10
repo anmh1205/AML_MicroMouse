@@ -1,3 +1,9 @@
 {
-    "cortex-debug.armToolchainPath": "C:\\MAKE\\TEST\\GCC-ARM-NONE-EABI-9-2019-Q4-MAJOR-WIN32\\BIN"
+    "cortex-debug.armToolchainPath": "C:\\MAKE\\TEST\\GCC-ARM-NONE-EABI-9-2019-Q4-MAJOR-WIN32\\BIN",
+    "cortex-debug.openocdPath": "C:\\MAKE\\TEST\\OPENOCD-20211118-0.11.0\\BIN\\OPENOCD.EXE",
+    "files.associations": {
+        "test.h": "c",
+        "stm32f4xx_hal_uart.h": "c",
+        "stm32f4xx_hal.h": "c"
+    }
 }

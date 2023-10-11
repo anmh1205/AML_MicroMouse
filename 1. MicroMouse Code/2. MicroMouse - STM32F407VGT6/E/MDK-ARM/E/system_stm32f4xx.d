@@ -9,7 +9,7 @@ e\system_stm32f4xx.o: ../Drivers/CMSIS/Include/cmsis_armcc.h
 e\system_stm32f4xx.o: ../Drivers/CMSIS/Include/mpu_armv7.h
 e\system_stm32f4xx.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h
 e\system_stm32f4xx.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
-e\system_stm32f4xx.o: ../Core/Inc/stm32f4xx_hal_conf.h
+e\system_stm32f4xx.o: ..\Core\Inc\stm32f4xx_hal_conf.h
 e\system_stm32f4xx.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h
 e\system_stm32f4xx.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h
 e\system_stm32f4xx.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h

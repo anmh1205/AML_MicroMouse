@@ -25,10 +25,8 @@ void handle()
     while (buffer != 85) // wait 0x55
     {
         HAL_UART_Receive(&huart1, &buffer, 1, 1000);
-        debug[0]++;
     }
     buffer = 70;
-    debug[1]++;
     HAL_UART_Receive_DMA(&huart1, data, 33);
 }
 
@@ -43,7 +41,6 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
             handle();
             return;
         }
-        debug[2]++;
         angle = (((data[6] << 8) | data[5]) / 32768.0) * 180;
         PID_Compute(&pid);
         HAL_UART_Receive_DMA(&huart1, data, 33);

@@ -1,7 +1,7 @@
 e\aml_mpusensor.o: ..\Core\Src\AML_MPUSensor.c
-e\aml_mpusensor.o: ../Core/Inc/AML_MPUSensor.h
+e\aml_mpusensor.o: ..\Core\Inc\AML_MPUSensor.h
 e\aml_mpusensor.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
-e\aml_mpusensor.o: ../Core/Inc/stm32f4xx_hal_conf.h
+e\aml_mpusensor.o: ..\Core\Inc\stm32f4xx_hal_conf.h
 e\aml_mpusensor.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h
 e\aml_mpusensor.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h
 e\aml_mpusensor.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h
@@ -31,6 +31,6 @@ e\aml_mpusensor.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c_ex.h
 e\aml_mpusensor.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h
 e\aml_mpusensor.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h
 e\aml_mpusensor.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
-e\aml_mpusensor.o: ../Core/Inc/pid.h
+e\aml_mpusensor.o: ..\Core\Inc\pid.h
 e\aml_mpusensor.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
-e\aml_mpusensor.o: ../Core/Inc/main.h
+e\aml_mpusensor.o: ..\Core\Inc\main.h

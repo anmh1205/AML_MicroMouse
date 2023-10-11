@@ -3,21 +3,20 @@
 
 #include "stm32f4xx.h"
 #include "vl53l0x_api.h"
+#include "main.h"
 
 typedef enum
 {
     FL,
     FF,
     FR,
-    RR,
     BR,
-    BL,
-    RL
+    BL
+} LaserName;
 
-} Laser;
-
-void scan_i2c_bus(I2C_HandleTypeDef *hi2c);
+void AML_LaserSensor_ScanI2CDevice(I2C_HandleTypeDef *hi2c);
 uint8_t AML_LaserSensor_Setup();
-void AML_LaserSensor_ReadSingle();
+void AML_LaserSensor_ReadAll();
+uint16_t AML_LaserSensor_ReadSingle(uint8_t name);
 
 #endif

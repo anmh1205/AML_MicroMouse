@@ -57,6 +57,16 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define XSHUT_BL_Pin GPIO_PIN_0
+#define XSHUT_BL_GPIO_Port GPIOD
+#define XSHUT_BR_Pin GPIO_PIN_2
+#define XSHUT_BR_GPIO_Port GPIOD
+#define XSHUT_FR_Pin GPIO_PIN_4
+#define XSHUT_FR_GPIO_Port GPIOD
+#define XSHUT_FF_Pin GPIO_PIN_6
+#define XSHUT_FF_GPIO_Port GPIOD
+#define XSHUT_FL_Pin GPIO_PIN_3
+#define XSHUT_FL_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
 

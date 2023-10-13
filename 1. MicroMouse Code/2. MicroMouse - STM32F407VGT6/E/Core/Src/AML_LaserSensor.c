@@ -23,11 +23,9 @@ void AML_LaserSensor_ScanI2CDevice(I2C_HandleTypeDef *hi2c)
     {
         if (HAL_I2C_IsDeviceReady(hi2c, i << 1, 2, I2C_TIMEOUT) == HAL_OK)
         {
-            printf("I2C device found at address 0x%X\n", i);
-            // debug[7] = i;
+            // printf("I2C device found at address 0x%X\n", i);
+            debug[i] = 1;
         }
-
-        // debug[4]++;
     }
 }
 
@@ -45,7 +43,7 @@ void AML_LaserSensor_Init(uint8_t i)
     VL53L0X_SetLimitCheckEnable(Laser[i], VL53L0X_CHECKENABLE_SIGNAL_RATE_FINAL_RANGE, 1);
     VL53L0X_SetLimitCheckValue(Laser[i], VL53L0X_CHECKENABLE_SIGNAL_RATE_FINAL_RANGE, (FixPoint1616_t)(0.1 * 65536));
     VL53L0X_SetLimitCheckValue(Laser[i], VL53L0X_CHECKENABLE_SIGMA_FINAL_RANGE, (FixPoint1616_t)(60 * 65536));
-    VL53L0X_SetMeasurementTimingBudgetMicroSeconds(Laser[i], 33000);
+    VL53L0X_SetMeasurementTimingBudgetMicroSeconds(Laser[i], 20000);
     VL53L0X_SetVcselPulsePeriod(Laser[i], VL53L0X_VCSEL_PERIOD_PRE_RANGE, 18);
     VL53L0X_SetVcselPulsePeriod(Laser[i], VL53L0X_VCSEL_PERIOD_FINAL_RANGE, 14);
 }
@@ -125,5 +123,6 @@ void AML_LaserSensor_ReadAll()
 
 uint16_t AML_LaserSensor_ReadSingle(uint8_t name)
 {
-    VL53L0X_PerformSingleMeasurement(Laser[name], &SensorValue[name]);  
+    VL53L0X_PerformSingleRangingMeasurement(Laser[name], &SensorValue[name]);
+    return SensorValue[name].RangeMilliMeter;
 }

@@ -36,6 +36,7 @@ BUILD_DIR = build
 ######################################
 # C sources
 C_SOURCES =  \
+Core/Src/AML_Keyboard.c \
 Core/Src/AML_LaserSensor.c \
 Core/Src/AML_MPUSensor.c \
 Core/Src/main.c \

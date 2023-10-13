@@ -17,6 +17,9 @@ build/main.o: Core/Src/main.c Core/Inc/main.h \
  Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h \
  Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma_ex.h \
  Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_cortex.h \
+ Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc.h \
+ Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_adc.h \
+ Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc_ex.h \
  Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash.h \
  Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ex.h \
  Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h \
@@ -29,7 +32,8 @@ build/main.o: Core/Src/main.c Core/Inc/main.h \
  Core/Inc/AML_LaserSensor.h Core/Inc/vl53l0x_api.h \
  Core/Inc/vl53l0x_api_strings.h Core/Inc/vl53l0x_def.h \
  Core/Inc/vl53l0x_device.h Core/Inc/vl53l0x_types.h \
- Core/Inc/vl53l0x_platform.h Core/Inc/vl53l0x_platform_log.h
+ Core/Inc/vl53l0x_platform.h Core/Inc/vl53l0x_platform_log.h \
+ Core/Inc/AML_Keyboard.h
 
 Core/Inc/main.h:
 
@@ -73,6 +77,12 @@ Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma_ex.h:
 
 Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_cortex.h:
 
+Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc.h:
+
+Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_adc.h:
+
+Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc_ex.h:
+
 Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash.h:
 
 Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ex.h:
@@ -110,3 +120,5 @@ Core/Inc/vl53l0x_types.h:
 Core/Inc/vl53l0x_platform.h:
 
 Core/Inc/vl53l0x_platform_log.h:
+
+Core/Inc/AML_Keyboard.h:

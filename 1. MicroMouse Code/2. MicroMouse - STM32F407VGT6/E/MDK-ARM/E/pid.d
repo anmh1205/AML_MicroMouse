@@ -1,10 +1,10 @@
 e\pid.o: ..\Core\Src\pid.c
-e\pid.o: ..\Core\Inc\pid.h
+e\pid.o: ../Core/Inc/pid.h
 e\pid.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 e\pid.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
-e\pid.o: ..\Core\Inc\main.h
+e\pid.o: ../Core/Inc/main.h
 e\pid.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
-e\pid.o: ..\Core\Inc\stm32f4xx_hal_conf.h
+e\pid.o: ../Core/Inc/stm32f4xx_hal_conf.h
 e\pid.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h
 e\pid.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h
 e\pid.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h
@@ -25,6 +25,9 @@ e\pid.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_exti.h
 e\pid.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h
 e\pid.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma_ex.h
 e\pid.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_cortex.h
+e\pid.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc.h
+e\pid.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_adc.h
+e\pid.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc_ex.h
 e\pid.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash.h
 e\pid.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ex.h
 e\pid.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h

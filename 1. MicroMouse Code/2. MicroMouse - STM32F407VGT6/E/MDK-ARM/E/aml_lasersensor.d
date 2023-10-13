@@ -1,5 +1,5 @@
 e\aml_lasersensor.o: ..\Core\Src\AML_LaserSensor.c
-e\aml_lasersensor.o: ..\Core\Inc\AML_LaserSensor.h
+e\aml_lasersensor.o: ../Core/Inc/AML_LaserSensor.h
 e\aml_lasersensor.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h
 e\aml_lasersensor.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h
 e\aml_lasersensor.o: ../Drivers/CMSIS/Include/core_cm4.h
@@ -10,7 +10,7 @@ e\aml_lasersensor.o: ../Drivers/CMSIS/Include/cmsis_armcc.h
 e\aml_lasersensor.o: ../Drivers/CMSIS/Include/mpu_armv7.h
 e\aml_lasersensor.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h
 e\aml_lasersensor.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
-e\aml_lasersensor.o: ..\Core\Inc\stm32f4xx_hal_conf.h
+e\aml_lasersensor.o: ../Core/Inc/stm32f4xx_hal_conf.h
 e\aml_lasersensor.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h
 e\aml_lasersensor.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h
 e\aml_lasersensor.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h
@@ -23,6 +23,9 @@ e\aml_lasersensor.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_exti.h
 e\aml_lasersensor.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h
 e\aml_lasersensor.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma_ex.h
 e\aml_lasersensor.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_cortex.h
+e\aml_lasersensor.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc.h
+e\aml_lasersensor.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_adc.h
+e\aml_lasersensor.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc_ex.h
 e\aml_lasersensor.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash.h
 e\aml_lasersensor.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ex.h
 e\aml_lasersensor.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h
@@ -31,13 +34,13 @@ e\aml_lasersensor.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c_ex.h
 e\aml_lasersensor.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h
 e\aml_lasersensor.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h
 e\aml_lasersensor.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
-e\aml_lasersensor.o: ..\Core\Inc\vl53l0x_api.h
-e\aml_lasersensor.o: ..\Core\Inc\vl53l0x_api_strings.h
-e\aml_lasersensor.o: ..\Core\Inc\vl53l0x_def.h
-e\aml_lasersensor.o: ..\Core\Inc\vl53l0x_device.h
-e\aml_lasersensor.o: ..\Core\Inc\vl53l0x_types.h
-e\aml_lasersensor.o: ..\Core\Inc\vl53l0x_platform.h
-e\aml_lasersensor.o: ..\Core\Inc\vl53l0x_platform_log.h
+e\aml_lasersensor.o: ../Core/Inc/vl53l0x_api.h
+e\aml_lasersensor.o: ../Core/Inc/vl53l0x_api_strings.h
+e\aml_lasersensor.o: ../Core/Inc/vl53l0x_def.h
+e\aml_lasersensor.o: ../Core/Inc/vl53l0x_device.h
+e\aml_lasersensor.o: ../Core/Inc/vl53l0x_types.h
+e\aml_lasersensor.o: ../Core/Inc/vl53l0x_platform.h
+e\aml_lasersensor.o: ../Core/Inc/vl53l0x_platform_log.h
 e\aml_lasersensor.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 e\aml_lasersensor.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
-e\aml_lasersensor.o: ..\Core\Inc\main.h
+e\aml_lasersensor.o: ../Core/Inc/main.h

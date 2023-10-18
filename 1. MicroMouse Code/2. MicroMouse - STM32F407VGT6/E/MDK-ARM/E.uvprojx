@@ -412,6 +412,11 @@
               <FilePath>../Core/Src/stm32f4xx_hal_msp.c</FilePath>
             </File>
             <File>
+              <FileName>AML_Encoder.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\AML_Encoder.c</FilePath>
+            </File>
+            <File>
               <FileName>AML_Keyboard.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Core\Src\AML_Keyboard.c</FilePath>
@@ -420,6 +425,11 @@
               <FileName>AML_LaserSensor.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Core\Src\AML_LaserSensor.c</FilePath>
+            </File>
+            <File>
+              <FileName>AML_MotorControl.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\AML_MotorControl.c</FilePath>
             </File>
             <File>
               <FileName>AML_MPUSensor.c</FileName>

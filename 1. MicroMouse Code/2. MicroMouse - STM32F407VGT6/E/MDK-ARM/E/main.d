@@ -33,6 +33,8 @@ e\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c.h
 e\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c_ex.h
 e\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h
 e\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h
+e\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h
+e\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h
 e\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
 e\main.o: ../Core/Inc/AML_MPUSensor.h
 e\main.o: ../Core/Inc/pid.h
@@ -47,3 +49,5 @@ e\main.o: ../Core/Inc/vl53l0x_platform.h
 e\main.o: ../Core/Inc/vl53l0x_platform_log.h
 e\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 e\main.o: ../Core/Inc/AML_Keyboard.h
+e\main.o: ../Core/Inc/AML_Encoder.h
+e\main.o: ../Core/Inc/AML_MotorControl.h

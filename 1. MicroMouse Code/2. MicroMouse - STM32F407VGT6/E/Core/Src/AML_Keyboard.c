@@ -14,7 +14,7 @@ typedef enum
 } ButtonName;
 
 uint32_t ADCValue = 4100;
-uint16_t CompareValue[] = {150, 350, 600, 1000, 3200, 4100};
+uint16_t CompareValue[] = {150, 450, 750, 1000, 3900, 4100};
 //         button         A,   B,   C,    D,    E,  nothing
 
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)

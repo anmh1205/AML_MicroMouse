@@ -39,6 +39,8 @@ e\vl53l0x_platform.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c.h
 e\vl53l0x_platform.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c_ex.h
 e\vl53l0x_platform.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h
 e\vl53l0x_platform.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h
+e\vl53l0x_platform.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h
+e\vl53l0x_platform.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h
 e\vl53l0x_platform.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
 e\vl53l0x_platform.o: ../Core/Inc/vl53l0x_api.h
 e\vl53l0x_platform.o: ../Core/Inc/vl53l0x_api_strings.h

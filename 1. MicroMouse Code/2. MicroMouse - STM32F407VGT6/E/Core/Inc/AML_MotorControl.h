@@ -11,4 +11,5 @@ void AML_MotorControl_SetLeftSpeed(int16_t PWMValue);
 void AML_MotorControl_SetRightSpeed(int16_t PWMValue);
 void AML_MotorControl_SetDirection(short dir);
 
+
 #endif // AML_MOTORCONTROL_H

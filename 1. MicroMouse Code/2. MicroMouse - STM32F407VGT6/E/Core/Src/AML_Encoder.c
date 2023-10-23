@@ -10,6 +10,8 @@ void AML_Encoder_Setup()
 {
     HAL_TIM_Encoder_Start(&htim1, TIM_CHANNEL_ALL);  // left encoder
     HAL_TIM_Encoder_Start(&htim4, TIM_CHANNEL_ALL);  // right encoder
+  
+
 }
 
 int16_t AML_Encoder_GetLeftValue()

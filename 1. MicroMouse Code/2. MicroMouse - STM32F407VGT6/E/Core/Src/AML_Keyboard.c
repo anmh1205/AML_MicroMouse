@@ -22,6 +22,7 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
     if (hadc->Instance == hadc1.Instance) // kiểm tra ADC nào gây ra ngắt
     {
         ADCValue = HAL_ADC_GetValue(&hadc1);
+        debug[4]++;
     }
 }
 
@@ -44,7 +45,7 @@ void AML_Keyboard_WaitStartKey()
     }
 }
 
-void    AML_Keyboard_Setup()
+void AML_Keyboard_Setup()
 {
     HAL_ADC_Start_IT(&hadc1);
 }

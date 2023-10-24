@@ -446,7 +446,7 @@
       "idf": "",
       "netlist": "",
       "specctra_dsn": "../file gen/test_rule.dsn",
-      "step": "",
+      "step": "STM32F407VGT6.step",
       "vrml": ""
     },
     "page_layout_descr_file": ""

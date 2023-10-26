@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccJ93Zyi.s 			page 1
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccFbin2N.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -17,21 +17,20 @@ ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccJ93Zyi.s 			page 1
   14              		.text
   15              	.Ltext0:
   16              		.cfi_sections	.debug_frame
-  17              		.section	.text.HAL_ADC_ConvCpltCallback,"ax",%progbits
+  17              		.section	.text.AML_Keyboard_GetKey,"ax",%progbits
   18              		.align	1
-  19              		.global	HAL_ADC_ConvCpltCallback
+  19              		.global	AML_Keyboard_GetKey
   20              		.arch armv7e-m
   21              		.syntax unified
   22              		.thumb
   23              		.thumb_func
   24              		.fpu fpv4-sp-d16
-  26              	HAL_ADC_ConvCpltCallback:
-  27              	.LVL0:
-  28              	.LFB235:
-  29              		.file 1 "Core/Src/AML_Keyboard.c"
+  26              	AML_Keyboard_GetKey:
+  27              	.LFB130:
+  28              		.file 1 "Core/Src/AML_Keyboard.c"
    1:Core/Src/AML_Keyboard.c **** #include "AML_Keyboard.h"
    2:Core/Src/AML_Keyboard.c **** 
-   3:Core/Src/AML_Keyboard.c **** extern ADC_HandleTypeDef hadc1;
+   3:Core/Src/AML_Keyboard.c **** // extern ADC_HandleTypeDef hadc1;
    4:Core/Src/AML_Keyboard.c **** extern int16_t debug[100];
    5:Core/Src/AML_Keyboard.c **** 
    6:Core/Src/AML_Keyboard.c **** typedef enum
@@ -48,277 +47,124 @@ ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccJ93Zyi.s 			page 1
   17:Core/Src/AML_Keyboard.c **** uint16_t CompareValue[] = {150, 450, 750, 1000, 3900, 4100};
   18:Core/Src/AML_Keyboard.c **** //         button         A,   B,   C,    D,    E,  nothing
   19:Core/Src/AML_Keyboard.c **** 
-  20:Core/Src/AML_Keyboard.c **** void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
-  21:Core/Src/AML_Keyboard.c **** {
-  30              		.loc 1 21 1 view -0
-  31              		.cfi_startproc
-  32              		@ args = 0, pretend = 0, frame = 0
-  33              		@ frame_needed = 0, uses_anonymous_args = 0
-  34              		.loc 1 21 1 is_stmt 0 view .LVU1
-  35 0000 08B5     		push	{r3, lr}
-  36              		.cfi_def_cfa_offset 8
-  37              		.cfi_offset 3, -8
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccJ93Zyi.s 			page 2
+  20:Core/Src/AML_Keyboard.c **** // void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
+  21:Core/Src/AML_Keyboard.c **** // {
+  22:Core/Src/AML_Keyboard.c **** //     if (hadc->Instance == hadc1.Instance) // kiểm tra ADC nào gây ra ngắt
+  23:Core/Src/AML_Keyboard.c **** //     {
+  24:Core/Src/AML_Keyboard.c **** //         ADCValue = HAL_ADC_GetValue(&hadc1);
+  25:Core/Src/AML_Keyboard.c **** //         debug[4]++;
+  26:Core/Src/AML_Keyboard.c **** //     }
+  27:Core/Src/AML_Keyboard.c **** // }
+  28:Core/Src/AML_Keyboard.c **** 
+  29:Core/Src/AML_Keyboard.c **** uint8_t AML_Keyboard_GetKey()
+  30:Core/Src/AML_Keyboard.c **** {
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccFbin2N.s 			page 2
 
 
-  38              		.cfi_offset 14, -4
-  22:Core/Src/AML_Keyboard.c ****     if (hadc->Instance == hadc1.Instance) // kiểm tra ADC nào gây ra ngắt
-  39              		.loc 1 22 5 is_stmt 1 view .LVU2
-  40              		.loc 1 22 13 is_stmt 0 view .LVU3
-  41 0002 0268     		ldr	r2, [r0]
-  42              		.loc 1 22 32 view .LVU4
-  43 0004 054B     		ldr	r3, .L5
-  44 0006 1B68     		ldr	r3, [r3]
-  45              		.loc 1 22 8 view .LVU5
-  46 0008 9A42     		cmp	r2, r3
-  47 000a 00D0     		beq	.L4
-  48              	.LVL1:
-  49              	.L1:
-  23:Core/Src/AML_Keyboard.c ****     {
-  24:Core/Src/AML_Keyboard.c ****         ADCValue = HAL_ADC_GetValue(&hadc1);
-  25:Core/Src/AML_Keyboard.c ****     }
-  26:Core/Src/AML_Keyboard.c **** }
-  50              		.loc 1 26 1 view .LVU6
-  51 000c 08BD     		pop	{r3, pc}
-  52              	.LVL2:
-  53              	.L4:
-  24:Core/Src/AML_Keyboard.c ****     }
-  54              		.loc 1 24 9 is_stmt 1 view .LVU7
-  24:Core/Src/AML_Keyboard.c ****     }
-  55              		.loc 1 24 20 is_stmt 0 view .LVU8
-  56 000e 0348     		ldr	r0, .L5
-  57              	.LVL3:
-  24:Core/Src/AML_Keyboard.c ****     }
-  58              		.loc 1 24 20 view .LVU9
-  59 0010 FFF7FEFF 		bl	HAL_ADC_GetValue
-  60              	.LVL4:
-  24:Core/Src/AML_Keyboard.c ****     }
-  61              		.loc 1 24 18 view .LVU10
-  62 0014 024B     		ldr	r3, .L5+4
-  63 0016 1860     		str	r0, [r3]
-  64              		.loc 1 26 1 view .LVU11
-  65 0018 F8E7     		b	.L1
-  66              	.L6:
-  67 001a 00BF     		.align	2
-  68              	.L5:
-  69 001c 00000000 		.word	hadc1
-  70 0020 00000000 		.word	.LANCHOR0
-  71              		.cfi_endproc
-  72              	.LFE235:
-  74              		.section	.text.AML_Keyboard_GetKey,"ax",%progbits
-  75              		.align	1
-  76              		.global	AML_Keyboard_GetKey
-  77              		.syntax unified
-  78              		.thumb
-  79              		.thumb_func
-  80              		.fpu fpv4-sp-d16
-  82              	AML_Keyboard_GetKey:
-  83              	.LFB236:
-  27:Core/Src/AML_Keyboard.c **** 
-  28:Core/Src/AML_Keyboard.c **** uint8_t AML_Keyboard_GetKey()
-  29:Core/Src/AML_Keyboard.c **** {
-  84              		.loc 1 29 1 is_stmt 1 view -0
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccJ93Zyi.s 			page 3
-
-
-  85              		.cfi_startproc
-  86              		@ args = 0, pretend = 0, frame = 0
-  87              		@ frame_needed = 0, uses_anonymous_args = 0
-  88 0000 08B5     		push	{r3, lr}
-  89              		.cfi_def_cfa_offset 8
-  90              		.cfi_offset 3, -8
-  91              		.cfi_offset 14, -4
-  30:Core/Src/AML_Keyboard.c ****     ADCValue = HAL_ADC_GetValue(&hadc1);
-  92              		.loc 1 30 5 view .LVU13
-  93              		.loc 1 30 16 is_stmt 0 view .LVU14
-  94 0002 0848     		ldr	r0, .L13
-  95 0004 FFF7FEFF 		bl	HAL_ADC_GetValue
-  96              	.LVL5:
-  97              		.loc 1 30 14 view .LVU15
-  98 0008 074B     		ldr	r3, .L13+4
-  99 000a 1860     		str	r0, [r3]
-  31:Core/Src/AML_Keyboard.c ****     for (int i = 0; i < 5; i++)
- 100              		.loc 1 31 5 is_stmt 1 view .LVU16
- 101              	.LBB2:
- 102              		.loc 1 31 10 view .LVU17
- 103              	.LVL6:
- 104              		.loc 1 31 14 is_stmt 0 view .LVU18
- 105 000c 0023     		movs	r3, #0
- 106              	.LVL7:
- 107              	.L8:
- 108              		.loc 1 31 21 is_stmt 1 discriminator 1 view .LVU19
- 109              		.loc 1 31 5 is_stmt 0 discriminator 1 view .LVU20
- 110 000e 042B     		cmp	r3, #4
- 111 0010 07DC     		bgt	.L7
-  32:Core/Src/AML_Keyboard.c ****     {
-  33:Core/Src/AML_Keyboard.c ****         if (ADCValue < CompareValue[i])
- 112              		.loc 1 33 9 is_stmt 1 view .LVU21
- 113              		.loc 1 33 36 is_stmt 0 view .LVU22
- 114 0012 064A     		ldr	r2, .L13+8
- 115 0014 32F81320 		ldrh	r2, [r2, r3, lsl #1]
- 116              		.loc 1 33 12 view .LVU23
- 117 0018 9042     		cmp	r0, r2
- 118 001a 01D3     		bcc	.L12
-  31:Core/Src/AML_Keyboard.c ****     for (int i = 0; i < 5; i++)
- 119              		.loc 1 31 28 is_stmt 1 discriminator 2 view .LVU24
-  31:Core/Src/AML_Keyboard.c ****     for (int i = 0; i < 5; i++)
- 120              		.loc 1 31 29 is_stmt 0 discriminator 2 view .LVU25
- 121 001c 0133     		adds	r3, r3, #1
- 122              	.LVL8:
-  31:Core/Src/AML_Keyboard.c ****     for (int i = 0; i < 5; i++)
- 123              		.loc 1 31 29 discriminator 2 view .LVU26
- 124 001e F6E7     		b	.L8
- 125              	.L12:
-  34:Core/Src/AML_Keyboard.c ****             return i;
- 126              		.loc 1 34 13 is_stmt 1 view .LVU27
- 127              		.loc 1 34 20 is_stmt 0 view .LVU28
- 128 0020 D8B2     		uxtb	r0, r3
- 129              	.L7:
- 130              	.LBE2:
-  35:Core/Src/AML_Keyboard.c ****     }
-  36:Core/Src/AML_Keyboard.c **** }
- 131              		.loc 1 36 1 view .LVU29
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccJ93Zyi.s 			page 4
-
-
- 132 0022 08BD     		pop	{r3, pc}
- 133              	.LVL9:
- 134              	.L14:
- 135              		.loc 1 36 1 view .LVU30
- 136              		.align	2
- 137              	.L13:
- 138 0024 00000000 		.word	hadc1
- 139 0028 00000000 		.word	.LANCHOR0
- 140 002c 00000000 		.word	.LANCHOR1
- 141              		.cfi_endproc
- 142              	.LFE236:
- 144              		.section	.text.AML_Keyboard_WaitStartKey,"ax",%progbits
- 145              		.align	1
- 146              		.global	AML_Keyboard_WaitStartKey
- 147              		.syntax unified
- 148              		.thumb
- 149              		.thumb_func
- 150              		.fpu fpv4-sp-d16
- 152              	AML_Keyboard_WaitStartKey:
- 153              	.LFB237:
+  29              		.loc 1 30 1 view -0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33 0000 08B5     		push	{r3, lr}
+  34              		.cfi_def_cfa_offset 8
+  35              		.cfi_offset 3, -8
+  36              		.cfi_offset 14, -4
+  31:Core/Src/AML_Keyboard.c ****     // ADCValue = HAL_ADC_GetValue(&hadc1);
+  32:Core/Src/AML_Keyboard.c ****     // for (int i = 0; i < 5; i++)
+  33:Core/Src/AML_Keyboard.c ****     // {
+  34:Core/Src/AML_Keyboard.c ****     //     if (ADCValue < CompareValue[i])
+  35:Core/Src/AML_Keyboard.c ****     //         return i;
+  36:Core/Src/AML_Keyboard.c ****     // }
   37:Core/Src/AML_Keyboard.c **** 
-  38:Core/Src/AML_Keyboard.c **** void AML_Keyboard_WaitStartKey()
-  39:Core/Src/AML_Keyboard.c **** {
- 154              		.loc 1 39 1 is_stmt 1 view -0
- 155              		.cfi_startproc
- 156              		@ args = 0, pretend = 0, frame = 0
- 157              		@ frame_needed = 0, uses_anonymous_args = 0
- 158 0000 08B5     		push	{r3, lr}
- 159              		.cfi_def_cfa_offset 8
- 160              		.cfi_offset 3, -8
- 161              		.cfi_offset 14, -4
- 162              	.L16:
-  40:Core/Src/AML_Keyboard.c ****     while (1)
- 163              		.loc 1 40 5 view .LVU32
-  41:Core/Src/AML_Keyboard.c ****     {
-  42:Core/Src/AML_Keyboard.c ****         if (AML_Keyboard_GetKey() != 5)
- 164              		.loc 1 42 9 view .LVU33
- 165              		.loc 1 42 13 is_stmt 0 view .LVU34
- 166 0002 FFF7FEFF 		bl	AML_Keyboard_GetKey
- 167              	.LVL10:
- 168              		.loc 1 42 12 view .LVU35
- 169 0006 0528     		cmp	r0, #5
- 170 0008 FBD0     		beq	.L16
-  43:Core/Src/AML_Keyboard.c ****             return;
-  44:Core/Src/AML_Keyboard.c ****     }
-  45:Core/Src/AML_Keyboard.c **** }
- 171              		.loc 1 45 1 view .LVU36
- 172 000a 08BD     		pop	{r3, pc}
- 173              		.cfi_endproc
- 174              	.LFE237:
- 176              		.section	.text.AML_Keyboard_Setup,"ax",%progbits
- 177              		.align	1
- 178              		.global	AML_Keyboard_Setup
- 179              		.syntax unified
- 180              		.thumb
- 181              		.thumb_func
- 182              		.fpu fpv4-sp-d16
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccJ93Zyi.s 			page 5
+  38:Core/Src/AML_Keyboard.c ****     return HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0);
+  37              		.loc 1 38 5 view .LVU1
+  38              		.loc 1 38 12 is_stmt 0 view .LVU2
+  39 0002 0121     		movs	r1, #1
+  40 0004 0148     		ldr	r0, .L3
+  41 0006 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+  42              	.LVL0:
+  39:Core/Src/AML_Keyboard.c **** }
+  43              		.loc 1 39 1 view .LVU3
+  44 000a 08BD     		pop	{r3, pc}
+  45              	.L4:
+  46              		.align	2
+  47              	.L3:
+  48 000c 00000240 		.word	1073872896
+  49              		.cfi_endproc
+  50              	.LFE130:
+  52              		.section	.text.AML_Keyboard_Setup,"ax",%progbits
+  53              		.align	1
+  54              		.global	AML_Keyboard_Setup
+  55              		.syntax unified
+  56              		.thumb
+  57              		.thumb_func
+  58              		.fpu fpv4-sp-d16
+  60              	AML_Keyboard_Setup:
+  61              	.LFB131:
+  40:Core/Src/AML_Keyboard.c **** 
+  41:Core/Src/AML_Keyboard.c **** // void AML_Keyboard_WaitStartKey()
+  42:Core/Src/AML_Keyboard.c **** // {
+  43:Core/Src/AML_Keyboard.c **** //     while (1)
+  44:Core/Src/AML_Keyboard.c **** //     {
+  45:Core/Src/AML_Keyboard.c **** //         if (AML_Keyboard_GetKey() != 5)
+  46:Core/Src/AML_Keyboard.c **** //             return;
+  47:Core/Src/AML_Keyboard.c **** //     }
+  48:Core/Src/AML_Keyboard.c **** // }
+  49:Core/Src/AML_Keyboard.c **** 
+  50:Core/Src/AML_Keyboard.c **** void AML_Keyboard_Setup()
+  51:Core/Src/AML_Keyboard.c **** {
+  62              		.loc 1 51 1 is_stmt 1 view -0
+  63              		.cfi_startproc
+  64              		@ args = 0, pretend = 0, frame = 0
+  65              		@ frame_needed = 0, uses_anonymous_args = 0
+  66              		@ link register save eliminated.
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccFbin2N.s 			page 3
 
 
- 184              	AML_Keyboard_Setup:
- 185              	.LFB238:
-  46:Core/Src/AML_Keyboard.c **** 
-  47:Core/Src/AML_Keyboard.c **** void    AML_Keyboard_Setup()
-  48:Core/Src/AML_Keyboard.c **** {
- 186              		.loc 1 48 1 is_stmt 1 view -0
- 187              		.cfi_startproc
- 188              		@ args = 0, pretend = 0, frame = 0
- 189              		@ frame_needed = 0, uses_anonymous_args = 0
- 190 0000 08B5     		push	{r3, lr}
- 191              		.cfi_def_cfa_offset 8
- 192              		.cfi_offset 3, -8
- 193              		.cfi_offset 14, -4
-  49:Core/Src/AML_Keyboard.c ****     HAL_ADC_Start_IT(&hadc1);
- 194              		.loc 1 49 5 view .LVU38
- 195 0002 0248     		ldr	r0, .L20
- 196 0004 FFF7FEFF 		bl	HAL_ADC_Start_IT
- 197              	.LVL11:
-  50:Core/Src/AML_Keyboard.c **** }
- 198              		.loc 1 50 1 is_stmt 0 view .LVU39
- 199 0008 08BD     		pop	{r3, pc}
- 200              	.L21:
- 201 000a 00BF     		.align	2
- 202              	.L20:
- 203 000c 00000000 		.word	hadc1
- 204              		.cfi_endproc
- 205              	.LFE238:
- 207              		.global	CompareValue
- 208              		.global	ADCValue
- 209              		.section	.data.ADCValue,"aw"
- 210              		.align	2
- 211              		.set	.LANCHOR0,. + 0
- 214              	ADCValue:
- 215 0000 04100000 		.word	4100
- 216              		.section	.data.CompareValue,"aw"
- 217              		.align	2
- 218              		.set	.LANCHOR1,. + 0
- 221              	CompareValue:
- 222 0000 9600     		.short	150
- 223 0002 C201     		.short	450
- 224 0004 EE02     		.short	750
- 225 0006 E803     		.short	1000
- 226 0008 3C0F     		.short	3900
- 227 000a 0410     		.short	4100
- 228              		.text
- 229              	.Letext0:
- 230              		.file 2 "c:\\make\\test\\gcc-arm-none-eabi-9-2019-q4-major-win32\\arm-none-eabi\\include\\machine\
- 231              		.file 3 "c:\\make\\test\\gcc-arm-none-eabi-9-2019-q4-major-win32\\arm-none-eabi\\include\\sys\\_st
- 232              		.file 4 "Drivers/CMSIS/Include/core_cm4.h"
- 233              		.file 5 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h"
- 234              		.file 6 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h"
- 235              		.file 7 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h"
- 236              		.file 8 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h"
- 237              		.file 9 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h"
- 238              		.file 10 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc.h"
- 239              		.file 11 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h"
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccJ93Zyi.s 			page 6
+  52:Core/Src/AML_Keyboard.c ****     
+  53:Core/Src/AML_Keyboard.c **** }
+  67              		.loc 1 53 1 view .LVU5
+  68 0000 7047     		bx	lr
+  69              		.cfi_endproc
+  70              	.LFE131:
+  72              		.global	CompareValue
+  73              		.global	ADCValue
+  74              		.section	.data.ADCValue,"aw"
+  75              		.align	2
+  78              	ADCValue:
+  79 0000 04100000 		.word	4100
+  80              		.section	.data.CompareValue,"aw"
+  81              		.align	2
+  84              	CompareValue:
+  85 0000 9600     		.short	150
+  86 0002 C201     		.short	450
+  87 0004 EE02     		.short	750
+  88 0006 E803     		.short	1000
+  89 0008 3C0F     		.short	3900
+  90 000a 0410     		.short	4100
+  91              		.text
+  92              	.Letext0:
+  93              		.file 2 "c:\\make\\test\\gcc-arm-none-eabi-9-2019-q4-major-win32\\arm-none-eabi\\include\\machine\
+  94              		.file 3 "c:\\make\\test\\gcc-arm-none-eabi-9-2019-q4-major-win32\\arm-none-eabi\\include\\sys\\_st
+  95              		.file 4 "Drivers/CMSIS/Include/core_cm4.h"
+  96              		.file 5 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h"
+  97              		.file 6 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h"
+  98              		.file 7 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h"
+  99              		.file 8 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h"
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccFbin2N.s 			page 4
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 AML_Keyboard.c
-C:\Users\anmh1\AppData\Local\Temp\ccJ93Zyi.s:18     .text.HAL_ADC_ConvCpltCallback:00000000 $t
-C:\Users\anmh1\AppData\Local\Temp\ccJ93Zyi.s:26     .text.HAL_ADC_ConvCpltCallback:00000000 HAL_ADC_ConvCpltCallback
-C:\Users\anmh1\AppData\Local\Temp\ccJ93Zyi.s:69     .text.HAL_ADC_ConvCpltCallback:0000001c $d
-C:\Users\anmh1\AppData\Local\Temp\ccJ93Zyi.s:75     .text.AML_Keyboard_GetKey:00000000 $t
-C:\Users\anmh1\AppData\Local\Temp\ccJ93Zyi.s:82     .text.AML_Keyboard_GetKey:00000000 AML_Keyboard_GetKey
-C:\Users\anmh1\AppData\Local\Temp\ccJ93Zyi.s:138    .text.AML_Keyboard_GetKey:00000024 $d
-C:\Users\anmh1\AppData\Local\Temp\ccJ93Zyi.s:145    .text.AML_Keyboard_WaitStartKey:00000000 $t
-C:\Users\anmh1\AppData\Local\Temp\ccJ93Zyi.s:152    .text.AML_Keyboard_WaitStartKey:00000000 AML_Keyboard_WaitStartKey
-C:\Users\anmh1\AppData\Local\Temp\ccJ93Zyi.s:177    .text.AML_Keyboard_Setup:00000000 $t
-C:\Users\anmh1\AppData\Local\Temp\ccJ93Zyi.s:184    .text.AML_Keyboard_Setup:00000000 AML_Keyboard_Setup
-C:\Users\anmh1\AppData\Local\Temp\ccJ93Zyi.s:203    .text.AML_Keyboard_Setup:0000000c $d
-C:\Users\anmh1\AppData\Local\Temp\ccJ93Zyi.s:221    .data.CompareValue:00000000 CompareValue
-C:\Users\anmh1\AppData\Local\Temp\ccJ93Zyi.s:214    .data.ADCValue:00000000 ADCValue
-C:\Users\anmh1\AppData\Local\Temp\ccJ93Zyi.s:210    .data.ADCValue:00000000 $d
-C:\Users\anmh1\AppData\Local\Temp\ccJ93Zyi.s:217    .data.CompareValue:00000000 $d
+C:\Users\anmh1\AppData\Local\Temp\ccFbin2N.s:18     .text.AML_Keyboard_GetKey:00000000 $t
+C:\Users\anmh1\AppData\Local\Temp\ccFbin2N.s:26     .text.AML_Keyboard_GetKey:00000000 AML_Keyboard_GetKey
+C:\Users\anmh1\AppData\Local\Temp\ccFbin2N.s:48     .text.AML_Keyboard_GetKey:0000000c $d
+C:\Users\anmh1\AppData\Local\Temp\ccFbin2N.s:53     .text.AML_Keyboard_Setup:00000000 $t
+C:\Users\anmh1\AppData\Local\Temp\ccFbin2N.s:60     .text.AML_Keyboard_Setup:00000000 AML_Keyboard_Setup
+C:\Users\anmh1\AppData\Local\Temp\ccFbin2N.s:84     .data.CompareValue:00000000 CompareValue
+C:\Users\anmh1\AppData\Local\Temp\ccFbin2N.s:78     .data.ADCValue:00000000 ADCValue
+C:\Users\anmh1\AppData\Local\Temp\ccFbin2N.s:75     .data.ADCValue:00000000 $d
+C:\Users\anmh1\AppData\Local\Temp\ccFbin2N.s:81     .data.CompareValue:00000000 $d
 
 UNDEFINED SYMBOLS
-HAL_ADC_GetValue
-hadc1
-HAL_ADC_Start_IT
+HAL_GPIO_ReadPin

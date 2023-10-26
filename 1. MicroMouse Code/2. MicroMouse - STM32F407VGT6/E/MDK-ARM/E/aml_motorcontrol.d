@@ -23,9 +23,6 @@ e\aml_motorcontrol.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_exti.h
 e\aml_motorcontrol.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h
 e\aml_motorcontrol.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma_ex.h
 e\aml_motorcontrol.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_cortex.h
-e\aml_motorcontrol.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc.h
-e\aml_motorcontrol.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_adc.h
-e\aml_motorcontrol.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc_ex.h
 e\aml_motorcontrol.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash.h
 e\aml_motorcontrol.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ex.h
 e\aml_motorcontrol.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h
@@ -38,3 +35,6 @@ e\aml_motorcontrol.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h
 e\aml_motorcontrol.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
 e\aml_motorcontrol.o: ../Core/Inc/main.h
 e\aml_motorcontrol.o: ../Core/Inc/AML_Encoder.h
+e\aml_motorcontrol.o: ../Core/Inc/pid.h
+e\aml_motorcontrol.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+e\aml_motorcontrol.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h

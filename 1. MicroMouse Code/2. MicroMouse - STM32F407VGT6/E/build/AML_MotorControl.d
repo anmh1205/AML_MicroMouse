@@ -18,9 +18,6 @@ build/AML_MotorControl.o: Core/Src/AML_MotorControl.c \
  Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h \
  Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma_ex.h \
  Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_cortex.h \
- Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc.h \
- Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_adc.h \
- Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc_ex.h \
  Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash.h \
  Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ex.h \
  Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h \
@@ -31,7 +28,7 @@ build/AML_MotorControl.o: Core/Src/AML_MotorControl.c \
  Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h \
  Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h \
  Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h Core/Inc/main.h \
- Core/Inc/AML_Encoder.h
+ Core/Inc/AML_Encoder.h Core/Inc/pid.h
 
 Core/Inc/AML_MotorControl.h:
 
@@ -75,12 +72,6 @@ Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma_ex.h:
 
 Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_cortex.h:
 
-Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc.h:
-
-Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_adc.h:
-
-Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc_ex.h:
-
 Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash.h:
 
 Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ex.h:
@@ -104,3 +95,5 @@ Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h:
 Core/Inc/main.h:
 
 Core/Inc/AML_Encoder.h:
+
+Core/Inc/pid.h:

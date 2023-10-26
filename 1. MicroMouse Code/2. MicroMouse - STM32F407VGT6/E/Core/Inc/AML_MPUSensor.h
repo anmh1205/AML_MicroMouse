@@ -6,8 +6,8 @@
 #include "pid.h"
 
 
-void AML_MPUSensor_Setup();
-uint8_t AML_MPUSensor_ResetAngle();
-double AML_MPUSensor_GetAngle();
+void AML_MPUSensor_Setup(void);
+uint8_t AML_MPUSensor_ResetAngle(void);
+double AML_MPUSensor_GetAngle(void);
 
 #endif /* test_h */

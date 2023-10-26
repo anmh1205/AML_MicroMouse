@@ -5,9 +5,9 @@
 
 
 void AML_Encoder_Setup(void);
-int16_t AML_Encoder_GetLeftValue();
-int16_t AML_Encoder_GetRightValue();
-void AML_Encoder_ResetLeftValue();
-void AML_Encoder_ResetRightValue();
+int16_t AML_Encoder_GetLeftValue(void);
+int16_t AML_Encoder_GetRightValue(void);
+void AML_Encoder_ResetLeftValue(void);
+void AML_Encoder_ResetRightValue(void);
 
 #endif // AML_ENCODER_H

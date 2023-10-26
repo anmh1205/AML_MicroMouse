@@ -83,7 +83,8 @@ void Error_Handler(void);
 #define XSHUT_FL_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
-
+#define FW 1
+#define BW -1
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

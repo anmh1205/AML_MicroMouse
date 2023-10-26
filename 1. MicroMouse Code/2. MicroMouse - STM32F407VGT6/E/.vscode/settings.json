@@ -4,7 +4,13 @@
   "files.associations": {
     "test.h": "c",
     "stm32f4xx_hal_uart.h": "c",
-    "stm32f4xx_hal.h": "c"
+    "stm32f4xx_hal.h": "c",
+    "vl6180x_api.h": "c",
+    "aml_motorcontrol.h": "c",
+    "cmath": "c",
+    "cstdlib": "c",
+    "*.tcc": "c",
+    "cinttypes": "c"
   },
   "C_Cpp_Runner.msvcBatchPath": "",
   "C_Cpp_Runner.cCompilerPath": "gcc",

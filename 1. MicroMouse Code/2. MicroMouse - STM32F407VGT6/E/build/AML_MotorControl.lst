@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccJg1Ucb.s 			page 1
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -17,726 +17,1153 @@ ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccJg1Ucb.s 			page 1
   14              		.text
   15              	.Ltext0:
   16              		.cfi_sections	.debug_frame
-  17              		.section	.text.AML_MotorControl_Setup,"ax",%progbits
+  17              		.section	.text.AML_MotorControl_PIDSetTunings,"ax",%progbits
   18              		.align	1
-  19              		.global	AML_MotorControl_Setup
+  19              		.global	AML_MotorControl_PIDSetTunings
   20              		.arch armv7e-m
   21              		.syntax unified
   22              		.thumb
   23              		.thumb_func
   24              		.fpu fpv4-sp-d16
-  26              	AML_MotorControl_Setup:
-  27              	.LFB235:
-  28              		.file 1 "Core/Src/AML_MotorControl.c"
+  26              	AML_MotorControl_PIDSetTunings:
+  27              	.LVL0:
+  28              	.LFB130:
+  29              		.file 1 "Core/Src/AML_MotorControl.c"
    1:Core/Src/AML_MotorControl.c **** #include "AML_MotorControl.h"
    2:Core/Src/AML_MotorControl.c **** 
-   3:Core/Src/AML_MotorControl.c **** extern TIM_HandleTypeDef htim2;
-   4:Core/Src/AML_MotorControl.c **** short direction = 0;
+   3:Core/Src/AML_MotorControl.c **** #define Pi 3.14159265359
+   4:Core/Src/AML_MotorControl.c **** #define WheelDiameter 48
    5:Core/Src/AML_MotorControl.c **** 
-   6:Core/Src/AML_MotorControl.c **** 
-   7:Core/Src/AML_MotorControl.c **** void AML_MotorControl_Setup()
-   8:Core/Src/AML_MotorControl.c **** {
-  29              		.loc 1 8 1 view -0
-  30              		.cfi_startproc
-  31              		@ args = 0, pretend = 0, frame = 0
-  32              		@ frame_needed = 0, uses_anonymous_args = 0
-  33 0000 10B5     		push	{r4, lr}
-  34              		.cfi_def_cfa_offset 8
-  35              		.cfi_offset 4, -8
-  36              		.cfi_offset 14, -4
-   9:Core/Src/AML_MotorControl.c ****     HAL_TIM_Base_Start(&htim2);
-  37              		.loc 1 9 5 view .LVU1
-  38 0002 094C     		ldr	r4, .L3
-  39 0004 2046     		mov	r0, r4
-  40 0006 FFF7FEFF 		bl	HAL_TIM_Base_Start
-  41              	.LVL0:
-  10:Core/Src/AML_MotorControl.c ****     HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
-  42              		.loc 1 10 5 view .LVU2
-  43 000a 0021     		movs	r1, #0
-  44 000c 2046     		mov	r0, r4
-  45 000e FFF7FEFF 		bl	HAL_TIM_PWM_Start
-  46              	.LVL1:
-  11:Core/Src/AML_MotorControl.c ****     HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_2);
-  47              		.loc 1 11 5 view .LVU3
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccJg1Ucb.s 			page 2
+   6:Core/Src/AML_MotorControl.c **** extern TIM_HandleTypeDef htim2;
+   7:Core/Src/AML_MotorControl.c **** extern int32_t LeftEncoderValue, RightEncoderValue;
+   8:Core/Src/AML_MotorControl.c **** int32_t PreviousLeftEncoderValue = 0, PreviousRightEncoderValue = 0;
+   9:Core/Src/AML_MotorControl.c **** 
+  10:Core/Src/AML_MotorControl.c **** short direction = 0;
+  11:Core/Src/AML_MotorControl.c **** uint32_t period = (16000000 / 5000) - 1;
+  12:Core/Src/AML_MotorControl.c **** 
+  13:Core/Src/AML_MotorControl.c **** PID_TypeDef PID_Left;
+  14:Core/Src/AML_MotorControl.c **** PID_TypeDef PID_Right;
+  15:Core/Src/AML_MotorControl.c **** double Input_Left, Output_Left, Setpoint_Left;
+  16:Core/Src/AML_MotorControl.c **** double Input_Right, Output_Right, Setpoint_Right;
+  17:Core/Src/AML_MotorControl.c **** 
+  18:Core/Src/AML_MotorControl.c **** double kp = 2.5;
+  19:Core/Src/AML_MotorControl.c **** double ki = 0.8;
+  20:Core/Src/AML_MotorControl.c **** double kd = 0;
+  21:Core/Src/AML_MotorControl.c **** 
+  22:Core/Src/AML_MotorControl.c **** int64_t PreviousTime = 0;
+  23:Core/Src/AML_MotorControl.c **** 
+  24:Core/Src/AML_MotorControl.c **** void AML_MotorControl_PIDSetTunings(double Kp, double Ki, double Kd)
+  25:Core/Src/AML_MotorControl.c **** {
+  30              		.loc 1 25 1 view -0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 0
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s 			page 2
 
 
-  48 0012 0421     		movs	r1, #4
-  49 0014 2046     		mov	r0, r4
-  50 0016 FFF7FEFF 		bl	HAL_TIM_PWM_Start
-  51              	.LVL2:
-  12:Core/Src/AML_MotorControl.c ****     HAL_GPIO_WritePin(STBY_GPIO_Port, STBY_Pin, GPIO_PIN_SET);
-  52              		.loc 1 12 5 view .LVU4
-  53 001a 0122     		movs	r2, #1
-  54 001c 4FF48051 		mov	r1, #4096
-  55 0020 0248     		ldr	r0, .L3+4
-  56 0022 FFF7FEFF 		bl	HAL_GPIO_WritePin
-  57              	.LVL3:
-  13:Core/Src/AML_MotorControl.c **** }
-  58              		.loc 1 13 1 is_stmt 0 view .LVU5
-  59 0026 10BD     		pop	{r4, pc}
-  60              	.L4:
-  61              		.align	2
-  62              	.L3:
-  63 0028 00000000 		.word	htim2
-  64 002c 00080240 		.word	1073874944
-  65              		.cfi_endproc
-  66              	.LFE235:
-  68              		.section	.text.AML_MotorControl_SetLeftSpeed,"ax",%progbits
-  69              		.align	1
-  70              		.global	AML_MotorControl_SetLeftSpeed
-  71              		.syntax unified
-  72              		.thumb
-  73              		.thumb_func
-  74              		.fpu fpv4-sp-d16
-  76              	AML_MotorControl_SetLeftSpeed:
-  77              	.LVL4:
-  78              	.LFB236:
-  14:Core/Src/AML_MotorControl.c **** 
-  15:Core/Src/AML_MotorControl.c **** void AML_MotorControl_SetLeftSpeed(int16_t PWMValue)
-  16:Core/Src/AML_MotorControl.c **** {
-  79              		.loc 1 16 1 is_stmt 1 view -0
-  80              		.cfi_startproc
-  81              		@ args = 0, pretend = 0, frame = 0
-  82              		@ frame_needed = 0, uses_anonymous_args = 0
-  83              		.loc 1 16 1 is_stmt 0 view .LVU7
-  84 0000 70B5     		push	{r4, r5, r6, lr}
-  85              		.cfi_def_cfa_offset 16
-  86              		.cfi_offset 4, -16
-  87              		.cfi_offset 5, -12
-  88              		.cfi_offset 6, -8
-  89              		.cfi_offset 14, -4
-  17:Core/Src/AML_MotorControl.c ****     if (PWMValue > 0)
-  90              		.loc 1 17 5 is_stmt 1 view .LVU8
-  91              		.loc 1 17 8 is_stmt 0 view .LVU9
-  92 0002 041E     		subs	r4, r0, #0
-  93 0004 12DC     		bgt	.L10
-  18:Core/Src/AML_MotorControl.c ****     {
-  19:Core/Src/AML_MotorControl.c ****         HAL_GPIO_WritePin(AIN1_GPIO_Port, AIN1_Pin, direction);
-  20:Core/Src/AML_MotorControl.c ****         HAL_GPIO_WritePin(AIN2_GPIO_Port, AIN2_Pin, !direction);
-  21:Core/Src/AML_MotorControl.c ****         __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, PWMValue);
-  22:Core/Src/AML_MotorControl.c ****     }
-  23:Core/Src/AML_MotorControl.c ****     else if (PWMValue < 0)
-  94              		.loc 1 23 10 is_stmt 1 view .LVU10
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccJg1Ucb.s 			page 3
+  34              		@ link register save eliminated.
+  26:Core/Src/AML_MotorControl.c ****     PID_Left.Kp = Kp;
+  35              		.loc 1 26 5 view .LVU1
+  36              		.loc 1 26 17 is_stmt 0 view .LVU2
+  37 0000 074B     		ldr	r3, .L2
+  38 0002 83ED0A0B 		vstr.64	d0, [r3, #40]
+  27:Core/Src/AML_MotorControl.c ****     PID_Left.Ki = Ki;
+  39              		.loc 1 27 5 is_stmt 1 view .LVU3
+  40              		.loc 1 27 17 is_stmt 0 view .LVU4
+  41 0006 83ED0C1B 		vstr.64	d1, [r3, #48]
+  28:Core/Src/AML_MotorControl.c ****     PID_Left.Kd = Kd;
+  42              		.loc 1 28 5 is_stmt 1 view .LVU5
+  43              		.loc 1 28 17 is_stmt 0 view .LVU6
+  44 000a 83ED0E2B 		vstr.64	d2, [r3, #56]
+  29:Core/Src/AML_MotorControl.c **** 
+  30:Core/Src/AML_MotorControl.c ****     PID_Right.Kp = Kp;
+  45              		.loc 1 30 5 is_stmt 1 view .LVU7
+  46              		.loc 1 30 18 is_stmt 0 view .LVU8
+  47 000e 054B     		ldr	r3, .L2+4
+  48 0010 83ED0A0B 		vstr.64	d0, [r3, #40]
+  31:Core/Src/AML_MotorControl.c ****     PID_Right.Ki = Ki;
+  49              		.loc 1 31 5 is_stmt 1 view .LVU9
+  50              		.loc 1 31 18 is_stmt 0 view .LVU10
+  51 0014 83ED0C1B 		vstr.64	d1, [r3, #48]
+  32:Core/Src/AML_MotorControl.c ****     PID_Right.Kd = Kd;
+  52              		.loc 1 32 5 is_stmt 1 view .LVU11
+  53              		.loc 1 32 18 is_stmt 0 view .LVU12
+  54 0018 83ED0E2B 		vstr.64	d2, [r3, #56]
+  33:Core/Src/AML_MotorControl.c **** }
+  55              		.loc 1 33 1 view .LVU13
+  56 001c 7047     		bx	lr
+  57              	.L3:
+  58 001e 00BF     		.align	2
+  59              	.L2:
+  60 0020 00000000 		.word	PID_Left
+  61 0024 00000000 		.word	PID_Right
+  62              		.cfi_endproc
+  63              	.LFE130:
+  65              		.section	.text.AML_MotorControl_PIDSetSampleTime,"ax",%progbits
+  66              		.align	1
+  67              		.global	AML_MotorControl_PIDSetSampleTime
+  68              		.syntax unified
+  69              		.thumb
+  70              		.thumb_func
+  71              		.fpu fpv4-sp-d16
+  73              	AML_MotorControl_PIDSetSampleTime:
+  74              	.LVL1:
+  75              	.LFB131:
+  34:Core/Src/AML_MotorControl.c **** 
+  35:Core/Src/AML_MotorControl.c **** void AML_MotorControl_PIDSetSampleTime(uint32_t NewSampleTime)
+  36:Core/Src/AML_MotorControl.c **** {
+  76              		.loc 1 36 1 is_stmt 1 view -0
+  77              		.cfi_startproc
+  78              		@ args = 0, pretend = 0, frame = 0
+  79              		@ frame_needed = 0, uses_anonymous_args = 0
+  80              		@ link register save eliminated.
+  37:Core/Src/AML_MotorControl.c ****     PID_Left.SampleTime = NewSampleTime;
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s 			page 3
 
 
-  95              		.loc 1 23 13 is_stmt 0 view .LVU11
-  96 0006 002C     		cmp	r4, #0
-  97 0008 24DB     		blt	.L11
-  24:Core/Src/AML_MotorControl.c ****     {
-  25:Core/Src/AML_MotorControl.c ****         HAL_GPIO_WritePin(AIN1_GPIO_Port, AIN1_Pin, !direction);
-  26:Core/Src/AML_MotorControl.c ****         HAL_GPIO_WritePin(AIN2_GPIO_Port, AIN2_Pin, direction);
-  27:Core/Src/AML_MotorControl.c ****         __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, PWMValue);
-  28:Core/Src/AML_MotorControl.c ****     }
-  29:Core/Src/AML_MotorControl.c ****     else if (!PWMValue)
-  98              		.loc 1 29 10 is_stmt 1 view .LVU12
-  99              		.loc 1 29 13 is_stmt 0 view .LVU13
- 100 000a 14BB     		cbnz	r4, .L5
-  30:Core/Src/AML_MotorControl.c ****     {
-  31:Core/Src/AML_MotorControl.c ****         HAL_GPIO_WritePin(AIN1_GPIO_Port, AIN1_Pin, GPIO_PIN_RESET);
- 101              		.loc 1 31 9 is_stmt 1 view .LVU14
- 102 000c 1B4C     		ldr	r4, .L12
- 103 000e 0022     		movs	r2, #0
- 104 0010 8021     		movs	r1, #128
- 105 0012 2046     		mov	r0, r4
- 106              	.LVL5:
- 107              		.loc 1 31 9 is_stmt 0 view .LVU15
- 108 0014 FFF7FEFF 		bl	HAL_GPIO_WritePin
- 109              	.LVL6:
-  32:Core/Src/AML_MotorControl.c ****         HAL_GPIO_WritePin(AIN2_GPIO_Port, AIN2_Pin, GPIO_PIN_RESET);
- 110              		.loc 1 32 9 is_stmt 1 view .LVU16
- 111 0018 0022     		movs	r2, #0
- 112 001a 2021     		movs	r1, #32
- 113 001c 2046     		mov	r0, r4
- 114 001e FFF7FEFF 		bl	HAL_GPIO_WritePin
- 115              	.LVL7:
-  33:Core/Src/AML_MotorControl.c ****         __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, 0);
- 116              		.loc 1 33 9 view .LVU17
- 117 0022 174B     		ldr	r3, .L12+4
- 118 0024 1B68     		ldr	r3, [r3]
- 119 0026 0022     		movs	r2, #0
- 120 0028 5A63     		str	r2, [r3, #52]
-  34:Core/Src/AML_MotorControl.c ****     }
-  35:Core/Src/AML_MotorControl.c **** 
-  36:Core/Src/AML_MotorControl.c **** }
- 121              		.loc 1 36 1 is_stmt 0 view .LVU18
- 122 002a 12E0     		b	.L5
- 123              	.LVL8:
- 124              	.L10:
-  19:Core/Src/AML_MotorControl.c ****         HAL_GPIO_WritePin(AIN2_GPIO_Port, AIN2_Pin, !direction);
- 125              		.loc 1 19 9 is_stmt 1 view .LVU19
- 126 002c 154E     		ldr	r6, .L12+8
- 127 002e 134D     		ldr	r5, .L12
- 128 0030 3278     		ldrb	r2, [r6]	@ zero_extendqisi2
- 129 0032 8021     		movs	r1, #128
- 130 0034 2846     		mov	r0, r5
- 131              	.LVL9:
-  19:Core/Src/AML_MotorControl.c ****         HAL_GPIO_WritePin(AIN2_GPIO_Port, AIN2_Pin, !direction);
- 132              		.loc 1 19 9 is_stmt 0 view .LVU20
- 133 0036 FFF7FEFF 		bl	HAL_GPIO_WritePin
- 134              	.LVL10:
-  20:Core/Src/AML_MotorControl.c ****         __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, PWMValue);
- 135              		.loc 1 20 9 is_stmt 1 view .LVU21
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccJg1Ucb.s 			page 4
+  81              		.loc 1 37 5 view .LVU15
+  82              		.loc 1 37 25 is_stmt 0 view .LVU16
+  83 0000 024B     		ldr	r3, .L5
+  84 0002 9860     		str	r0, [r3, #8]
+  38:Core/Src/AML_MotorControl.c ****     PID_Right.SampleTime = NewSampleTime;
+  85              		.loc 1 38 5 is_stmt 1 view .LVU17
+  86              		.loc 1 38 26 is_stmt 0 view .LVU18
+  87 0004 024B     		ldr	r3, .L5+4
+  88 0006 9860     		str	r0, [r3, #8]
+  39:Core/Src/AML_MotorControl.c **** }
+  89              		.loc 1 39 1 view .LVU19
+  90 0008 7047     		bx	lr
+  91              	.L6:
+  92 000a 00BF     		.align	2
+  93              	.L5:
+  94 000c 00000000 		.word	PID_Left
+  95 0010 00000000 		.word	PID_Right
+  96              		.cfi_endproc
+  97              	.LFE131:
+  99              		.section	.text.AML_MotorControl_PIDSetOutputLimits,"ax",%progbits
+ 100              		.align	1
+ 101              		.global	AML_MotorControl_PIDSetOutputLimits
+ 102              		.syntax unified
+ 103              		.thumb
+ 104              		.thumb_func
+ 105              		.fpu fpv4-sp-d16
+ 107              	AML_MotorControl_PIDSetOutputLimits:
+ 108              	.LVL2:
+ 109              	.LFB132:
+  40:Core/Src/AML_MotorControl.c **** 
+  41:Core/Src/AML_MotorControl.c **** void AML_MotorControl_PIDSetOutputLimits(double Min, double Max)
+  42:Core/Src/AML_MotorControl.c **** {
+ 110              		.loc 1 42 1 is_stmt 1 view -0
+ 111              		.cfi_startproc
+ 112              		@ args = 0, pretend = 0, frame = 0
+ 113              		@ frame_needed = 0, uses_anonymous_args = 0
+ 114              		@ link register save eliminated.
+  43:Core/Src/AML_MotorControl.c ****     PID_Left.OutMin = Min;
+ 115              		.loc 1 43 5 view .LVU21
+ 116              		.loc 1 43 21 is_stmt 0 view .LVU22
+ 117 0000 054B     		ldr	r3, .L8
+ 118 0002 83ED180B 		vstr.64	d0, [r3, #96]
+  44:Core/Src/AML_MotorControl.c ****     PID_Left.OutMax = Max;
+ 119              		.loc 1 44 5 is_stmt 1 view .LVU23
+ 120              		.loc 1 44 21 is_stmt 0 view .LVU24
+ 121 0006 83ED1A1B 		vstr.64	d1, [r3, #104]
+  45:Core/Src/AML_MotorControl.c **** 
+  46:Core/Src/AML_MotorControl.c ****     PID_Right.OutMin = Min;
+ 122              		.loc 1 46 5 is_stmt 1 view .LVU25
+ 123              		.loc 1 46 22 is_stmt 0 view .LVU26
+ 124 000a 044B     		ldr	r3, .L8+4
+ 125 000c 83ED180B 		vstr.64	d0, [r3, #96]
+  47:Core/Src/AML_MotorControl.c ****     PID_Right.OutMax = Max;
+ 126              		.loc 1 47 5 is_stmt 1 view .LVU27
+ 127              		.loc 1 47 22 is_stmt 0 view .LVU28
+ 128 0010 83ED1A1B 		vstr.64	d1, [r3, #104]
+  48:Core/Src/AML_MotorControl.c **** }
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s 			page 4
 
 
- 136 003a B6F90020 		ldrsh	r2, [r6]
- 137 003e B2FA82F2 		clz	r2, r2
- 138 0042 5209     		lsrs	r2, r2, #5
- 139 0044 2021     		movs	r1, #32
- 140 0046 2846     		mov	r0, r5
- 141 0048 FFF7FEFF 		bl	HAL_GPIO_WritePin
- 142              	.LVL11:
-  21:Core/Src/AML_MotorControl.c ****     }
- 143              		.loc 1 21 9 view .LVU22
- 144 004c 0C4B     		ldr	r3, .L12+4
- 145 004e 1B68     		ldr	r3, [r3]
- 146 0050 5C63     		str	r4, [r3, #52]
- 147              	.L5:
- 148              		.loc 1 36 1 is_stmt 0 view .LVU23
- 149 0052 70BD     		pop	{r4, r5, r6, pc}
- 150              	.LVL12:
- 151              	.L11:
-  25:Core/Src/AML_MotorControl.c ****         HAL_GPIO_WritePin(AIN2_GPIO_Port, AIN2_Pin, direction);
- 152              		.loc 1 25 9 is_stmt 1 view .LVU24
- 153 0054 0B4E     		ldr	r6, .L12+8
- 154 0056 B6F90020 		ldrsh	r2, [r6]
- 155 005a 084D     		ldr	r5, .L12
- 156 005c B2FA82F2 		clz	r2, r2
- 157 0060 5209     		lsrs	r2, r2, #5
- 158 0062 8021     		movs	r1, #128
- 159 0064 2846     		mov	r0, r5
- 160              	.LVL13:
-  25:Core/Src/AML_MotorControl.c ****         HAL_GPIO_WritePin(AIN2_GPIO_Port, AIN2_Pin, direction);
- 161              		.loc 1 25 9 is_stmt 0 view .LVU25
- 162 0066 FFF7FEFF 		bl	HAL_GPIO_WritePin
- 163              	.LVL14:
-  26:Core/Src/AML_MotorControl.c ****         __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, PWMValue);
- 164              		.loc 1 26 9 is_stmt 1 view .LVU26
- 165 006a 3278     		ldrb	r2, [r6]	@ zero_extendqisi2
- 166 006c 2021     		movs	r1, #32
- 167 006e 2846     		mov	r0, r5
- 168 0070 FFF7FEFF 		bl	HAL_GPIO_WritePin
- 169              	.LVL15:
-  27:Core/Src/AML_MotorControl.c ****     }
- 170              		.loc 1 27 9 view .LVU27
- 171 0074 024B     		ldr	r3, .L12+4
- 172 0076 1B68     		ldr	r3, [r3]
- 173 0078 5C63     		str	r4, [r3, #52]
- 174 007a EAE7     		b	.L5
- 175              	.L13:
- 176              		.align	2
- 177              	.L12:
- 178 007c 000C0240 		.word	1073875968
- 179 0080 00000000 		.word	htim2
- 180 0084 00000000 		.word	.LANCHOR0
- 181              		.cfi_endproc
- 182              	.LFE236:
- 184              		.section	.text.AML_MotorControl_SetRightSpeed,"ax",%progbits
- 185              		.align	1
- 186              		.global	AML_MotorControl_SetRightSpeed
- 187              		.syntax unified
- 188              		.thumb
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccJg1Ucb.s 			page 5
+ 129              		.loc 1 48 1 view .LVU29
+ 130 0014 7047     		bx	lr
+ 131              	.L9:
+ 132 0016 00BF     		.align	2
+ 133              	.L8:
+ 134 0018 00000000 		.word	PID_Left
+ 135 001c 00000000 		.word	PID_Right
+ 136              		.cfi_endproc
+ 137              	.LFE132:
+ 139              		.section	.text.AML_MotorControl_PIDSetMode,"ax",%progbits
+ 140              		.align	1
+ 141              		.global	AML_MotorControl_PIDSetMode
+ 142              		.syntax unified
+ 143              		.thumb
+ 144              		.thumb_func
+ 145              		.fpu fpv4-sp-d16
+ 147              	AML_MotorControl_PIDSetMode:
+ 148              	.LVL3:
+ 149              	.LFB133:
+  49:Core/Src/AML_MotorControl.c **** 
+  50:Core/Src/AML_MotorControl.c **** void AML_MotorControl_PIDSetMode(PIDMode_TypeDef Mode)
+  51:Core/Src/AML_MotorControl.c **** {
+ 150              		.loc 1 51 1 is_stmt 1 view -0
+ 151              		.cfi_startproc
+ 152              		@ args = 0, pretend = 0, frame = 0
+ 153              		@ frame_needed = 0, uses_anonymous_args = 0
+ 154              		.loc 1 51 1 is_stmt 0 view .LVU31
+ 155 0000 10B5     		push	{r4, lr}
+ 156              		.cfi_def_cfa_offset 8
+ 157              		.cfi_offset 4, -8
+ 158              		.cfi_offset 14, -4
+ 159 0002 0446     		mov	r4, r0
+  52:Core/Src/AML_MotorControl.c ****     PID_SetMode(&PID_Left, Mode);
+ 160              		.loc 1 52 5 is_stmt 1 view .LVU32
+ 161 0004 0146     		mov	r1, r0
+ 162 0006 0448     		ldr	r0, .L12
+ 163              	.LVL4:
+ 164              		.loc 1 52 5 is_stmt 0 view .LVU33
+ 165 0008 FFF7FEFF 		bl	PID_SetMode
+ 166              	.LVL5:
+  53:Core/Src/AML_MotorControl.c ****     PID_SetMode(&PID_Right, Mode);
+ 167              		.loc 1 53 5 is_stmt 1 view .LVU34
+ 168 000c 2146     		mov	r1, r4
+ 169 000e 0348     		ldr	r0, .L12+4
+ 170 0010 FFF7FEFF 		bl	PID_SetMode
+ 171              	.LVL6:
+  54:Core/Src/AML_MotorControl.c **** }
+ 172              		.loc 1 54 1 is_stmt 0 view .LVU35
+ 173 0014 10BD     		pop	{r4, pc}
+ 174              	.L13:
+ 175 0016 00BF     		.align	2
+ 176              	.L12:
+ 177 0018 00000000 		.word	PID_Left
+ 178 001c 00000000 		.word	PID_Right
+ 179              		.cfi_endproc
+ 180              	.LFE133:
+ 182              		.section	.text.AML_MotorControl_PIDSetup,"ax",%progbits
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s 			page 5
 
 
- 189              		.thumb_func
- 190              		.fpu fpv4-sp-d16
- 192              	AML_MotorControl_SetRightSpeed:
- 193              	.LVL16:
- 194              	.LFB237:
-  37:Core/Src/AML_MotorControl.c **** 
-  38:Core/Src/AML_MotorControl.c **** void AML_MotorControl_SetRightSpeed(int16_t PWMValue)
-  39:Core/Src/AML_MotorControl.c **** {
- 195              		.loc 1 39 1 view -0
- 196              		.cfi_startproc
- 197              		@ args = 0, pretend = 0, frame = 0
- 198              		@ frame_needed = 0, uses_anonymous_args = 0
- 199              		.loc 1 39 1 is_stmt 0 view .LVU29
- 200 0000 70B5     		push	{r4, r5, r6, lr}
- 201              		.cfi_def_cfa_offset 16
- 202              		.cfi_offset 4, -16
- 203              		.cfi_offset 5, -12
- 204              		.cfi_offset 6, -8
- 205              		.cfi_offset 14, -4
-  40:Core/Src/AML_MotorControl.c ****     if (PWMValue > 0)
- 206              		.loc 1 40 5 is_stmt 1 view .LVU30
- 207              		.loc 1 40 8 is_stmt 0 view .LVU31
- 208 0002 041E     		subs	r4, r0, #0
- 209 0004 12DC     		bgt	.L19
-  41:Core/Src/AML_MotorControl.c ****     {
-  42:Core/Src/AML_MotorControl.c ****         HAL_GPIO_WritePin(BIN1_GPIO_Port, BIN1_Pin, direction);
-  43:Core/Src/AML_MotorControl.c ****         HAL_GPIO_WritePin(BIN2_GPIO_Port, BIN2_Pin, !direction);
-  44:Core/Src/AML_MotorControl.c ****         __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_2, PWMValue);
-  45:Core/Src/AML_MotorControl.c ****     }
-  46:Core/Src/AML_MotorControl.c ****     else if (PWMValue < 0)
- 210              		.loc 1 46 10 is_stmt 1 view .LVU32
- 211              		.loc 1 46 13 is_stmt 0 view .LVU33
- 212 0006 002C     		cmp	r4, #0
- 213 0008 24DB     		blt	.L20
-  47:Core/Src/AML_MotorControl.c ****     {
-  48:Core/Src/AML_MotorControl.c ****         HAL_GPIO_WritePin(BIN1_GPIO_Port, BIN1_Pin, !direction);
-  49:Core/Src/AML_MotorControl.c ****         HAL_GPIO_WritePin(BIN2_GPIO_Port, BIN2_Pin, direction);
-  50:Core/Src/AML_MotorControl.c ****         __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_2, PWMValue);
-  51:Core/Src/AML_MotorControl.c ****     }
-  52:Core/Src/AML_MotorControl.c ****     else if (!PWMValue)
- 214              		.loc 1 52 10 is_stmt 1 view .LVU34
- 215              		.loc 1 52 13 is_stmt 0 view .LVU35
- 216 000a 14BB     		cbnz	r4, .L14
-  53:Core/Src/AML_MotorControl.c ****     {
-  54:Core/Src/AML_MotorControl.c ****         HAL_GPIO_WritePin(BIN1_GPIO_Port, BIN1_Pin, GPIO_PIN_RESET);
- 217              		.loc 1 54 9 is_stmt 1 view .LVU36
- 218 000c 1B4C     		ldr	r4, .L21
- 219 000e 0022     		movs	r2, #0
- 220 0010 0821     		movs	r1, #8
- 221 0012 2046     		mov	r0, r4
- 222              	.LVL17:
- 223              		.loc 1 54 9 is_stmt 0 view .LVU37
- 224 0014 FFF7FEFF 		bl	HAL_GPIO_WritePin
- 225              	.LVL18:
-  55:Core/Src/AML_MotorControl.c ****         HAL_GPIO_WritePin(BIN2_GPIO_Port, BIN2_Pin, GPIO_PIN_RESET);
- 226              		.loc 1 55 9 is_stmt 1 view .LVU38
- 227 0018 0022     		movs	r2, #0
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccJg1Ucb.s 			page 6
+ 183              		.align	1
+ 184              		.global	AML_MotorControl_PIDSetup
+ 185              		.syntax unified
+ 186              		.thumb
+ 187              		.thumb_func
+ 188              		.fpu fpv4-sp-d16
+ 190              	AML_MotorControl_PIDSetup:
+ 191              	.LFB134:
+  55:Core/Src/AML_MotorControl.c **** 
+  56:Core/Src/AML_MotorControl.c **** void AML_MotorControl_PIDSetup()
+  57:Core/Src/AML_MotorControl.c **** {
+ 192              		.loc 1 57 1 is_stmt 1 view -0
+ 193              		.cfi_startproc
+ 194              		@ args = 0, pretend = 0, frame = 0
+ 195              		@ frame_needed = 0, uses_anonymous_args = 0
+ 196 0000 2DE9F041 		push	{r4, r5, r6, r7, r8, lr}
+ 197              		.cfi_def_cfa_offset 24
+ 198              		.cfi_offset 4, -24
+ 199              		.cfi_offset 5, -20
+ 200              		.cfi_offset 6, -16
+ 201              		.cfi_offset 7, -12
+ 202              		.cfi_offset 8, -8
+ 203              		.cfi_offset 14, -4
+ 204 0004 82B0     		sub	sp, sp, #8
+ 205              		.cfi_def_cfa_offset 32
+  58:Core/Src/AML_MotorControl.c **** 
+  59:Core/Src/AML_MotorControl.c ****     PID_Init(&PID_Left);
+ 206              		.loc 1 59 5 view .LVU37
+ 207 0006 264D     		ldr	r5, .L16+16
+ 208 0008 2846     		mov	r0, r5
+ 209 000a FFF7FEFF 		bl	PID_Init
+ 210              	.LVL7:
+  60:Core/Src/AML_MotorControl.c ****     PID_Init(&PID_Right);
+ 211              		.loc 1 60 5 view .LVU38
+ 212 000e 254C     		ldr	r4, .L16+20
+ 213 0010 2046     		mov	r0, r4
+ 214 0012 FFF7FEFF 		bl	PID_Init
+ 215              	.LVL8:
+  61:Core/Src/AML_MotorControl.c **** 
+  62:Core/Src/AML_MotorControl.c ****     PID(&PID_Left, &Input_Left, &Output_Left, &Setpoint_Left, kp, ki, kd, PID_Left.POn, PID_Left.Co
+ 216              		.loc 1 62 5 view .LVU39
+ 217 0016 DFF8B080 		ldr	r8, .L16+56
+ 218 001a 234F     		ldr	r7, .L16+24
+ 219 001c 234E     		ldr	r6, .L16+28
+ 220 001e EB78     		ldrb	r3, [r5, #3]	@ zero_extendqisi2
+ 221 0020 0193     		str	r3, [sp, #4]
+ 222 0022 AB78     		ldrb	r3, [r5, #2]	@ zero_extendqisi2
+ 223 0024 0093     		str	r3, [sp]
+ 224 0026 98ED002B 		vldr.64	d2, [r8]
+ 225 002a 97ED001B 		vldr.64	d1, [r7]
+ 226 002e 96ED000B 		vldr.64	d0, [r6]
+ 227 0032 1F4B     		ldr	r3, .L16+32
+ 228 0034 1F4A     		ldr	r2, .L16+36
+ 229 0036 2049     		ldr	r1, .L16+40
+ 230 0038 2846     		mov	r0, r5
+ 231 003a FFF7FEFF 		bl	PID
+ 232              	.LVL9:
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s 			page 6
 
 
- 228 001a 0221     		movs	r1, #2
- 229 001c 2046     		mov	r0, r4
- 230 001e FFF7FEFF 		bl	HAL_GPIO_WritePin
- 231              	.LVL19:
-  56:Core/Src/AML_MotorControl.c ****         __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_2, 0);
- 232              		.loc 1 56 9 view .LVU39
- 233 0022 174B     		ldr	r3, .L21+4
- 234 0024 1B68     		ldr	r3, [r3]
- 235 0026 0022     		movs	r2, #0
- 236 0028 9A63     		str	r2, [r3, #56]
-  57:Core/Src/AML_MotorControl.c ****     }
-  58:Core/Src/AML_MotorControl.c **** }
- 237              		.loc 1 58 1 is_stmt 0 view .LVU40
- 238 002a 12E0     		b	.L14
- 239              	.LVL20:
- 240              	.L19:
-  42:Core/Src/AML_MotorControl.c ****         HAL_GPIO_WritePin(BIN2_GPIO_Port, BIN2_Pin, !direction);
- 241              		.loc 1 42 9 is_stmt 1 view .LVU41
- 242 002c 154E     		ldr	r6, .L21+8
- 243 002e 134D     		ldr	r5, .L21
- 244 0030 3278     		ldrb	r2, [r6]	@ zero_extendqisi2
- 245 0032 0821     		movs	r1, #8
- 246 0034 2846     		mov	r0, r5
- 247              	.LVL21:
-  42:Core/Src/AML_MotorControl.c ****         HAL_GPIO_WritePin(BIN2_GPIO_Port, BIN2_Pin, !direction);
- 248              		.loc 1 42 9 is_stmt 0 view .LVU42
- 249 0036 FFF7FEFF 		bl	HAL_GPIO_WritePin
- 250              	.LVL22:
-  43:Core/Src/AML_MotorControl.c ****         __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_2, PWMValue);
- 251              		.loc 1 43 9 is_stmt 1 view .LVU43
- 252 003a B6F90020 		ldrsh	r2, [r6]
- 253 003e B2FA82F2 		clz	r2, r2
- 254 0042 5209     		lsrs	r2, r2, #5
- 255 0044 0221     		movs	r1, #2
- 256 0046 2846     		mov	r0, r5
- 257 0048 FFF7FEFF 		bl	HAL_GPIO_WritePin
- 258              	.LVL23:
-  44:Core/Src/AML_MotorControl.c ****     }
- 259              		.loc 1 44 9 view .LVU44
- 260 004c 0C4B     		ldr	r3, .L21+4
- 261 004e 1B68     		ldr	r3, [r3]
- 262 0050 9C63     		str	r4, [r3, #56]
- 263              	.L14:
- 264              		.loc 1 58 1 is_stmt 0 view .LVU45
- 265 0052 70BD     		pop	{r4, r5, r6, pc}
- 266              	.LVL24:
- 267              	.L20:
-  48:Core/Src/AML_MotorControl.c ****         HAL_GPIO_WritePin(BIN2_GPIO_Port, BIN2_Pin, direction);
- 268              		.loc 1 48 9 is_stmt 1 view .LVU46
- 269 0054 0B4E     		ldr	r6, .L21+8
- 270 0056 B6F90020 		ldrsh	r2, [r6]
- 271 005a 084D     		ldr	r5, .L21
- 272 005c B2FA82F2 		clz	r2, r2
- 273 0060 5209     		lsrs	r2, r2, #5
- 274 0062 0821     		movs	r1, #8
- 275 0064 2846     		mov	r0, r5
- 276              	.LVL25:
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccJg1Ucb.s 			page 7
-
-
-  48:Core/Src/AML_MotorControl.c ****         HAL_GPIO_WritePin(BIN2_GPIO_Port, BIN2_Pin, direction);
- 277              		.loc 1 48 9 is_stmt 0 view .LVU47
- 278 0066 FFF7FEFF 		bl	HAL_GPIO_WritePin
- 279              	.LVL26:
-  49:Core/Src/AML_MotorControl.c ****         __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_2, PWMValue);
- 280              		.loc 1 49 9 is_stmt 1 view .LVU48
- 281 006a 3278     		ldrb	r2, [r6]	@ zero_extendqisi2
- 282 006c 0221     		movs	r1, #2
- 283 006e 2846     		mov	r0, r5
- 284 0070 FFF7FEFF 		bl	HAL_GPIO_WritePin
- 285              	.LVL27:
-  50:Core/Src/AML_MotorControl.c ****     }
- 286              		.loc 1 50 9 view .LVU49
- 287 0074 024B     		ldr	r3, .L21+4
- 288 0076 1B68     		ldr	r3, [r3]
- 289 0078 9C63     		str	r4, [r3, #56]
- 290 007a EAE7     		b	.L14
- 291              	.L22:
- 292              		.align	2
- 293              	.L21:
- 294 007c 000C0240 		.word	1073875968
- 295 0080 00000000 		.word	htim2
- 296 0084 00000000 		.word	.LANCHOR0
- 297              		.cfi_endproc
- 298              	.LFE237:
- 300              		.section	.text.AML_MotorControl_SetDirection,"ax",%progbits
- 301              		.align	1
- 302              		.global	AML_MotorControl_SetDirection
- 303              		.syntax unified
- 304              		.thumb
- 305              		.thumb_func
- 306              		.fpu fpv4-sp-d16
- 308              	AML_MotorControl_SetDirection:
- 309              	.LVL28:
- 310              	.LFB238:
-  59:Core/Src/AML_MotorControl.c **** 
-  60:Core/Src/AML_MotorControl.c **** void AML_MotorControl_SetDirection(short dir)
-  61:Core/Src/AML_MotorControl.c **** {
- 311              		.loc 1 61 1 view -0
- 312              		.cfi_startproc
- 313              		@ args = 0, pretend = 0, frame = 0
- 314              		@ frame_needed = 0, uses_anonymous_args = 0
- 315              		@ link register save eliminated.
-  62:Core/Src/AML_MotorControl.c ****     direction = dir;
- 316              		.loc 1 62 5 view .LVU51
- 317              		.loc 1 62 15 is_stmt 0 view .LVU52
- 318 0000 014B     		ldr	r3, .L24
- 319 0002 1880     		strh	r0, [r3]	@ movhi
-  63:Core/Src/AML_MotorControl.c **** }
- 320              		.loc 1 63 1 view .LVU53
- 321 0004 7047     		bx	lr
- 322              	.L25:
- 323 0006 00BF     		.align	2
- 324              	.L24:
- 325 0008 00000000 		.word	.LANCHOR0
- 326              		.cfi_endproc
- 327              	.LFE238:
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccJg1Ucb.s 			page 8
-
-
- 329              		.section	.text.AML_MotorControl_ToggleDirection,"ax",%progbits
- 330              		.align	1
- 331              		.global	AML_MotorControl_ToggleDirection
- 332              		.syntax unified
- 333              		.thumb
- 334              		.thumb_func
- 335              		.fpu fpv4-sp-d16
- 337              	AML_MotorControl_ToggleDirection:
- 338              	.LFB239:
+  63:Core/Src/AML_MotorControl.c ****     PID(&PID_Right, &Input_Right, &Output_Right, &Setpoint_Right, kp, ki, kd, PID_Right.POn, PID_Ri
+ 233              		.loc 1 63 5 view .LVU40
+ 234 003e E378     		ldrb	r3, [r4, #3]	@ zero_extendqisi2
+ 235 0040 0193     		str	r3, [sp, #4]
+ 236 0042 A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 237 0044 0093     		str	r3, [sp]
+ 238 0046 98ED002B 		vldr.64	d2, [r8]
+ 239 004a 97ED001B 		vldr.64	d1, [r7]
+ 240 004e 96ED000B 		vldr.64	d0, [r6]
+ 241 0052 1A4B     		ldr	r3, .L16+44
+ 242 0054 1A4A     		ldr	r2, .L16+48
+ 243 0056 1B49     		ldr	r1, .L16+52
+ 244 0058 2046     		mov	r0, r4
+ 245 005a FFF7FEFF 		bl	PID
+ 246              	.LVL10:
   64:Core/Src/AML_MotorControl.c **** 
-  65:Core/Src/AML_MotorControl.c **** void AML_MotorControl_ToggleDirection()
-  66:Core/Src/AML_MotorControl.c **** {
- 339              		.loc 1 66 1 is_stmt 1 view -0
- 340              		.cfi_startproc
- 341              		@ args = 0, pretend = 0, frame = 0
- 342              		@ frame_needed = 0, uses_anonymous_args = 0
- 343              		@ link register save eliminated.
-  67:Core/Src/AML_MotorControl.c ****     direction = ~direction;
- 344              		.loc 1 67 5 view .LVU55
- 345              		.loc 1 67 15 is_stmt 0 view .LVU56
- 346 0000 024A     		ldr	r2, .L27
- 347 0002 1388     		ldrh	r3, [r2]
- 348 0004 DB43     		mvns	r3, r3
- 349 0006 1380     		strh	r3, [r2]	@ movhi
-  68:Core/Src/AML_MotorControl.c **** }
- 350              		.loc 1 68 1 view .LVU57
- 351 0008 7047     		bx	lr
- 352              	.L28:
- 353 000a 00BF     		.align	2
- 354              	.L27:
- 355 000c 00000000 		.word	.LANCHOR0
- 356              		.cfi_endproc
- 357              	.LFE239:
- 359              		.section	.text.Motor_PWM,"ax",%progbits
- 360              		.align	1
- 361              		.global	Motor_PWM
- 362              		.syntax unified
- 363              		.thumb
- 364              		.thumb_func
- 365              		.fpu fpv4-sp-d16
- 367              	Motor_PWM:
- 368              	.LVL29:
- 369              	.LFB240:
-  69:Core/Src/AML_MotorControl.c **** 
-  70:Core/Src/AML_MotorControl.c **** void Motor_PWM(uint8_t channel, uint32_t duty)
-  71:Core/Src/AML_MotorControl.c **** {
- 370              		.loc 1 71 1 is_stmt 1 view -0
- 371              		.cfi_startproc
- 372              		@ args = 0, pretend = 0, frame = 0
- 373              		@ frame_needed = 0, uses_anonymous_args = 0
- 374              		.loc 1 71 1 is_stmt 0 view .LVU59
- 375 0000 38B5     		push	{r3, r4, r5, lr}
- 376              		.cfi_def_cfa_offset 16
- 377              		.cfi_offset 3, -16
- 378              		.cfi_offset 4, -12
- 379              		.cfi_offset 5, -8
- 380              		.cfi_offset 14, -4
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccJg1Ucb.s 			page 9
+  65:Core/Src/AML_MotorControl.c ****     AML_MotorControl_PIDSetTunings(kp, ki, kd);
+ 247              		.loc 1 65 5 view .LVU41
+ 248 005e 98ED002B 		vldr.64	d2, [r8]
+ 249 0062 97ED001B 		vldr.64	d1, [r7]
+ 250 0066 96ED000B 		vldr.64	d0, [r6]
+ 251 006a FFF7FEFF 		bl	AML_MotorControl_PIDSetTunings
+ 252              	.LVL11:
+  66:Core/Src/AML_MotorControl.c ****     AML_MotorControl_PIDSetSampleTime(10);
+ 253              		.loc 1 66 5 view .LVU42
+ 254 006e 0A20     		movs	r0, #10
+ 255 0070 FFF7FEFF 		bl	AML_MotorControl_PIDSetSampleTime
+ 256              	.LVL12:
+  67:Core/Src/AML_MotorControl.c ****     AML_MotorControl_PIDSetOutputLimits(0, 100);
+ 257              		.loc 1 67 5 view .LVU43
+ 258 0074 9FED061B 		vldr.64	d1, .L16
+ 259 0078 9FED070B 		vldr.64	d0, .L16+8
+ 260 007c FFF7FEFF 		bl	AML_MotorControl_PIDSetOutputLimits
+ 261              	.LVL13:
+  68:Core/Src/AML_MotorControl.c ****     AML_MotorControl_PIDSetMode(_PID_MODE_AUTOMATIC);
+ 262              		.loc 1 68 5 view .LVU44
+ 263 0080 0120     		movs	r0, #1
+ 264 0082 FFF7FEFF 		bl	AML_MotorControl_PIDSetMode
+ 265              	.LVL14:
+  69:Core/Src/AML_MotorControl.c **** }
+ 266              		.loc 1 69 1 is_stmt 0 view .LVU45
+ 267 0086 02B0     		add	sp, sp, #8
+ 268              		.cfi_def_cfa_offset 24
+ 269              		@ sp needed
+ 270 0088 BDE8F081 		pop	{r4, r5, r6, r7, r8, pc}
+ 271              	.L17:
+ 272 008c AFF30080 		.align	3
+ 273              	.L16:
+ 274 0090 00000000 		.word	0
+ 275 0094 00005940 		.word	1079574528
+ 276 0098 00000000 		.word	0
+ 277 009c 00000000 		.word	0
+ 278 00a0 00000000 		.word	PID_Left
+ 279 00a4 00000000 		.word	PID_Right
+ 280 00a8 00000000 		.word	.LANCHOR1
+ 281 00ac 00000000 		.word	.LANCHOR2
+ 282 00b0 00000000 		.word	Setpoint_Left
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s 			page 7
 
 
- 381 0002 0D46     		mov	r5, r1
-  72:Core/Src/AML_MotorControl.c ****     uint32_t period = (SystemCoreClock / 5000) - 1;
- 382              		.loc 1 72 5 is_stmt 1 view .LVU60
- 383              		.loc 1 72 40 is_stmt 0 view .LVU61
- 384 0004 204B     		ldr	r3, .L40
- 385 0006 1C68     		ldr	r4, [r3]
- 386 0008 204B     		ldr	r3, .L40+4
- 387 000a A3FB0434 		umull	r3, r4, r3, r4
- 388 000e 240B     		lsrs	r4, r4, #12
- 389              		.loc 1 72 14 view .LVU62
- 390 0010 013C     		subs	r4, r4, #1
- 391              	.LVL30:
-  73:Core/Src/AML_MotorControl.c ****     htim2.Instance->ARR = period;
- 392              		.loc 1 73 5 is_stmt 1 view .LVU63
- 393              		.loc 1 73 10 is_stmt 0 view .LVU64
- 394 0012 1F4B     		ldr	r3, .L40+8
- 395 0014 1B68     		ldr	r3, [r3]
- 396              		.loc 1 73 25 view .LVU65
- 397 0016 DC62     		str	r4, [r3, #44]
-  74:Core/Src/AML_MotorControl.c ****     switch (channel)
- 398              		.loc 1 74 5 is_stmt 1 view .LVU66
- 399 0018 0128     		cmp	r0, #1
- 400 001a 03D0     		beq	.L30
- 401 001c 0228     		cmp	r0, #2
- 402 001e 15D0     		beq	.L31
- 403 0020 40B3     		cbz	r0, .L39
- 404              	.LVL31:
- 405              	.L29:
-  75:Core/Src/AML_MotorControl.c ****     {
-  76:Core/Src/AML_MotorControl.c ****     case 1:
-  77:Core/Src/AML_MotorControl.c ****         duty == 0 ? HAL_TIM_PWM_Stop(&htim2, TIM_CHANNEL_1) : HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL
-  78:Core/Src/AML_MotorControl.c ****         htim2.Instance->CCR1 = (period * duty) / 100;
-  79:Core/Src/AML_MotorControl.c ****         break;
-  80:Core/Src/AML_MotorControl.c ****     case 2:
-  81:Core/Src/AML_MotorControl.c ****         duty == 0 ? HAL_TIM_PWM_Stop(&htim2, TIM_CHANNEL_2) : HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL
-  82:Core/Src/AML_MotorControl.c ****         htim2.Instance->CCR2 = (period * duty) / 100;
-  83:Core/Src/AML_MotorControl.c ****         break;
-  84:Core/Src/AML_MotorControl.c ****     case 0:
-  85:Core/Src/AML_MotorControl.c ****         HAL_TIM_PWM_Stop(&htim2, TIM_CHANNEL_ALL);
-  86:Core/Src/AML_MotorControl.c ****         HAL_TIM_Base_Stop_IT(&htim2);
-  87:Core/Src/AML_MotorControl.c ****         break;
-  88:Core/Src/AML_MotorControl.c ****     default:
-  89:Core/Src/AML_MotorControl.c ****         break;
+ 283 00b4 00000000 		.word	Output_Left
+ 284 00b8 00000000 		.word	Input_Left
+ 285 00bc 00000000 		.word	Setpoint_Right
+ 286 00c0 00000000 		.word	Output_Right
+ 287 00c4 00000000 		.word	Input_Right
+ 288 00c8 00000000 		.word	.LANCHOR0
+ 289              		.cfi_endproc
+ 290              	.LFE134:
+ 292              		.section	.text.AML_MotorControl_Setup,"ax",%progbits
+ 293              		.align	1
+ 294              		.global	AML_MotorControl_Setup
+ 295              		.syntax unified
+ 296              		.thumb
+ 297              		.thumb_func
+ 298              		.fpu fpv4-sp-d16
+ 300              	AML_MotorControl_Setup:
+ 301              	.LFB135:
+  70:Core/Src/AML_MotorControl.c **** 
+  71:Core/Src/AML_MotorControl.c **** ///////////////////////////////////////////////////////////////////////////////////////////////////
+  72:Core/Src/AML_MotorControl.c **** void AML_MotorControl_Setup()
+  73:Core/Src/AML_MotorControl.c **** {
+ 302              		.loc 1 73 1 is_stmt 1 view -0
+ 303              		.cfi_startproc
+ 304              		@ args = 0, pretend = 0, frame = 0
+ 305              		@ frame_needed = 0, uses_anonymous_args = 0
+ 306 0000 10B5     		push	{r4, lr}
+ 307              		.cfi_def_cfa_offset 8
+ 308              		.cfi_offset 4, -8
+ 309              		.cfi_offset 14, -4
+  74:Core/Src/AML_MotorControl.c ****     HAL_TIM_Base_Start(&htim2);
+ 310              		.loc 1 74 5 view .LVU47
+ 311 0002 0C4C     		ldr	r4, .L20
+ 312 0004 2046     		mov	r0, r4
+ 313 0006 FFF7FEFF 		bl	HAL_TIM_Base_Start
+ 314              	.LVL15:
+  75:Core/Src/AML_MotorControl.c ****     HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
+ 315              		.loc 1 75 5 view .LVU48
+ 316 000a 0021     		movs	r1, #0
+ 317 000c 2046     		mov	r0, r4
+ 318 000e FFF7FEFF 		bl	HAL_TIM_PWM_Start
+ 319              	.LVL16:
+  76:Core/Src/AML_MotorControl.c ****     HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_2);
+ 320              		.loc 1 76 5 view .LVU49
+ 321 0012 0421     		movs	r1, #4
+ 322 0014 2046     		mov	r0, r4
+ 323 0016 FFF7FEFF 		bl	HAL_TIM_PWM_Start
+ 324              	.LVL17:
+  77:Core/Src/AML_MotorControl.c ****     HAL_GPIO_WritePin(STBY_GPIO_Port, STBY_Pin, GPIO_PIN_SET);
+ 325              		.loc 1 77 5 view .LVU50
+ 326 001a 0122     		movs	r2, #1
+ 327 001c 4FF48051 		mov	r1, #4096
+ 328 0020 0548     		ldr	r0, .L20+4
+ 329 0022 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 330              	.LVL18:
+  78:Core/Src/AML_MotorControl.c ****     htim2.Instance->ARR = period;
+ 331              		.loc 1 78 5 view .LVU51
+ 332              		.loc 1 78 10 is_stmt 0 view .LVU52
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s 			page 8
+
+
+ 333 0026 2368     		ldr	r3, [r4]
+ 334              		.loc 1 78 25 view .LVU53
+ 335 0028 044A     		ldr	r2, .L20+8
+ 336 002a 1268     		ldr	r2, [r2]
+ 337 002c DA62     		str	r2, [r3, #44]
+  79:Core/Src/AML_MotorControl.c **** 
+  80:Core/Src/AML_MotorControl.c ****     AML_MotorControl_PIDSetup();
+ 338              		.loc 1 80 5 is_stmt 1 view .LVU54
+ 339 002e FFF7FEFF 		bl	AML_MotorControl_PIDSetup
+ 340              	.LVL19:
+  81:Core/Src/AML_MotorControl.c **** }
+ 341              		.loc 1 81 1 is_stmt 0 view .LVU55
+ 342 0032 10BD     		pop	{r4, pc}
+ 343              	.L21:
+ 344              		.align	2
+ 345              	.L20:
+ 346 0034 00000000 		.word	htim2
+ 347 0038 00080240 		.word	1073874944
+ 348 003c 00000000 		.word	.LANCHOR3
+ 349              		.cfi_endproc
+ 350              	.LFE135:
+ 352              		.section	.text.AML_MotorControl_LeftPWM,"ax",%progbits
+ 353              		.align	1
+ 354              		.global	AML_MotorControl_LeftPWM
+ 355              		.syntax unified
+ 356              		.thumb
+ 357              		.thumb_func
+ 358              		.fpu fpv4-sp-d16
+ 360              	AML_MotorControl_LeftPWM:
+ 361              	.LVL20:
+ 362              	.LFB136:
+  82:Core/Src/AML_MotorControl.c **** 
+  83:Core/Src/AML_MotorControl.c **** void AML_MotorControl_LeftPWM(int16_t PWMValue)
+  84:Core/Src/AML_MotorControl.c **** {
+ 363              		.loc 1 84 1 is_stmt 1 view -0
+ 364              		.cfi_startproc
+ 365              		@ args = 0, pretend = 0, frame = 0
+ 366              		@ frame_needed = 0, uses_anonymous_args = 0
+ 367              		.loc 1 84 1 is_stmt 0 view .LVU57
+ 368 0000 70B5     		push	{r4, r5, r6, lr}
+ 369              		.cfi_def_cfa_offset 16
+ 370              		.cfi_offset 4, -16
+ 371              		.cfi_offset 5, -12
+ 372              		.cfi_offset 6, -8
+ 373              		.cfi_offset 14, -4
+  85:Core/Src/AML_MotorControl.c ****     if (PWMValue > 0)
+ 374              		.loc 1 85 5 is_stmt 1 view .LVU58
+ 375              		.loc 1 85 8 is_stmt 0 view .LVU59
+ 376 0002 041E     		subs	r4, r0, #0
+ 377 0004 12DC     		bgt	.L27
+  86:Core/Src/AML_MotorControl.c ****     {
+  87:Core/Src/AML_MotorControl.c ****         HAL_GPIO_WritePin(AIN1_GPIO_Port, AIN1_Pin, direction);
+  88:Core/Src/AML_MotorControl.c ****         HAL_GPIO_WritePin(AIN2_GPIO_Port, AIN2_Pin, !direction);
+  89:Core/Src/AML_MotorControl.c ****         // __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, PWMValue);
+  90:Core/Src/AML_MotorControl.c ****         htim2.Instance->CCR1 = (period * PWMValue) / 100;
+  91:Core/Src/AML_MotorControl.c ****     }
+  92:Core/Src/AML_MotorControl.c ****     else if (PWMValue < 0)
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s 			page 9
+
+
+ 378              		.loc 1 92 10 is_stmt 1 view .LVU60
+ 379              		.loc 1 92 13 is_stmt 0 view .LVU61
+ 380 0006 002C     		cmp	r4, #0
+ 381 0008 2CDB     		blt	.L28
+  93:Core/Src/AML_MotorControl.c ****     {
+  94:Core/Src/AML_MotorControl.c ****         HAL_GPIO_WritePin(AIN1_GPIO_Port, AIN1_Pin, !direction);
+  95:Core/Src/AML_MotorControl.c ****         HAL_GPIO_WritePin(AIN2_GPIO_Port, AIN2_Pin, direction);
+  96:Core/Src/AML_MotorControl.c ****         // __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, PWMValue);
+  97:Core/Src/AML_MotorControl.c ****         htim2.Instance->CCR1 = (period * (-PWMValue)) / 100;
+  98:Core/Src/AML_MotorControl.c ****     }
+  99:Core/Src/AML_MotorControl.c ****     else if (!PWMValue)
+ 382              		.loc 1 99 10 is_stmt 1 view .LVU62
+ 383              		.loc 1 99 13 is_stmt 0 view .LVU63
+ 384 000a 54BB     		cbnz	r4, .L22
+ 100:Core/Src/AML_MotorControl.c ****     {
+ 101:Core/Src/AML_MotorControl.c ****         HAL_GPIO_WritePin(AIN1_GPIO_Port, AIN1_Pin, GPIO_PIN_RESET);
+ 385              		.loc 1 101 9 is_stmt 1 view .LVU64
+ 386 000c 244C     		ldr	r4, .L29
+ 387 000e 0022     		movs	r2, #0
+ 388 0010 8021     		movs	r1, #128
+ 389 0012 2046     		mov	r0, r4
+ 390              	.LVL21:
+ 391              		.loc 1 101 9 is_stmt 0 view .LVU65
+ 392 0014 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 393              	.LVL22:
+ 102:Core/Src/AML_MotorControl.c ****         HAL_GPIO_WritePin(AIN2_GPIO_Port, AIN2_Pin, GPIO_PIN_RESET);
+ 394              		.loc 1 102 9 is_stmt 1 view .LVU66
+ 395 0018 0022     		movs	r2, #0
+ 396 001a 2021     		movs	r1, #32
+ 397 001c 2046     		mov	r0, r4
+ 398 001e FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 399              	.LVL23:
+ 103:Core/Src/AML_MotorControl.c ****         // __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, 0);
+ 104:Core/Src/AML_MotorControl.c ****         htim2.Instance->CCR1 = 0;
+ 400              		.loc 1 104 9 view .LVU67
+ 401              		.loc 1 104 14 is_stmt 0 view .LVU68
+ 402 0022 204B     		ldr	r3, .L29+4
+ 403 0024 1B68     		ldr	r3, [r3]
+ 404              		.loc 1 104 30 view .LVU69
+ 405 0026 0022     		movs	r2, #0
+ 406 0028 5A63     		str	r2, [r3, #52]
+ 105:Core/Src/AML_MotorControl.c ****     }
+ 106:Core/Src/AML_MotorControl.c **** }
+ 407              		.loc 1 106 1 view .LVU70
+ 408 002a 1AE0     		b	.L22
+ 409              	.LVL24:
+ 410              	.L27:
+  87:Core/Src/AML_MotorControl.c ****         HAL_GPIO_WritePin(AIN2_GPIO_Port, AIN2_Pin, !direction);
+ 411              		.loc 1 87 9 is_stmt 1 view .LVU71
+ 412 002c 1E4E     		ldr	r6, .L29+8
+ 413 002e 1C4D     		ldr	r5, .L29
+ 414 0030 3278     		ldrb	r2, [r6]	@ zero_extendqisi2
+ 415 0032 8021     		movs	r1, #128
+ 416 0034 2846     		mov	r0, r5
+ 417              	.LVL25:
+  87:Core/Src/AML_MotorControl.c ****         HAL_GPIO_WritePin(AIN2_GPIO_Port, AIN2_Pin, !direction);
+ 418              		.loc 1 87 9 is_stmt 0 view .LVU72
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s 			page 10
+
+
+ 419 0036 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 420              	.LVL26:
+  88:Core/Src/AML_MotorControl.c ****         // __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, PWMValue);
+ 421              		.loc 1 88 9 is_stmt 1 view .LVU73
+ 422 003a B6F90020 		ldrsh	r2, [r6]
+ 423 003e B2FA82F2 		clz	r2, r2
+ 424 0042 5209     		lsrs	r2, r2, #5
+ 425 0044 2021     		movs	r1, #32
+ 426 0046 2846     		mov	r0, r5
+ 427 0048 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 428              	.LVL27:
   90:Core/Src/AML_MotorControl.c ****     }
-  91:Core/Src/AML_MotorControl.c **** }
- 406              		.loc 1 91 1 is_stmt 0 view .LVU67
- 407 0022 38BD     		pop	{r3, r4, r5, pc}
- 408              	.LVL32:
- 409              	.L30:
-  77:Core/Src/AML_MotorControl.c ****         htim2.Instance->CCR1 = (period * duty) / 100;
- 410              		.loc 1 77 9 is_stmt 1 view .LVU68
-  77:Core/Src/AML_MotorControl.c ****         htim2.Instance->CCR1 = (period * duty) / 100;
- 411              		.loc 1 77 61 is_stmt 0 view .LVU69
- 412 0024 69B9     		cbnz	r1, .L34
-  77:Core/Src/AML_MotorControl.c ****         htim2.Instance->CCR1 = (period * duty) / 100;
- 413              		.loc 1 77 21 discriminator 1 view .LVU70
- 414 0026 0021     		movs	r1, #0
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccJg1Ucb.s 			page 10
+ 429              		.loc 1 90 9 view .LVU74
+  90:Core/Src/AML_MotorControl.c ****     }
+ 430              		.loc 1 90 40 is_stmt 0 view .LVU75
+ 431 004c 174B     		ldr	r3, .L29+12
+ 432 004e 1B68     		ldr	r3, [r3]
+ 433 0050 03FB04F3 		mul	r3, r3, r4
+  90:Core/Src/AML_MotorControl.c ****     }
+ 434              		.loc 1 90 14 view .LVU76
+ 435 0054 134A     		ldr	r2, .L29+4
+ 436 0056 1268     		ldr	r2, [r2]
+  90:Core/Src/AML_MotorControl.c ****     }
+ 437              		.loc 1 90 52 view .LVU77
+ 438 0058 1548     		ldr	r0, .L29+16
+ 439 005a A0FB0313 		umull	r1, r3, r0, r3
+ 440 005e 5B09     		lsrs	r3, r3, #5
+  90:Core/Src/AML_MotorControl.c ****     }
+ 441              		.loc 1 90 30 view .LVU78
+ 442 0060 5363     		str	r3, [r2, #52]
+ 443              	.L22:
+ 444              		.loc 1 106 1 view .LVU79
+ 445 0062 70BD     		pop	{r4, r5, r6, pc}
+ 446              	.LVL28:
+ 447              	.L28:
+  94:Core/Src/AML_MotorControl.c ****         HAL_GPIO_WritePin(AIN2_GPIO_Port, AIN2_Pin, direction);
+ 448              		.loc 1 94 9 is_stmt 1 view .LVU80
+ 449 0064 104E     		ldr	r6, .L29+8
+ 450 0066 B6F90020 		ldrsh	r2, [r6]
+ 451 006a 0D4D     		ldr	r5, .L29
+ 452 006c B2FA82F2 		clz	r2, r2
+ 453 0070 5209     		lsrs	r2, r2, #5
+ 454 0072 8021     		movs	r1, #128
+ 455 0074 2846     		mov	r0, r5
+ 456              	.LVL29:
+  94:Core/Src/AML_MotorControl.c ****         HAL_GPIO_WritePin(AIN2_GPIO_Port, AIN2_Pin, direction);
+ 457              		.loc 1 94 9 is_stmt 0 view .LVU81
+ 458 0076 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 459              	.LVL30:
+  95:Core/Src/AML_MotorControl.c ****         // __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, PWMValue);
+ 460              		.loc 1 95 9 is_stmt 1 view .LVU82
+ 461 007a 3278     		ldrb	r2, [r6]	@ zero_extendqisi2
+ 462 007c 2021     		movs	r1, #32
+ 463 007e 2846     		mov	r0, r5
+ 464 0080 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 465              	.LVL31:
+  97:Core/Src/AML_MotorControl.c ****     }
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s 			page 11
 
 
- 415              	.LVL33:
-  77:Core/Src/AML_MotorControl.c ****         htim2.Instance->CCR1 = (period * duty) / 100;
- 416              		.loc 1 77 21 discriminator 1 view .LVU71
- 417 0028 1948     		ldr	r0, .L40+8
- 418              	.LVL34:
-  77:Core/Src/AML_MotorControl.c ****         htim2.Instance->CCR1 = (period * duty) / 100;
- 419              		.loc 1 77 21 discriminator 1 view .LVU72
- 420 002a FFF7FEFF 		bl	HAL_TIM_PWM_Stop
- 421              	.LVL35:
- 422              	.L35:
-  78:Core/Src/AML_MotorControl.c ****         break;
- 423              		.loc 1 78 9 is_stmt 1 view .LVU73
-  78:Core/Src/AML_MotorControl.c ****         break;
- 424              		.loc 1 78 40 is_stmt 0 view .LVU74
- 425 002e 05FB04F4 		mul	r4, r5, r4
- 426              	.LVL36:
-  78:Core/Src/AML_MotorControl.c ****         break;
- 427              		.loc 1 78 14 view .LVU75
- 428 0032 174B     		ldr	r3, .L40+8
- 429 0034 1B68     		ldr	r3, [r3]
-  78:Core/Src/AML_MotorControl.c ****         break;
- 430              		.loc 1 78 48 view .LVU76
- 431 0036 174A     		ldr	r2, .L40+12
- 432 0038 A2FB0424 		umull	r2, r4, r2, r4
- 433 003c 6409     		lsrs	r4, r4, #5
-  78:Core/Src/AML_MotorControl.c ****         break;
- 434              		.loc 1 78 30 view .LVU77
- 435 003e 5C63     		str	r4, [r3, #52]
-  79:Core/Src/AML_MotorControl.c ****     case 2:
- 436              		.loc 1 79 9 is_stmt 1 view .LVU78
- 437 0040 EFE7     		b	.L29
- 438              	.LVL37:
- 439              	.L34:
-  77:Core/Src/AML_MotorControl.c ****         htim2.Instance->CCR1 = (period * duty) / 100;
- 440              		.loc 1 77 63 is_stmt 0 discriminator 2 view .LVU79
- 441 0042 0021     		movs	r1, #0
- 442              	.LVL38:
-  77:Core/Src/AML_MotorControl.c ****         htim2.Instance->CCR1 = (period * duty) / 100;
- 443              		.loc 1 77 63 discriminator 2 view .LVU80
- 444 0044 1248     		ldr	r0, .L40+8
- 445              	.LVL39:
-  77:Core/Src/AML_MotorControl.c ****         htim2.Instance->CCR1 = (period * duty) / 100;
- 446              		.loc 1 77 63 discriminator 2 view .LVU81
- 447 0046 FFF7FEFF 		bl	HAL_TIM_PWM_Start
- 448              	.LVL40:
- 449 004a F0E7     		b	.L35
- 450              	.LVL41:
- 451              	.L31:
-  81:Core/Src/AML_MotorControl.c ****         htim2.Instance->CCR2 = (period * duty) / 100;
- 452              		.loc 1 81 9 is_stmt 1 view .LVU82
-  81:Core/Src/AML_MotorControl.c ****         htim2.Instance->CCR2 = (period * duty) / 100;
- 453              		.loc 1 81 61 is_stmt 0 view .LVU83
- 454 004c 69B9     		cbnz	r1, .L36
-  81:Core/Src/AML_MotorControl.c ****         htim2.Instance->CCR2 = (period * duty) / 100;
- 455              		.loc 1 81 21 discriminator 1 view .LVU84
- 456 004e 0421     		movs	r1, #4
- 457              	.LVL42:
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccJg1Ucb.s 			page 11
+ 466              		.loc 1 97 9 view .LVU83
+  97:Core/Src/AML_MotorControl.c ****     }
+ 467              		.loc 1 97 43 is_stmt 0 view .LVU84
+ 468 0084 6042     		rsbs	r0, r4, #0
+  97:Core/Src/AML_MotorControl.c ****     }
+ 469              		.loc 1 97 40 view .LVU85
+ 470 0086 094B     		ldr	r3, .L29+12
+ 471 0088 1B68     		ldr	r3, [r3]
+ 472 008a 03FB00F3 		mul	r3, r3, r0
+  97:Core/Src/AML_MotorControl.c ****     }
+ 473              		.loc 1 97 14 view .LVU86
+ 474 008e 054A     		ldr	r2, .L29+4
+ 475 0090 1268     		ldr	r2, [r2]
+  97:Core/Src/AML_MotorControl.c ****     }
+ 476              		.loc 1 97 55 view .LVU87
+ 477 0092 074C     		ldr	r4, .L29+16
+ 478 0094 A4FB0313 		umull	r1, r3, r4, r3
+ 479 0098 5B09     		lsrs	r3, r3, #5
+  97:Core/Src/AML_MotorControl.c ****     }
+ 480              		.loc 1 97 30 view .LVU88
+ 481 009a 5363     		str	r3, [r2, #52]
+ 482 009c E1E7     		b	.L22
+ 483              	.L30:
+ 484 009e 00BF     		.align	2
+ 485              	.L29:
+ 486 00a0 000C0240 		.word	1073875968
+ 487 00a4 00000000 		.word	htim2
+ 488 00a8 00000000 		.word	.LANCHOR4
+ 489 00ac 00000000 		.word	.LANCHOR3
+ 490 00b0 1F85EB51 		.word	1374389535
+ 491              		.cfi_endproc
+ 492              	.LFE136:
+ 494              		.section	.text.AML_MotorControl_RightPWM,"ax",%progbits
+ 495              		.align	1
+ 496              		.global	AML_MotorControl_RightPWM
+ 497              		.syntax unified
+ 498              		.thumb
+ 499              		.thumb_func
+ 500              		.fpu fpv4-sp-d16
+ 502              	AML_MotorControl_RightPWM:
+ 503              	.LVL32:
+ 504              	.LFB137:
+ 107:Core/Src/AML_MotorControl.c **** 
+ 108:Core/Src/AML_MotorControl.c **** void AML_MotorControl_RightPWM(int16_t PWMValue)
+ 109:Core/Src/AML_MotorControl.c **** {
+ 505              		.loc 1 109 1 is_stmt 1 view -0
+ 506              		.cfi_startproc
+ 507              		@ args = 0, pretend = 0, frame = 0
+ 508              		@ frame_needed = 0, uses_anonymous_args = 0
+ 509              		.loc 1 109 1 is_stmt 0 view .LVU90
+ 510 0000 70B5     		push	{r4, r5, r6, lr}
+ 511              		.cfi_def_cfa_offset 16
+ 512              		.cfi_offset 4, -16
+ 513              		.cfi_offset 5, -12
+ 514              		.cfi_offset 6, -8
+ 515              		.cfi_offset 14, -4
+ 110:Core/Src/AML_MotorControl.c ****     if (PWMValue > 0)
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s 			page 12
 
 
-  81:Core/Src/AML_MotorControl.c ****         htim2.Instance->CCR2 = (period * duty) / 100;
- 458              		.loc 1 81 21 discriminator 1 view .LVU85
- 459 0050 0F48     		ldr	r0, .L40+8
- 460              	.LVL43:
-  81:Core/Src/AML_MotorControl.c ****         htim2.Instance->CCR2 = (period * duty) / 100;
- 461              		.loc 1 81 21 discriminator 1 view .LVU86
- 462 0052 FFF7FEFF 		bl	HAL_TIM_PWM_Stop
- 463              	.LVL44:
- 464              	.L37:
-  82:Core/Src/AML_MotorControl.c ****         break;
- 465              		.loc 1 82 9 is_stmt 1 view .LVU87
-  82:Core/Src/AML_MotorControl.c ****         break;
- 466              		.loc 1 82 40 is_stmt 0 view .LVU88
- 467 0056 05FB04F4 		mul	r4, r5, r4
- 468              	.LVL45:
-  82:Core/Src/AML_MotorControl.c ****         break;
- 469              		.loc 1 82 14 view .LVU89
- 470 005a 0D4B     		ldr	r3, .L40+8
- 471 005c 1B68     		ldr	r3, [r3]
-  82:Core/Src/AML_MotorControl.c ****         break;
- 472              		.loc 1 82 48 view .LVU90
- 473 005e 0D4D     		ldr	r5, .L40+12
- 474              	.LVL46:
-  82:Core/Src/AML_MotorControl.c ****         break;
- 475              		.loc 1 82 48 view .LVU91
- 476 0060 A5FB0424 		umull	r2, r4, r5, r4
- 477 0064 6409     		lsrs	r4, r4, #5
-  82:Core/Src/AML_MotorControl.c ****         break;
- 478              		.loc 1 82 30 view .LVU92
- 479 0066 9C63     		str	r4, [r3, #56]
-  83:Core/Src/AML_MotorControl.c ****     case 0:
- 480              		.loc 1 83 9 is_stmt 1 view .LVU93
- 481 0068 DBE7     		b	.L29
- 482              	.LVL47:
- 483              	.L36:
-  81:Core/Src/AML_MotorControl.c ****         htim2.Instance->CCR2 = (period * duty) / 100;
- 484              		.loc 1 81 63 is_stmt 0 discriminator 2 view .LVU94
- 485 006a 0421     		movs	r1, #4
- 486              	.LVL48:
-  81:Core/Src/AML_MotorControl.c ****         htim2.Instance->CCR2 = (period * duty) / 100;
- 487              		.loc 1 81 63 discriminator 2 view .LVU95
- 488 006c 0848     		ldr	r0, .L40+8
- 489              	.LVL49:
-  81:Core/Src/AML_MotorControl.c ****         htim2.Instance->CCR2 = (period * duty) / 100;
- 490              		.loc 1 81 63 discriminator 2 view .LVU96
- 491 006e FFF7FEFF 		bl	HAL_TIM_PWM_Start
- 492              	.LVL50:
- 493 0072 F0E7     		b	.L37
- 494              	.LVL51:
- 495              	.L39:
-  85:Core/Src/AML_MotorControl.c ****         HAL_TIM_Base_Stop_IT(&htim2);
- 496              		.loc 1 85 9 is_stmt 1 view .LVU97
- 497 0074 064C     		ldr	r4, .L40+8
- 498              	.LVL52:
-  85:Core/Src/AML_MotorControl.c ****         HAL_TIM_Base_Stop_IT(&htim2);
- 499              		.loc 1 85 9 is_stmt 0 view .LVU98
- 500 0076 3C21     		movs	r1, #60
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccJg1Ucb.s 			page 12
+ 516              		.loc 1 110 5 is_stmt 1 view .LVU91
+ 517              		.loc 1 110 8 is_stmt 0 view .LVU92
+ 518 0002 041E     		subs	r4, r0, #0
+ 519 0004 12DC     		bgt	.L36
+ 111:Core/Src/AML_MotorControl.c ****     {
+ 112:Core/Src/AML_MotorControl.c ****         HAL_GPIO_WritePin(BIN1_GPIO_Port, BIN1_Pin, !direction);
+ 113:Core/Src/AML_MotorControl.c ****         HAL_GPIO_WritePin(BIN2_GPIO_Port, BIN2_Pin, direction);
+ 114:Core/Src/AML_MotorControl.c ****         // __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_2, PWMValue);
+ 115:Core/Src/AML_MotorControl.c ****         htim2.Instance->CCR2 = (period * PWMValue) / 100;
+ 116:Core/Src/AML_MotorControl.c ****     }
+ 117:Core/Src/AML_MotorControl.c ****     else if (PWMValue < 0)
+ 520              		.loc 1 117 10 is_stmt 1 view .LVU93
+ 521              		.loc 1 117 13 is_stmt 0 view .LVU94
+ 522 0006 002C     		cmp	r4, #0
+ 523 0008 2CDB     		blt	.L37
+ 118:Core/Src/AML_MotorControl.c ****     {
+ 119:Core/Src/AML_MotorControl.c ****         HAL_GPIO_WritePin(BIN1_GPIO_Port, BIN1_Pin, direction);
+ 120:Core/Src/AML_MotorControl.c ****         HAL_GPIO_WritePin(BIN2_GPIO_Port, BIN2_Pin, !direction);
+ 121:Core/Src/AML_MotorControl.c ****         // __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_2, PWMValue);
+ 122:Core/Src/AML_MotorControl.c ****         htim2.Instance->CCR2 = (period * -(PWMValue)) / 100;
+ 123:Core/Src/AML_MotorControl.c ****     }
+ 124:Core/Src/AML_MotorControl.c ****     else if (!PWMValue)
+ 524              		.loc 1 124 10 is_stmt 1 view .LVU95
+ 525              		.loc 1 124 13 is_stmt 0 view .LVU96
+ 526 000a 54BB     		cbnz	r4, .L31
+ 125:Core/Src/AML_MotorControl.c ****     {
+ 126:Core/Src/AML_MotorControl.c ****         HAL_GPIO_WritePin(BIN1_GPIO_Port, BIN1_Pin, GPIO_PIN_RESET);
+ 527              		.loc 1 126 9 is_stmt 1 view .LVU97
+ 528 000c 244C     		ldr	r4, .L38
+ 529 000e 0022     		movs	r2, #0
+ 530 0010 0821     		movs	r1, #8
+ 531 0012 2046     		mov	r0, r4
+ 532              	.LVL33:
+ 533              		.loc 1 126 9 is_stmt 0 view .LVU98
+ 534 0014 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 535              	.LVL34:
+ 127:Core/Src/AML_MotorControl.c ****         HAL_GPIO_WritePin(BIN2_GPIO_Port, BIN2_Pin, GPIO_PIN_RESET);
+ 536              		.loc 1 127 9 is_stmt 1 view .LVU99
+ 537 0018 0022     		movs	r2, #0
+ 538 001a 0221     		movs	r1, #2
+ 539 001c 2046     		mov	r0, r4
+ 540 001e FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 541              	.LVL35:
+ 128:Core/Src/AML_MotorControl.c ****         // __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_2, 0);
+ 129:Core/Src/AML_MotorControl.c ****         htim2.Instance->CCR2 = 0;
+ 542              		.loc 1 129 9 view .LVU100
+ 543              		.loc 1 129 14 is_stmt 0 view .LVU101
+ 544 0022 204B     		ldr	r3, .L38+4
+ 545 0024 1B68     		ldr	r3, [r3]
+ 546              		.loc 1 129 30 view .LVU102
+ 547 0026 0022     		movs	r2, #0
+ 548 0028 9A63     		str	r2, [r3, #56]
+ 130:Core/Src/AML_MotorControl.c ****     }
+ 131:Core/Src/AML_MotorControl.c **** }
+ 549              		.loc 1 131 1 view .LVU103
+ 550 002a 1AE0     		b	.L31
+ 551              	.LVL36:
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s 			page 13
 
 
- 501              	.LVL53:
-  85:Core/Src/AML_MotorControl.c ****         HAL_TIM_Base_Stop_IT(&htim2);
- 502              		.loc 1 85 9 view .LVU99
- 503 0078 2046     		mov	r0, r4
- 504              	.LVL54:
-  85:Core/Src/AML_MotorControl.c ****         HAL_TIM_Base_Stop_IT(&htim2);
- 505              		.loc 1 85 9 view .LVU100
- 506 007a FFF7FEFF 		bl	HAL_TIM_PWM_Stop
- 507              	.LVL55:
-  86:Core/Src/AML_MotorControl.c ****         break;
- 508              		.loc 1 86 9 is_stmt 1 view .LVU101
- 509 007e 2046     		mov	r0, r4
- 510 0080 FFF7FEFF 		bl	HAL_TIM_Base_Stop_IT
- 511              	.LVL56:
-  87:Core/Src/AML_MotorControl.c ****     default:
- 512              		.loc 1 87 9 view .LVU102
- 513              		.loc 1 91 1 is_stmt 0 view .LVU103
- 514 0084 CDE7     		b	.L29
- 515              	.L41:
- 516 0086 00BF     		.align	2
- 517              	.L40:
- 518 0088 00000000 		.word	SystemCoreClock
- 519 008c 5917B7D1 		.word	-776530087
- 520 0090 00000000 		.word	htim2
- 521 0094 1F85EB51 		.word	1374389535
- 522              		.cfi_endproc
- 523              	.LFE240:
- 525              		.global	direction
- 526              		.section	.bss.direction,"aw",%nobits
- 527              		.align	1
- 528              		.set	.LANCHOR0,. + 0
- 531              	direction:
- 532 0000 0000     		.space	2
- 533              		.text
- 534              	.Letext0:
- 535              		.file 2 "c:\\make\\test\\gcc-arm-none-eabi-9-2019-q4-major-win32\\arm-none-eabi\\include\\machine\
- 536              		.file 3 "c:\\make\\test\\gcc-arm-none-eabi-9-2019-q4-major-win32\\arm-none-eabi\\include\\sys\\_st
- 537              		.file 4 "Drivers/CMSIS/Include/core_cm4.h"
- 538              		.file 5 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h"
- 539              		.file 6 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h"
- 540              		.file 7 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h"
- 541              		.file 8 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h"
- 542              		.file 9 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h"
- 543              		.file 10 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h"
- 544              		.file 11 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h"
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccJg1Ucb.s 			page 13
+ 552              	.L36:
+ 112:Core/Src/AML_MotorControl.c ****         HAL_GPIO_WritePin(BIN2_GPIO_Port, BIN2_Pin, direction);
+ 553              		.loc 1 112 9 is_stmt 1 view .LVU104
+ 554 002c 1E4E     		ldr	r6, .L38+8
+ 555 002e B6F90020 		ldrsh	r2, [r6]
+ 556 0032 1B4D     		ldr	r5, .L38
+ 557 0034 B2FA82F2 		clz	r2, r2
+ 558 0038 5209     		lsrs	r2, r2, #5
+ 559 003a 0821     		movs	r1, #8
+ 560 003c 2846     		mov	r0, r5
+ 561              	.LVL37:
+ 112:Core/Src/AML_MotorControl.c ****         HAL_GPIO_WritePin(BIN2_GPIO_Port, BIN2_Pin, direction);
+ 562              		.loc 1 112 9 is_stmt 0 view .LVU105
+ 563 003e FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 564              	.LVL38:
+ 113:Core/Src/AML_MotorControl.c ****         // __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_2, PWMValue);
+ 565              		.loc 1 113 9 is_stmt 1 view .LVU106
+ 566 0042 3278     		ldrb	r2, [r6]	@ zero_extendqisi2
+ 567 0044 0221     		movs	r1, #2
+ 568 0046 2846     		mov	r0, r5
+ 569 0048 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 570              	.LVL39:
+ 115:Core/Src/AML_MotorControl.c ****     }
+ 571              		.loc 1 115 9 view .LVU107
+ 115:Core/Src/AML_MotorControl.c ****     }
+ 572              		.loc 1 115 40 is_stmt 0 view .LVU108
+ 573 004c 174B     		ldr	r3, .L38+12
+ 574 004e 1B68     		ldr	r3, [r3]
+ 575 0050 03FB04F3 		mul	r3, r3, r4
+ 115:Core/Src/AML_MotorControl.c ****     }
+ 576              		.loc 1 115 14 view .LVU109
+ 577 0054 134A     		ldr	r2, .L38+4
+ 578 0056 1268     		ldr	r2, [r2]
+ 115:Core/Src/AML_MotorControl.c ****     }
+ 579              		.loc 1 115 52 view .LVU110
+ 580 0058 1548     		ldr	r0, .L38+16
+ 581 005a A0FB0313 		umull	r1, r3, r0, r3
+ 582 005e 5B09     		lsrs	r3, r3, #5
+ 115:Core/Src/AML_MotorControl.c ****     }
+ 583              		.loc 1 115 30 view .LVU111
+ 584 0060 9363     		str	r3, [r2, #56]
+ 585              	.L31:
+ 586              		.loc 1 131 1 view .LVU112
+ 587 0062 70BD     		pop	{r4, r5, r6, pc}
+ 588              	.LVL40:
+ 589              	.L37:
+ 119:Core/Src/AML_MotorControl.c ****         HAL_GPIO_WritePin(BIN2_GPIO_Port, BIN2_Pin, !direction);
+ 590              		.loc 1 119 9 is_stmt 1 view .LVU113
+ 591 0064 104E     		ldr	r6, .L38+8
+ 592 0066 0E4D     		ldr	r5, .L38
+ 593 0068 3278     		ldrb	r2, [r6]	@ zero_extendqisi2
+ 594 006a 0821     		movs	r1, #8
+ 595 006c 2846     		mov	r0, r5
+ 596              	.LVL41:
+ 119:Core/Src/AML_MotorControl.c ****         HAL_GPIO_WritePin(BIN2_GPIO_Port, BIN2_Pin, !direction);
+ 597              		.loc 1 119 9 is_stmt 0 view .LVU114
+ 598 006e FFF7FEFF 		bl	HAL_GPIO_WritePin
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s 			page 14
+
+
+ 599              	.LVL42:
+ 120:Core/Src/AML_MotorControl.c ****         // __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_2, PWMValue);
+ 600              		.loc 1 120 9 is_stmt 1 view .LVU115
+ 601 0072 B6F90020 		ldrsh	r2, [r6]
+ 602 0076 B2FA82F2 		clz	r2, r2
+ 603 007a 5209     		lsrs	r2, r2, #5
+ 604 007c 0221     		movs	r1, #2
+ 605 007e 2846     		mov	r0, r5
+ 606 0080 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 607              	.LVL43:
+ 122:Core/Src/AML_MotorControl.c ****     }
+ 608              		.loc 1 122 9 view .LVU116
+ 122:Core/Src/AML_MotorControl.c ****     }
+ 609              		.loc 1 122 42 is_stmt 0 view .LVU117
+ 610 0084 6042     		rsbs	r0, r4, #0
+ 122:Core/Src/AML_MotorControl.c ****     }
+ 611              		.loc 1 122 40 view .LVU118
+ 612 0086 094B     		ldr	r3, .L38+12
+ 613 0088 1B68     		ldr	r3, [r3]
+ 614 008a 03FB00F3 		mul	r3, r3, r0
+ 122:Core/Src/AML_MotorControl.c ****     }
+ 615              		.loc 1 122 14 view .LVU119
+ 616 008e 054A     		ldr	r2, .L38+4
+ 617 0090 1268     		ldr	r2, [r2]
+ 122:Core/Src/AML_MotorControl.c ****     }
+ 618              		.loc 1 122 55 view .LVU120
+ 619 0092 074C     		ldr	r4, .L38+16
+ 620 0094 A4FB0313 		umull	r1, r3, r4, r3
+ 621 0098 5B09     		lsrs	r3, r3, #5
+ 122:Core/Src/AML_MotorControl.c ****     }
+ 622              		.loc 1 122 30 view .LVU121
+ 623 009a 9363     		str	r3, [r2, #56]
+ 624 009c E1E7     		b	.L31
+ 625              	.L39:
+ 626 009e 00BF     		.align	2
+ 627              	.L38:
+ 628 00a0 000C0240 		.word	1073875968
+ 629 00a4 00000000 		.word	htim2
+ 630 00a8 00000000 		.word	.LANCHOR4
+ 631 00ac 00000000 		.word	.LANCHOR3
+ 632 00b0 1F85EB51 		.word	1374389535
+ 633              		.cfi_endproc
+ 634              	.LFE137:
+ 636              		.section	.text.AML_MotorControl_SetDirection,"ax",%progbits
+ 637              		.align	1
+ 638              		.global	AML_MotorControl_SetDirection
+ 639              		.syntax unified
+ 640              		.thumb
+ 641              		.thumb_func
+ 642              		.fpu fpv4-sp-d16
+ 644              	AML_MotorControl_SetDirection:
+ 645              	.LVL44:
+ 646              	.LFB138:
+ 132:Core/Src/AML_MotorControl.c **** 
+ 133:Core/Src/AML_MotorControl.c **** void AML_MotorControl_SetDirection(short dir)
+ 134:Core/Src/AML_MotorControl.c **** {
+ 647              		.loc 1 134 1 is_stmt 1 view -0
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s 			page 15
+
+
+ 648              		.cfi_startproc
+ 649              		@ args = 0, pretend = 0, frame = 0
+ 650              		@ frame_needed = 0, uses_anonymous_args = 0
+ 651              		@ link register save eliminated.
+ 135:Core/Src/AML_MotorControl.c ****     direction = dir;
+ 652              		.loc 1 135 5 view .LVU123
+ 653              		.loc 1 135 15 is_stmt 0 view .LVU124
+ 654 0000 014B     		ldr	r3, .L41
+ 655 0002 1880     		strh	r0, [r3]	@ movhi
+ 136:Core/Src/AML_MotorControl.c **** }
+ 656              		.loc 1 136 1 view .LVU125
+ 657 0004 7047     		bx	lr
+ 658              	.L42:
+ 659 0006 00BF     		.align	2
+ 660              	.L41:
+ 661 0008 00000000 		.word	.LANCHOR4
+ 662              		.cfi_endproc
+ 663              	.LFE138:
+ 665              		.section	.text.AML_MotorControl_ToggleDirection,"ax",%progbits
+ 666              		.align	1
+ 667              		.global	AML_MotorControl_ToggleDirection
+ 668              		.syntax unified
+ 669              		.thumb
+ 670              		.thumb_func
+ 671              		.fpu fpv4-sp-d16
+ 673              	AML_MotorControl_ToggleDirection:
+ 674              	.LFB139:
+ 137:Core/Src/AML_MotorControl.c **** 
+ 138:Core/Src/AML_MotorControl.c **** void AML_MotorControl_ToggleDirection()
+ 139:Core/Src/AML_MotorControl.c **** {
+ 675              		.loc 1 139 1 is_stmt 1 view -0
+ 676              		.cfi_startproc
+ 677              		@ args = 0, pretend = 0, frame = 0
+ 678              		@ frame_needed = 0, uses_anonymous_args = 0
+ 679              		@ link register save eliminated.
+ 140:Core/Src/AML_MotorControl.c ****     direction = ~direction;
+ 680              		.loc 1 140 5 view .LVU127
+ 681              		.loc 1 140 15 is_stmt 0 view .LVU128
+ 682 0000 024A     		ldr	r2, .L44
+ 683 0002 1388     		ldrh	r3, [r2]
+ 684 0004 DB43     		mvns	r3, r3
+ 685 0006 1380     		strh	r3, [r2]	@ movhi
+ 141:Core/Src/AML_MotorControl.c **** }
+ 686              		.loc 1 141 1 view .LVU129
+ 687 0008 7047     		bx	lr
+ 688              	.L45:
+ 689 000a 00BF     		.align	2
+ 690              	.L44:
+ 691 000c 00000000 		.word	.LANCHOR4
+ 692              		.cfi_endproc
+ 693              	.LFE139:
+ 695              		.global	__aeabi_f2d
+ 696              		.global	__aeabi_i2d
+ 697              		.global	__aeabi_dmul
+ 698              		.global	__aeabi_d2iz
+ 699              		.section	.text.AML_MotorControl_SetLeftSpeed,"ax",%progbits
+ 700              		.align	1
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s 			page 16
+
+
+ 701              		.global	AML_MotorControl_SetLeftSpeed
+ 702              		.syntax unified
+ 703              		.thumb
+ 704              		.thumb_func
+ 705              		.fpu fpv4-sp-d16
+ 707              	AML_MotorControl_SetLeftSpeed:
+ 708              	.LVL45:
+ 709              	.LFB140:
+ 142:Core/Src/AML_MotorControl.c **** 
+ 143:Core/Src/AML_MotorControl.c **** void AML_MotorControl_SetLeftSpeed(float speed, short direction)
+ 144:Core/Src/AML_MotorControl.c **** {
+ 710              		.loc 1 144 1 is_stmt 1 view -0
+ 711              		.cfi_startproc
+ 712              		@ args = 0, pretend = 0, frame = 0
+ 713              		@ frame_needed = 0, uses_anonymous_args = 0
+ 714              		.loc 1 144 1 is_stmt 0 view .LVU131
+ 715 0000 10B5     		push	{r4, lr}
+ 716              		.cfi_def_cfa_offset 8
+ 717              		.cfi_offset 4, -8
+ 718              		.cfi_offset 14, -4
+ 719 0002 0446     		mov	r4, r0
+ 145:Core/Src/AML_MotorControl.c ****     // Setpoint_Left = speed / (Pi * WheelDiameter);  // rpm
+ 146:Core/Src/AML_MotorControl.c **** 
+ 147:Core/Src/AML_MotorControl.c ****     Setpoint_Left = speed;
+ 720              		.loc 1 147 5 is_stmt 1 view .LVU132
+ 721              		.loc 1 147 19 is_stmt 0 view .LVU133
+ 722 0004 10EE100A 		vmov	r0, s0
+ 723              	.LVL46:
+ 724              		.loc 1 147 19 view .LVU134
+ 725 0008 FFF7FEFF 		bl	__aeabi_f2d
+ 726              	.LVL47:
+ 727              		.loc 1 147 19 view .LVU135
+ 728 000c 134B     		ldr	r3, .L48
+ 729 000e C3E90001 		strd	r0, [r3]
+ 148:Core/Src/AML_MotorControl.c ****     Input_Left = abs(AML_Encoder_GetLeftValue() / 96);
+ 730              		.loc 1 148 5 is_stmt 1 view .LVU136
+ 731              		.loc 1 148 22 is_stmt 0 view .LVU137
+ 732 0012 FFF7FEFF 		bl	AML_Encoder_GetLeftValue
+ 733              	.LVL48:
+ 734              		.loc 1 148 18 view .LVU138
+ 735 0016 124A     		ldr	r2, .L48+4
+ 736 0018 82FB0032 		smull	r3, r2, r2, r0
+ 737 001c C317     		asrs	r3, r0, #31
+ 738 001e C3EB2213 		rsb	r3, r3, r2, asr #4
+ 739 0022 1BB2     		sxth	r3, r3
+ 740 0024 002B     		cmp	r3, #0
+ 741 0026 B8BF     		it	lt
+ 742 0028 5B42     		rsblt	r3, r3, #0
+ 743              		.loc 1 148 16 view .LVU139
+ 744 002a 98B2     		uxth	r0, r3
+ 745 002c FFF7FEFF 		bl	__aeabi_i2d
+ 746              	.LVL49:
+ 747 0030 0C4B     		ldr	r3, .L48+8
+ 748 0032 C3E90001 		strd	r0, [r3]
+ 149:Core/Src/AML_MotorControl.c ****     // Output_Right = ((HAL_GetTick() - PreviousTime) / 1000);
+ 150:Core/Src/AML_MotorControl.c ****     
+ 151:Core/Src/AML_MotorControl.c ****     // Input_Left = abs(AML_Encoder_GetLeftValue() / 96) / ((PID_Left.LastTime) / 1000);
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s 			page 17
+
+
+ 152:Core/Src/AML_MotorControl.c **** 
+ 153:Core/Src/AML_MotorControl.c ****     PID_Compute(&PID_Left);
+ 749              		.loc 1 153 5 is_stmt 1 view .LVU140
+ 750 0036 0C48     		ldr	r0, .L48+12
+ 751 0038 FFF7FEFF 		bl	PID_Compute
+ 752              	.LVL50:
+ 154:Core/Src/AML_MotorControl.c **** 
+ 155:Core/Src/AML_MotorControl.c ****     AML_MotorControl_LeftPWM(Output_Left * direction);
+ 753              		.loc 1 155 5 view .LVU141
+ 754              		.loc 1 155 42 is_stmt 0 view .LVU142
+ 755 003c 2046     		mov	r0, r4
+ 756 003e FFF7FEFF 		bl	__aeabi_i2d
+ 757              	.LVL51:
+ 758 0042 0A4B     		ldr	r3, .L48+16
+ 759 0044 D3E90023 		ldrd	r2, [r3]
+ 760 0048 FFF7FEFF 		bl	__aeabi_dmul
+ 761              	.LVL52:
+ 762              		.loc 1 155 5 view .LVU143
+ 763 004c FFF7FEFF 		bl	__aeabi_d2iz
+ 764              	.LVL53:
+ 765 0050 00B2     		sxth	r0, r0
+ 766 0052 FFF7FEFF 		bl	AML_MotorControl_LeftPWM
+ 767              	.LVL54:
+ 156:Core/Src/AML_MotorControl.c **** 
+ 157:Core/Src/AML_MotorControl.c ****     AML_Encoder_ResetLeftValue();
+ 768              		.loc 1 157 5 is_stmt 1 view .LVU144
+ 769 0056 FFF7FEFF 		bl	AML_Encoder_ResetLeftValue
+ 770              	.LVL55:
+ 158:Core/Src/AML_MotorControl.c ****     // PreviousTime = HAL_GetTick();
+ 159:Core/Src/AML_MotorControl.c **** }
+ 771              		.loc 1 159 1 is_stmt 0 view .LVU145
+ 772 005a 10BD     		pop	{r4, pc}
+ 773              	.L49:
+ 774              		.align	2
+ 775              	.L48:
+ 776 005c 00000000 		.word	Setpoint_Left
+ 777 0060 ABAAAA2A 		.word	715827883
+ 778 0064 00000000 		.word	Input_Left
+ 779 0068 00000000 		.word	PID_Left
+ 780 006c 00000000 		.word	Output_Left
+ 781              		.cfi_endproc
+ 782              	.LFE140:
+ 784              		.global	PreviousTime
+ 785              		.global	kd
+ 786              		.global	ki
+ 787              		.global	kp
+ 788              		.comm	Setpoint_Right,8,8
+ 789              		.comm	Output_Right,8,8
+ 790              		.comm	Input_Right,8,8
+ 791              		.comm	Setpoint_Left,8,8
+ 792              		.comm	Output_Left,8,8
+ 793              		.comm	Input_Left,8,8
+ 794              		.comm	PID_Right,112,8
+ 795              		.comm	PID_Left,112,8
+ 796              		.global	period
+ 797              		.global	direction
+ 798              		.global	PreviousRightEncoderValue
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s 			page 18
+
+
+ 799              		.global	PreviousLeftEncoderValue
+ 800              		.section	.bss.PreviousLeftEncoderValue,"aw",%nobits
+ 801              		.align	2
+ 804              	PreviousLeftEncoderValue:
+ 805 0000 00000000 		.space	4
+ 806              		.section	.bss.PreviousRightEncoderValue,"aw",%nobits
+ 807              		.align	2
+ 810              	PreviousRightEncoderValue:
+ 811 0000 00000000 		.space	4
+ 812              		.section	.bss.PreviousTime,"aw",%nobits
+ 813              		.align	3
+ 816              	PreviousTime:
+ 817 0000 00000000 		.space	8
+ 817      00000000 
+ 818              		.section	.bss.direction,"aw",%nobits
+ 819              		.align	1
+ 820              		.set	.LANCHOR4,. + 0
+ 823              	direction:
+ 824 0000 0000     		.space	2
+ 825              		.section	.bss.kd,"aw",%nobits
+ 826              		.align	3
+ 827              		.set	.LANCHOR0,. + 0
+ 830              	kd:
+ 831 0000 00000000 		.space	8
+ 831      00000000 
+ 832              		.section	.data.ki,"aw"
+ 833              		.align	3
+ 834              		.set	.LANCHOR1,. + 0
+ 837              	ki:
+ 838 0000 9A999999 		.word	-1717986918
+ 839 0004 9999E93F 		.word	1072273817
+ 840              		.section	.data.kp,"aw"
+ 841              		.align	3
+ 842              		.set	.LANCHOR2,. + 0
+ 845              	kp:
+ 846 0000 00000000 		.word	0
+ 847 0004 00000440 		.word	1074003968
+ 848              		.section	.data.period,"aw"
+ 849              		.align	2
+ 850              		.set	.LANCHOR3,. + 0
+ 853              	period:
+ 854 0000 7F0C0000 		.word	3199
+ 855              		.text
+ 856              	.Letext0:
+ 857              		.file 2 "c:\\make\\test\\gcc-arm-none-eabi-9-2019-q4-major-win32\\arm-none-eabi\\include\\machine\
+ 858              		.file 3 "c:\\make\\test\\gcc-arm-none-eabi-9-2019-q4-major-win32\\arm-none-eabi\\include\\sys\\_st
+ 859              		.file 4 "Drivers/CMSIS/Include/core_cm4.h"
+ 860              		.file 5 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h"
+ 861              		.file 6 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h"
+ 862              		.file 7 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h"
+ 863              		.file 8 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h"
+ 864              		.file 9 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h"
+ 865              		.file 10 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h"
+ 866              		.file 11 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h"
+ 867              		.file 12 "c:\\make\\test\\gcc-arm-none-eabi-9-2019-q4-major-win32\\arm-none-eabi\\include\\sys\\lo
+ 868              		.file 13 "c:\\make\\test\\gcc-arm-none-eabi-9-2019-q4-major-win32\\arm-none-eabi\\include\\sys\\_t
+ 869              		.file 14 "c:\\make\\test\\gcc-arm-none-eabi-9-2019-q4-major-win32\\lib\\gcc\\arm-none-eabi\\9.2.1\
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s 			page 19
+
+
+ 870              		.file 15 "c:\\make\\test\\gcc-arm-none-eabi-9-2019-q4-major-win32\\arm-none-eabi\\include\\sys\\re
+ 871              		.file 16 "Core/Inc/pid.h"
+ 872              		.file 17 "c:\\make\\test\\gcc-arm-none-eabi-9-2019-q4-major-win32\\arm-none-eabi\\include\\math.h"
+ 873              		.file 18 "Core/Inc/AML_Encoder.h"
+ 874              		.file 19 "<built-in>"
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s 			page 20
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 AML_MotorControl.c
-C:\Users\anmh1\AppData\Local\Temp\ccJg1Ucb.s:18     .text.AML_MotorControl_Setup:00000000 $t
-C:\Users\anmh1\AppData\Local\Temp\ccJg1Ucb.s:26     .text.AML_MotorControl_Setup:00000000 AML_MotorControl_Setup
-C:\Users\anmh1\AppData\Local\Temp\ccJg1Ucb.s:63     .text.AML_MotorControl_Setup:00000028 $d
-C:\Users\anmh1\AppData\Local\Temp\ccJg1Ucb.s:69     .text.AML_MotorControl_SetLeftSpeed:00000000 $t
-C:\Users\anmh1\AppData\Local\Temp\ccJg1Ucb.s:76     .text.AML_MotorControl_SetLeftSpeed:00000000 AML_MotorControl_SetLeftSpeed
-C:\Users\anmh1\AppData\Local\Temp\ccJg1Ucb.s:178    .text.AML_MotorControl_SetLeftSpeed:0000007c $d
-C:\Users\anmh1\AppData\Local\Temp\ccJg1Ucb.s:185    .text.AML_MotorControl_SetRightSpeed:00000000 $t
-C:\Users\anmh1\AppData\Local\Temp\ccJg1Ucb.s:192    .text.AML_MotorControl_SetRightSpeed:00000000 AML_MotorControl_SetRightSpeed
-C:\Users\anmh1\AppData\Local\Temp\ccJg1Ucb.s:294    .text.AML_MotorControl_SetRightSpeed:0000007c $d
-C:\Users\anmh1\AppData\Local\Temp\ccJg1Ucb.s:301    .text.AML_MotorControl_SetDirection:00000000 $t
-C:\Users\anmh1\AppData\Local\Temp\ccJg1Ucb.s:308    .text.AML_MotorControl_SetDirection:00000000 AML_MotorControl_SetDirection
-C:\Users\anmh1\AppData\Local\Temp\ccJg1Ucb.s:325    .text.AML_MotorControl_SetDirection:00000008 $d
-C:\Users\anmh1\AppData\Local\Temp\ccJg1Ucb.s:330    .text.AML_MotorControl_ToggleDirection:00000000 $t
-C:\Users\anmh1\AppData\Local\Temp\ccJg1Ucb.s:337    .text.AML_MotorControl_ToggleDirection:00000000 AML_MotorControl_ToggleDirection
-C:\Users\anmh1\AppData\Local\Temp\ccJg1Ucb.s:355    .text.AML_MotorControl_ToggleDirection:0000000c $d
-C:\Users\anmh1\AppData\Local\Temp\ccJg1Ucb.s:360    .text.Motor_PWM:00000000 $t
-C:\Users\anmh1\AppData\Local\Temp\ccJg1Ucb.s:367    .text.Motor_PWM:00000000 Motor_PWM
-C:\Users\anmh1\AppData\Local\Temp\ccJg1Ucb.s:518    .text.Motor_PWM:00000088 $d
-C:\Users\anmh1\AppData\Local\Temp\ccJg1Ucb.s:531    .bss.direction:00000000 direction
-C:\Users\anmh1\AppData\Local\Temp\ccJg1Ucb.s:527    .bss.direction:00000000 $d
+C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s:18     .text.AML_MotorControl_PIDSetTunings:00000000 $t
+C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s:26     .text.AML_MotorControl_PIDSetTunings:00000000 AML_MotorControl_PIDSetTunings
+C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s:60     .text.AML_MotorControl_PIDSetTunings:00000020 $d
+                            *COM*:00000070 PID_Left
+                            *COM*:00000070 PID_Right
+C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s:66     .text.AML_MotorControl_PIDSetSampleTime:00000000 $t
+C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s:73     .text.AML_MotorControl_PIDSetSampleTime:00000000 AML_MotorControl_PIDSetSampleTime
+C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s:94     .text.AML_MotorControl_PIDSetSampleTime:0000000c $d
+C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s:100    .text.AML_MotorControl_PIDSetOutputLimits:00000000 $t
+C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s:107    .text.AML_MotorControl_PIDSetOutputLimits:00000000 AML_MotorControl_PIDSetOutputLimits
+C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s:134    .text.AML_MotorControl_PIDSetOutputLimits:00000018 $d
+C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s:140    .text.AML_MotorControl_PIDSetMode:00000000 $t
+C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s:147    .text.AML_MotorControl_PIDSetMode:00000000 AML_MotorControl_PIDSetMode
+C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s:177    .text.AML_MotorControl_PIDSetMode:00000018 $d
+C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s:183    .text.AML_MotorControl_PIDSetup:00000000 $t
+C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s:190    .text.AML_MotorControl_PIDSetup:00000000 AML_MotorControl_PIDSetup
+C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s:274    .text.AML_MotorControl_PIDSetup:00000090 $d
+                            *COM*:00000008 Setpoint_Left
+                            *COM*:00000008 Output_Left
+                            *COM*:00000008 Input_Left
+                            *COM*:00000008 Setpoint_Right
+                            *COM*:00000008 Output_Right
+                            *COM*:00000008 Input_Right
+C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s:293    .text.AML_MotorControl_Setup:00000000 $t
+C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s:300    .text.AML_MotorControl_Setup:00000000 AML_MotorControl_Setup
+C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s:346    .text.AML_MotorControl_Setup:00000034 $d
+C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s:353    .text.AML_MotorControl_LeftPWM:00000000 $t
+C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s:360    .text.AML_MotorControl_LeftPWM:00000000 AML_MotorControl_LeftPWM
+C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s:486    .text.AML_MotorControl_LeftPWM:000000a0 $d
+C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s:495    .text.AML_MotorControl_RightPWM:00000000 $t
+C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s:502    .text.AML_MotorControl_RightPWM:00000000 AML_MotorControl_RightPWM
+C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s:628    .text.AML_MotorControl_RightPWM:000000a0 $d
+C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s:637    .text.AML_MotorControl_SetDirection:00000000 $t
+C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s:644    .text.AML_MotorControl_SetDirection:00000000 AML_MotorControl_SetDirection
+C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s:661    .text.AML_MotorControl_SetDirection:00000008 $d
+C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s:666    .text.AML_MotorControl_ToggleDirection:00000000 $t
+C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s:673    .text.AML_MotorControl_ToggleDirection:00000000 AML_MotorControl_ToggleDirection
+C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s:691    .text.AML_MotorControl_ToggleDirection:0000000c $d
+C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s:700    .text.AML_MotorControl_SetLeftSpeed:00000000 $t
+C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s:707    .text.AML_MotorControl_SetLeftSpeed:00000000 AML_MotorControl_SetLeftSpeed
+C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s:776    .text.AML_MotorControl_SetLeftSpeed:0000005c $d
+C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s:816    .bss.PreviousTime:00000000 PreviousTime
+C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s:830    .bss.kd:00000000 kd
+C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s:837    .data.ki:00000000 ki
+C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s:845    .data.kp:00000000 kp
+C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s:853    .data.period:00000000 period
+C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s:823    .bss.direction:00000000 direction
+C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s:810    .bss.PreviousRightEncoderValue:00000000 PreviousRightEncoderValue
+C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s:804    .bss.PreviousLeftEncoderValue:00000000 PreviousLeftEncoderValue
+C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s:801    .bss.PreviousLeftEncoderValue:00000000 $d
+C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s:807    .bss.PreviousRightEncoderValue:00000000 $d
+C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s:813    .bss.PreviousTime:00000000 $d
+C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s:819    .bss.direction:00000000 $d
+C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s:826    .bss.kd:00000000 $d
+C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s:833    .data.ki:00000000 $d
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s 			page 21
+
+
+C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s:841    .data.kp:00000000 $d
+C:\Users\anmh1\AppData\Local\Temp\ccVaHqi5.s:849    .data.period:00000000 $d
 
 UNDEFINED SYMBOLS
+PID_SetMode
+PID_Init
+PID
 HAL_TIM_Base_Start
 HAL_TIM_PWM_Start
 HAL_GPIO_WritePin
 htim2
-HAL_TIM_PWM_Stop
-HAL_TIM_Base_Stop_IT
-SystemCoreClock
+__aeabi_f2d
+__aeabi_i2d
+__aeabi_dmul
+__aeabi_d2iz
+AML_Encoder_GetLeftValue
+PID_Compute
+AML_Encoder_ResetLeftValue

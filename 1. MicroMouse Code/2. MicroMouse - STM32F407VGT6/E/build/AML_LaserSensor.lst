@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccJvjn2N.s 			page 1
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccyKVptk.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -58,7 +58,7 @@ ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccJvjn2N.s 			page 1
   36              		.cfi_def_cfa_offset 16
   37              		.cfi_offset 3, -16
   38              		.cfi_offset 4, -12
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccJvjn2N.s 			page 2
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccyKVptk.s 			page 2
 
 
   39              		.cfi_offset 5, -8
@@ -118,7 +118,7 @@ ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccJvjn2N.s 			page 1
   83              	.LVL6:
   84              	.L8:
   85              		.loc 1 30 1 view .LVU17
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccJvjn2N.s 			page 3
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccyKVptk.s 			page 3
 
 
   86 002e 00BF     		.align	2
@@ -178,7 +178,7 @@ ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccJvjn2N.s 			page 1
  135              	.LVL12:
   38:Core/Src/AML_LaserSensor.c ****     VL53L0X_PerformRefSpadManagement(Laser[i], &refSpadCount, &isApertureSpads);
  136              		.loc 1 38 5 view .LVU25
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccJvjn2N.s 			page 4
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccyKVptk.s 			page 4
 
 
  137 002a 1F4A     		ldr	r2, .L11+12
@@ -238,7 +238,7 @@ ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccJvjn2N.s 			page 1
   48:Core/Src/AML_LaserSensor.c ****     VL53L0X_SetVcselPulsePeriod(Laser[i], VL53L0X_VCSEL_PERIOD_FINAL_RANGE, 14);
  182              		.loc 1 48 5 view .LVU33
  183 008c 0E22     		movs	r2, #14
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccJvjn2N.s 			page 5
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccyKVptk.s 			page 5
 
 
  184 008e 0121     		movs	r1, #1
@@ -298,7 +298,7 @@ ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccJvjn2N.s 			page 1
  233              	.LVL23:
   56:Core/Src/AML_LaserSensor.c ****     HAL_GPIO_WritePin(XSHUT_FF_GPIO_Port, XSHUT_FF_Pin, GPIO_PIN_RESET);
  234              		.loc 1 56 5 view .LVU38
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccJvjn2N.s 			page 6
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccyKVptk.s 			page 6
 
 
  235 0010 4F4F     		ldr	r7, .L15+4
@@ -358,7 +358,7 @@ ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccJvjn2N.s 			page 1
  279              		.loc 1 66 26 is_stmt 0 view .LVU48
  280 0056 DFF80891 		ldr	r9, .L15+20
  281 005a C4F85C91 		str	r9, [r4, #348]
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccJvjn2N.s 			page 7
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccyKVptk.s 			page 7
 
 
   67:Core/Src/AML_LaserSensor.c ****     Laser[FL]->I2cDevAddr = 0x52;
@@ -418,7 +418,7 @@ ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccJvjn2N.s 			page 1
  324 009c 6978     		ldrb	r1, [r5, #1]	@ zero_extendqisi2
  325 009e FFF7FEFF 		bl	VL53L0X_SetDeviceAddress
  326              	.LVL35:
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccJvjn2N.s 			page 8
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccyKVptk.s 			page 8
 
 
   79:Core/Src/AML_LaserSensor.c ****     Laser[FF]->I2cDevAddr = LaserSensorAddress[FF];
@@ -478,7 +478,7 @@ ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccJvjn2N.s 			page 1
  369              		.loc 1 90 5 is_stmt 1 view .LVU84
  370 00dc 0220     		movs	r0, #2
  371 00de FFF7FEFF 		bl	AML_LaserSensor_Init
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccJvjn2N.s 			page 9
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccyKVptk.s 			page 9
 
 
  372              	.LVL40:
@@ -538,7 +538,7 @@ ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccJvjn2N.s 			page 1
  413              	.LVL45:
  104:Core/Src/AML_LaserSensor.c ****     HAL_Delay(DelayTime);
  414              		.loc 1 104 5 view .LVU100
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccJvjn2N.s 			page 10
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccyKVptk.s 			page 10
 
 
  415 011e 3220     		movs	r0, #50
@@ -598,7 +598,7 @@ ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccJvjn2N.s 			page 1
  461              		.global	AML_LaserSensor_ReadAll
  462              		.syntax unified
  463              		.thumb
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccJvjn2N.s 			page 11
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccyKVptk.s 			page 11
 
 
  464              		.thumb_func
@@ -658,7 +658,7 @@ ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccJvjn2N.s 			page 1
  510              	.L19:
  511 0038 00000000 		.word	SensorValue
  512 003c 00000000 		.word	Laser
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccJvjn2N.s 			page 12
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccyKVptk.s 			page 12
 
 
  513              		.cfi_endproc
@@ -718,7 +718,7 @@ ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccJvjn2N.s 			page 1
  563              	.LFE137:
  565              		.comm	PhaseCal,1,1
  566              		.comm	VhvSettings,1,1
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccJvjn2N.s 			page 13
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccyKVptk.s 			page 13
 
 
  567              		.comm	isApertureSpads,1,1
@@ -755,35 +755,35 @@ ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccJvjn2N.s 			page 1
  599              		.file 19 "Core/Inc/vl53l0x_platform.h"
  600              		.file 20 "Core/Inc/AML_LaserSensor.h"
  601              		.file 21 "Core/Inc/vl53l0x_api.h"
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccJvjn2N.s 			page 14
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccyKVptk.s 			page 14
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 AML_LaserSensor.c
-C:\Users\anmh1\AppData\Local\Temp\ccJvjn2N.s:18     .text.AML_LaserSensor_ScanI2CDevice:00000000 $t
-C:\Users\anmh1\AppData\Local\Temp\ccJvjn2N.s:26     .text.AML_LaserSensor_ScanI2CDevice:00000000 AML_LaserSensor_ScanI2CDevice
-C:\Users\anmh1\AppData\Local\Temp\ccJvjn2N.s:88     .text.AML_LaserSensor_ScanI2CDevice:00000030 $d
-C:\Users\anmh1\AppData\Local\Temp\ccJvjn2N.s:93     .text.AML_LaserSensor_Init:00000000 $t
-C:\Users\anmh1\AppData\Local\Temp\ccJvjn2N.s:100    .text.AML_LaserSensor_Init:00000000 AML_LaserSensor_Init
-C:\Users\anmh1\AppData\Local\Temp\ccJvjn2N.s:193    .text.AML_LaserSensor_Init:0000009c $d
+C:\Users\anmh1\AppData\Local\Temp\ccyKVptk.s:18     .text.AML_LaserSensor_ScanI2CDevice:00000000 $t
+C:\Users\anmh1\AppData\Local\Temp\ccyKVptk.s:26     .text.AML_LaserSensor_ScanI2CDevice:00000000 AML_LaserSensor_ScanI2CDevice
+C:\Users\anmh1\AppData\Local\Temp\ccyKVptk.s:88     .text.AML_LaserSensor_ScanI2CDevice:00000030 $d
+C:\Users\anmh1\AppData\Local\Temp\ccyKVptk.s:93     .text.AML_LaserSensor_Init:00000000 $t
+C:\Users\anmh1\AppData\Local\Temp\ccyKVptk.s:100    .text.AML_LaserSensor_Init:00000000 AML_LaserSensor_Init
+C:\Users\anmh1\AppData\Local\Temp\ccyKVptk.s:193    .text.AML_LaserSensor_Init:0000009c $d
                             *COM*:00000018 Laser
                             *COM*:00000001 PhaseCal
                             *COM*:00000001 VhvSettings
                             *COM*:00000001 isApertureSpads
                             *COM*:00000004 refSpadCount
-C:\Users\anmh1\AppData\Local\Temp\ccJvjn2N.s:202    .text.AML_LaserSensor_Setup:00000000 $t
-C:\Users\anmh1\AppData\Local\Temp\ccJvjn2N.s:209    .text.AML_LaserSensor_Setup:00000000 AML_LaserSensor_Setup
-C:\Users\anmh1\AppData\Local\Temp\ccJvjn2N.s:450    .text.AML_LaserSensor_Setup:0000014c $d
+C:\Users\anmh1\AppData\Local\Temp\ccyKVptk.s:202    .text.AML_LaserSensor_Setup:00000000 $t
+C:\Users\anmh1\AppData\Local\Temp\ccyKVptk.s:209    .text.AML_LaserSensor_Setup:00000000 AML_LaserSensor_Setup
+C:\Users\anmh1\AppData\Local\Temp\ccyKVptk.s:450    .text.AML_LaserSensor_Setup:0000014c $d
                             *COM*:00000960 Dev_Val
-C:\Users\anmh1\AppData\Local\Temp\ccJvjn2N.s:460    .text.AML_LaserSensor_ReadAll:00000000 $t
-C:\Users\anmh1\AppData\Local\Temp\ccJvjn2N.s:467    .text.AML_LaserSensor_ReadAll:00000000 AML_LaserSensor_ReadAll
-C:\Users\anmh1\AppData\Local\Temp\ccJvjn2N.s:511    .text.AML_LaserSensor_ReadAll:00000038 $d
+C:\Users\anmh1\AppData\Local\Temp\ccyKVptk.s:460    .text.AML_LaserSensor_ReadAll:00000000 $t
+C:\Users\anmh1\AppData\Local\Temp\ccyKVptk.s:467    .text.AML_LaserSensor_ReadAll:00000000 AML_LaserSensor_ReadAll
+C:\Users\anmh1\AppData\Local\Temp\ccyKVptk.s:511    .text.AML_LaserSensor_ReadAll:00000038 $d
                             *COM*:000000a8 SensorValue
-C:\Users\anmh1\AppData\Local\Temp\ccJvjn2N.s:517    .text.AML_LaserSensor_ReadSingle:00000000 $t
-C:\Users\anmh1\AppData\Local\Temp\ccJvjn2N.s:524    .text.AML_LaserSensor_ReadSingle:00000000 AML_LaserSensor_ReadSingle
-C:\Users\anmh1\AppData\Local\Temp\ccJvjn2N.s:560    .text.AML_LaserSensor_ReadSingle:00000024 $d
-C:\Users\anmh1\AppData\Local\Temp\ccJvjn2N.s:578    .data.LaserSensorAddress:00000000 LaserSensorAddress
-C:\Users\anmh1\AppData\Local\Temp\ccJvjn2N.s:574    .data.LaserSensorAddress:00000000 $d
+C:\Users\anmh1\AppData\Local\Temp\ccyKVptk.s:517    .text.AML_LaserSensor_ReadSingle:00000000 $t
+C:\Users\anmh1\AppData\Local\Temp\ccyKVptk.s:524    .text.AML_LaserSensor_ReadSingle:00000000 AML_LaserSensor_ReadSingle
+C:\Users\anmh1\AppData\Local\Temp\ccyKVptk.s:560    .text.AML_LaserSensor_ReadSingle:00000024 $d
+C:\Users\anmh1\AppData\Local\Temp\ccyKVptk.s:578    .data.LaserSensorAddress:00000000 LaserSensorAddress
+C:\Users\anmh1\AppData\Local\Temp\ccyKVptk.s:574    .data.LaserSensorAddress:00000000 $d
 
 UNDEFINED SYMBOLS
 HAL_I2C_IsDeviceReady

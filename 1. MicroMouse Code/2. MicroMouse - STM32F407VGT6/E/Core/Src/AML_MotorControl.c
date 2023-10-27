@@ -10,61 +10,87 @@ int32_t PreviousLeftEncoderValue = 0, PreviousRightEncoderValue = 0;
 short direction = 0;
 uint32_t period = (16000000 / 5000) - 1;
 
-PID_TypeDef PID_Left;
-PID_TypeDef PID_Right;
+PID_TypeDef PID_SpeedLeft;
+PID_TypeDef PID_SpeedRight;
+
+PID_TypeDef PID_PositionLeft;
+PID_TypeDef PID_PositionRight;
+
 double Input_Left, Output_Left, Setpoint_Left;
 double Input_Right, Output_Right, Setpoint_Right;
 
-double kp = 1.5;
-double ki = 0.8;
-double kd = 0;
+double Speed_Kp = 0.5;
+double Speed_Ki = 0;
+double Speed_Kd = 0;
+
+double Position_Kp = 0.005;
+double Position_Ki = 0.007;
+double Position_Kd = 0.0;
 
 int64_t PreviousTime = 0;
 
 void AML_MotorControl_PIDSetTunings(double Kp, double Ki, double Kd)
 {
-    PID_Left.Kp = Kp;
-    PID_Left.Ki = Ki;
-    PID_Left.Kd = Kd;
+    PID_SpeedLeft.Kp = Kp;
+    PID_SpeedLeft.Ki = Ki;
+    PID_SpeedLeft.Kd = Kd;
 
-    PID_Right.Kp = Kp;
-    PID_Right.Ki = Ki;
-    PID_Right.Kd = Kd;
+    PID_SpeedRight.Kp = Kp;
+    PID_SpeedRight.Ki = Ki;
+    PID_SpeedRight.Kd = Kd;
 }
 
 void AML_MotorControl_PIDSetSampleTime(uint32_t NewSampleTime)
 {
-    PID_Left.SampleTime = NewSampleTime;
-    PID_Right.SampleTime = NewSampleTime;
+    PID_SpeedLeft.SampleTime = NewSampleTime;
+    PID_SpeedRight.SampleTime = NewSampleTime;
+
+    PID_PositionLeft.SampleTime = NewSampleTime;
+    PID_PositionRight.SampleTime = NewSampleTime;
 }
 
 void AML_MotorControl_PIDSetOutputLimits(double Min, double Max)
 {
-    PID_Left.OutMin = Min;
-    PID_Left.OutMax = Max;
+    PID_SpeedLeft.OutMin = Min;
+    PID_SpeedLeft.OutMax = Max;
 
-    PID_Right.OutMin = Min;
-    PID_Right.OutMax = Max;
+    PID_SpeedRight.OutMin = Min;
+    PID_SpeedRight.OutMax = Max;
+
+    PID_PositionLeft.OutMin = Min;
+    PID_PositionLeft.OutMax = Max;
+
+    PID_PositionRight.OutMin = Min;
+    PID_PositionRight.OutMax = Max;    
 }
 
 void AML_MotorControl_PIDSetMode(PIDMode_TypeDef Mode)
 {
-    PID_SetMode(&PID_Left, Mode);
-    PID_SetMode(&PID_Right, Mode);
+    PID_SetMode(&PID_SpeedLeft, Mode);
+    PID_SetMode(&PID_SpeedRight, Mode);
+
+    PID_SetMode(&PID_PositionLeft, Mode);
+    PID_SetMode(&PID_PositionRight, Mode);
 }
 
 void AML_MotorControl_PIDSetup()
 {
+    PID_Init(&PID_SpeedLeft);
+    PID_Init(&PID_SpeedRight);
 
-    PID_Init(&PID_Left);
-    PID_Init(&PID_Right);
+    PID_Init(&PID_PositionLeft);
+    PID_Init(&PID_PositionRight);
 
-    PID(&PID_Left, &Input_Left, &Output_Left, &Setpoint_Left, kp, ki, kd, PID_Left.POn, PID_Left.ControllerDirection);
-    PID(&PID_Right, &Input_Right, &Output_Right, &Setpoint_Right, kp, ki, kd, PID_Right.POn, PID_Right.ControllerDirection);
+    PID(&PID_SpeedLeft, &Input_Left, &Output_Left, &Setpoint_Left, Speed_Kp, Speed_Ki, Speed_Kd, _PID_P_ON_E, PID_SpeedLeft.ControllerDirection);
+    PID(&PID_SpeedRight, &Input_Right, &Output_Right, &Setpoint_Right, Speed_Kp, Speed_Ki, Speed_Kd, _PID_P_ON_E, PID_SpeedRight.ControllerDirection);
 
-    AML_MotorControl_PIDSetTunings(kp, ki, kd);
+    PID(&PID_PositionLeft, &Input_Left, &Output_Left, &Setpoint_Left, Position_Kp, Position_Ki, Position_Kd, _PID_P_ON_E, PID_PositionLeft.ControllerDirection);
+    PID(&PID_PositionRight, &Input_Right, &Output_Right, &Setpoint_Right, Position_Kp, Position_Ki, Position_Kd, _PID_P_ON_E, PID_PositionRight.ControllerDirection);
+
+  
+    AML_MotorControl_PIDSetTunings(Speed_Kp, Speed_Ki, Speed_Kd);
     AML_MotorControl_PIDSetSampleTime(10);
-    AML_MotorControl_PIDSetOutputLimits(0, 100);
+    AML_MotorControl_PIDSetOutputLimits(-100, 100);
     AML_MotorControl_PIDSetMode(_PID_MODE_AUTOMATIC);
 }
 
@@ -142,27 +168,42 @@ void AML_MotorControl_ToggleDirection()
 
 void AML_MotorControl_SetLeftSpeed(float speed, short direction)
 {
-    // Setpoint_Left = speed / (Pi * WheelDiameter);  // rpm
-
     Setpoint_Left = speed;
     Input_Left = abs(AML_Encoder_GetLeftValue() / 96);
 
-    PID_Compute(&PID_Left);
+    PID_Compute(&PID_SpeedLeft);
     AML_Encoder_ResetLeftValue();
 
     AML_MotorControl_LeftPWM(Output_Left * direction);
-
 }
 
 void AML_MotorControl_SetRightSpeed(float speed, short direction)
 {
-
-
     Setpoint_Right = speed;
     Input_Right = abs(AML_Encoder_GetRightValue() / 96);
 
-    PID_Compute(&PID_Right);
+    PID_Compute(&PID_SpeedRight);
     AML_Encoder_ResetRightValue();
+
+    AML_MotorControl_RightPWM(Output_Right * direction);
+}
+
+void AML_MotorControl_MoveLeft(float distance, short direction)
+{
+    Setpoint_Left = distance;
+    Input_Left = abs(AML_Encoder_GetLeftValue());
+
+    PID_Compute(&PID_PositionLeft);
+
+    AML_MotorControl_LeftPWM(Output_Left * direction);
+}
+
+void AML_MotorControl_MoveRight(float distance, short direction)
+{
+    Setpoint_Right = distance;
+    Input_Right = abs(AML_Encoder_GetRightValue());
+
+    PID_Compute(&PID_PositionRight);
 
     AML_MotorControl_RightPWM(Output_Right * direction);
 }

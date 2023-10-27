@@ -37,7 +37,6 @@ Common symbol       size              file
 Input_Left          0x8               build/AML_MotorControl.o
 Angle               0x8               build/AML_MPUSensor.o
 hi2c3               0x54              build/main.o
-PID_Right           0x70              build/AML_MotorControl.o
 SensorValue         0xa8              build/AML_LaserSensor.o
 htim4               0x48              build/main.o
 hdma_usart3_rx      0x60              build/main.o
@@ -52,8 +51,8 @@ pFlash              0x20              build/stm32f4xx_hal_flash.o
 isApertureSpads     0x1               build/AML_LaserSensor.o
 testAngle           0x8               build/main.o
 Setpoint_Right      0x8               build/AML_MotorControl.o
-PID_Left            0x70              build/AML_MotorControl.o
 Input_Right         0x8               build/AML_MotorControl.o
+PID_PositionRight   0x70              build/AML_MotorControl.o
 refSpadCount        0x4               build/AML_LaserSensor.o
 PhaseCal            0x1               build/AML_LaserSensor.o
 data                0x21              build/AML_MPUSensor.o
@@ -63,8 +62,11 @@ Dev_Val             0x960             build/AML_LaserSensor.o
 huart6              0x44              build/main.o
 VhvSettings         0x1               build/AML_LaserSensor.o
 htim2               0x48              build/main.o
+PID_SpeedLeft       0x70              build/AML_MotorControl.o
 Output_Right        0x8               build/AML_MotorControl.o
 Output_Left         0x8               build/AML_MotorControl.o
+PID_PositionLeft    0x70              build/AML_MotorControl.o
+PID_SpeedRight      0x70              build/AML_MotorControl.o
 Laser               0x18              build/AML_LaserSensor.o
 
 Discarded input sections
@@ -83,6 +85,8 @@ Discarded input sections
  .text          0x00000000        0x0 build/AML_Encoder.o
  .data          0x00000000        0x0 build/AML_Encoder.o
  .bss           0x00000000        0x0 build/AML_Encoder.o
+ .text.AML_Encoder_ResetLeftValue
+                0x00000000       0x10 build/AML_Encoder.o
  .text.AML_Encoder_ResetRightValue
                 0x00000000       0x10 build/AML_Encoder.o
  .text          0x00000000        0x0 build/AML_Keyboard.o
@@ -111,6 +115,10 @@ Discarded input sections
                 0x00000000        0xc build/AML_MotorControl.o
  .text.AML_MotorControl_ToggleDirection
                 0x00000000       0x10 build/AML_MotorControl.o
+ .text.AML_MotorControl_SetLeftSpeed
+                0x00000000       0x70 build/AML_MotorControl.o
+ .text.AML_MotorControl_SetRightSpeed
+                0x00000000       0x70 build/AML_MotorControl.o
  .bss.PreviousLeftEncoderValue
                 0x00000000        0x4 build/AML_MotorControl.o
  .bss.PreviousRightEncoderValue
@@ -1530,7 +1538,7 @@ LOAD c:/make/test/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-non
                 0x08000000                g_pfnVectors
                 0x08000188                . = ALIGN (0x4)
 
-.text           0x08000188     0x75a8
+.text           0x08000188     0x7638
                 0x08000188                . = ALIGN (0x4)
  *(.text)
  .text          0x08000188       0x40 c:/make/test/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m+fp/hard/crtbegin.o
@@ -1588,799 +1596,795 @@ LOAD c:/make/test/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-non
  .text.AML_Encoder_GetLeftValue
                 0x08000dd8       0x18 build/AML_Encoder.o
                 0x08000dd8                AML_Encoder_GetLeftValue
- .text.AML_Encoder_ResetLeftValue
-                0x08000df0       0x10 build/AML_Encoder.o
-                0x08000df0                AML_Encoder_ResetLeftValue
  .text.AML_Encoder_GetRightValue
-                0x08000e00       0x18 build/AML_Encoder.o
-                0x08000e00                AML_Encoder_GetRightValue
+                0x08000df0       0x18 build/AML_Encoder.o
+                0x08000df0                AML_Encoder_GetRightValue
  .text.AML_Keyboard_GetKey
-                0x08000e18       0x10 build/AML_Keyboard.o
-                0x08000e18                AML_Keyboard_GetKey
+                0x08000e08       0x10 build/AML_Keyboard.o
+                0x08000e08                AML_Keyboard_GetKey
  .text.AML_Keyboard_Setup
-                0x08000e28        0x2 build/AML_Keyboard.o
-                0x08000e28                AML_Keyboard_Setup
- *fill*         0x08000e2a        0x2 
+                0x08000e18        0x2 build/AML_Keyboard.o
+                0x08000e18                AML_Keyboard_Setup
+ *fill*         0x08000e1a        0x2 
  .text.AML_LaserSensor_Init
-                0x08000e2c       0xb0 build/AML_LaserSensor.o
-                0x08000e2c                AML_LaserSensor_Init
+                0x08000e1c       0xb0 build/AML_LaserSensor.o
+                0x08000e1c                AML_LaserSensor_Init
  .text.AML_LaserSensor_Setup
-                0x08000edc      0x164 build/AML_LaserSensor.o
-                0x08000edc                AML_LaserSensor_Setup
+                0x08000ecc      0x164 build/AML_LaserSensor.o
+                0x08000ecc                AML_LaserSensor_Setup
  .text.AML_LaserSensor_ReadAll
-                0x08001040       0x40 build/AML_LaserSensor.o
-                0x08001040                AML_LaserSensor_ReadAll
+                0x08001030       0x40 build/AML_LaserSensor.o
+                0x08001030                AML_LaserSensor_ReadAll
  .text.AML_MPUSensor_Setup
-                0x08001080       0x18 build/AML_MPUSensor.o
-                0x08001080                AML_MPUSensor_Setup
- .text.handle   0x08001098       0x38 build/AML_MPUSensor.o
-                0x08001098                handle
+                0x08001070       0x18 build/AML_MPUSensor.o
+                0x08001070                AML_MPUSensor_Setup
+ .text.handle   0x08001088       0x38 build/AML_MPUSensor.o
+                0x08001088                handle
  .text.HAL_UART_RxCpltCallback
-                0x080010d0       0xe0 build/AML_MPUSensor.o
-                0x080010d0                HAL_UART_RxCpltCallback
+                0x080010c0       0xe0 build/AML_MPUSensor.o
+                0x080010c0                HAL_UART_RxCpltCallback
  .text.AML_MPUSensor_ResetAngle
-                0x080011b0       0x28 build/AML_MPUSensor.o
-                0x080011b0                AML_MPUSensor_ResetAngle
+                0x080011a0       0x28 build/AML_MPUSensor.o
+                0x080011a0                AML_MPUSensor_ResetAngle
  .text.AML_MPUSensor_GetAngle
-                0x080011d8       0x20 build/AML_MPUSensor.o
-                0x080011d8                AML_MPUSensor_GetAngle
+                0x080011c8       0x20 build/AML_MPUSensor.o
+                0x080011c8                AML_MPUSensor_GetAngle
  .text.AML_MotorControl_PIDSetTunings
-                0x080011f8       0x28 build/AML_MotorControl.o
-                0x080011f8                AML_MotorControl_PIDSetTunings
+                0x080011e8       0x28 build/AML_MotorControl.o
+                0x080011e8                AML_MotorControl_PIDSetTunings
  .text.AML_MotorControl_PIDSetSampleTime
-                0x08001220       0x14 build/AML_MotorControl.o
-                0x08001220                AML_MotorControl_PIDSetSampleTime
+                0x08001210       0x24 build/AML_MotorControl.o
+                0x08001210                AML_MotorControl_PIDSetSampleTime
  .text.AML_MotorControl_PIDSetOutputLimits
-                0x08001234       0x20 build/AML_MotorControl.o
+                0x08001234       0x3c build/AML_MotorControl.o
                 0x08001234                AML_MotorControl_PIDSetOutputLimits
  .text.AML_MotorControl_PIDSetMode
-                0x08001254       0x20 build/AML_MotorControl.o
-                0x08001254                AML_MotorControl_PIDSetMode
- *fill*         0x08001274        0x4 
+                0x08001270       0x38 build/AML_MotorControl.o
+                0x08001270                AML_MotorControl_PIDSetMode
  .text.AML_MotorControl_PIDSetup
-                0x08001278       0xcc build/AML_MotorControl.o
-                0x08001278                AML_MotorControl_PIDSetup
+                0x080012a8      0x140 build/AML_MotorControl.o
+                0x080012a8                AML_MotorControl_PIDSetup
  .text.AML_MotorControl_Setup
-                0x08001344       0x40 build/AML_MotorControl.o
-                0x08001344                AML_MotorControl_Setup
+                0x080013e8       0x40 build/AML_MotorControl.o
+                0x080013e8                AML_MotorControl_Setup
  .text.AML_MotorControl_LeftPWM
-                0x08001384       0xb4 build/AML_MotorControl.o
-                0x08001384                AML_MotorControl_LeftPWM
- .text.AML_MotorControl_SetLeftSpeed
-                0x08001438       0x70 build/AML_MotorControl.o
-                0x08001438                AML_MotorControl_SetLeftSpeed
+                0x08001428       0xb4 build/AML_MotorControl.o
+                0x08001428                AML_MotorControl_LeftPWM
+ .text.AML_MotorControl_MoveLeft
+                0x080014dc       0x5c build/AML_MotorControl.o
+                0x080014dc                AML_MotorControl_MoveLeft
  .text.MX_GPIO_Init
-                0x080014a8      0x134 build/main.o
+                0x08001538      0x134 build/main.o
  .text.MX_DMA_Init
-                0x080015dc       0x34 build/main.o
+                0x0800166c       0x34 build/main.o
  .text.Error_Handler
-                0x08001610        0x4 build/main.o
-                0x08001610                Error_Handler
+                0x080016a0        0x4 build/main.o
+                0x080016a0                Error_Handler
  .text.MX_I2C1_Init
-                0x08001614       0x38 build/main.o
+                0x080016a4       0x38 build/main.o
  .text.MX_USART3_UART_Init
-                0x0800164c       0x34 build/main.o
+                0x080016dc       0x34 build/main.o
  .text.MX_TIM1_Init
-                0x08001680       0x68 build/main.o
+                0x08001710       0x68 build/main.o
  .text.MX_TIM2_Init
-                0x080016e8       0xb0 build/main.o
+                0x08001778       0xb0 build/main.o
  .text.MX_TIM4_Init
-                0x08001798       0x64 build/main.o
+                0x08001828       0x64 build/main.o
  .text.MX_USART6_UART_Init
-                0x080017fc       0x34 build/main.o
+                0x0800188c       0x34 build/main.o
  .text.MX_I2C3_Init
-                0x08001830       0x38 build/main.o
+                0x080018c0       0x38 build/main.o
  .text.SystemClock_Config
-                0x08001868       0xa8 build/main.o
-                0x08001868                SystemClock_Config
- .text.main     0x08001910       0x94 build/main.o
-                0x08001910                main
+                0x080018f8       0xa8 build/main.o
+                0x080018f8                SystemClock_Config
+ .text.main     0x080019a0       0x98 build/main.o
+                0x080019a0                main
  .text.PID_Init
-                0x080019a4       0x4e build/pid.o
-                0x080019a4                PID_Init
- *fill*         0x080019f2        0x6 
+                0x08001a38       0x4e build/pid.o
+                0x08001a38                PID_Init
+ *fill*         0x08001a86        0x2 
  .text.PID_Compute
-                0x080019f8      0x158 build/pid.o
-                0x080019f8                PID_Compute
+                0x08001a88      0x158 build/pid.o
+                0x08001a88                PID_Compute
  .text.PID_SetMode
-                0x08001b50       0x1e build/pid.o
-                0x08001b50                PID_SetMode
+                0x08001be0       0x1e build/pid.o
+                0x08001be0                PID_SetMode
  .text.PID_SetOutputLimits
-                0x08001b6e       0x92 build/pid.o
-                0x08001b6e                PID_SetOutputLimits
+                0x08001bfe       0x92 build/pid.o
+                0x08001bfe                PID_SetOutputLimits
  .text.PID_SetTunings2
-                0x08001c00       0xe8 build/pid.o
-                0x08001c00                PID_SetTunings2
+                0x08001c90       0xe8 build/pid.o
+                0x08001c90                PID_SetTunings2
  .text.PID_SetControllerDirection
-                0x08001ce8       0x44 build/pid.o
-                0x08001ce8                PID_SetControllerDirection
- *fill*         0x08001d2c        0x4 
- .text.PID      0x08001d30       0x88 build/pid.o
-                0x08001d30                PID
+                0x08001d78       0x44 build/pid.o
+                0x08001d78                PID_SetControllerDirection
+ *fill*         0x08001dbc        0x4 
+ .text.PID      0x08001dc0       0x88 build/pid.o
+                0x08001dc0                PID
  .text.HAL_MspInit
-                0x08001db8       0x38 build/stm32f4xx_hal_msp.o
-                0x08001db8                HAL_MspInit
+                0x08001e48       0x38 build/stm32f4xx_hal_msp.o
+                0x08001e48                HAL_MspInit
  .text.HAL_I2C_MspInit
-                0x08001df0      0x104 build/stm32f4xx_hal_msp.o
-                0x08001df0                HAL_I2C_MspInit
+                0x08001e80      0x104 build/stm32f4xx_hal_msp.o
+                0x08001e80                HAL_I2C_MspInit
  .text.HAL_TIM_Encoder_MspInit
-                0x08001ef4       0xf0 build/stm32f4xx_hal_msp.o
-                0x08001ef4                HAL_TIM_Encoder_MspInit
+                0x08001f84       0xf0 build/stm32f4xx_hal_msp.o
+                0x08001f84                HAL_TIM_Encoder_MspInit
  .text.HAL_TIM_Base_MspInit
-                0x08001fe4       0x2c build/stm32f4xx_hal_msp.o
-                0x08001fe4                HAL_TIM_Base_MspInit
+                0x08002074       0x2c build/stm32f4xx_hal_msp.o
+                0x08002074                HAL_TIM_Base_MspInit
  .text.HAL_TIM_MspPostInit
-                0x08002010       0x58 build/stm32f4xx_hal_msp.o
-                0x08002010                HAL_TIM_MspPostInit
+                0x080020a0       0x58 build/stm32f4xx_hal_msp.o
+                0x080020a0                HAL_TIM_MspPostInit
  .text.HAL_UART_MspInit
-                0x08002068      0x104 build/stm32f4xx_hal_msp.o
-                0x08002068                HAL_UART_MspInit
+                0x080020f8      0x104 build/stm32f4xx_hal_msp.o
+                0x080020f8                HAL_UART_MspInit
  .text.NMI_Handler
-                0x0800216c        0x2 build/stm32f4xx_it.o
-                0x0800216c                NMI_Handler
+                0x080021fc        0x2 build/stm32f4xx_it.o
+                0x080021fc                NMI_Handler
  .text.HardFault_Handler
-                0x0800216e        0x2 build/stm32f4xx_it.o
-                0x0800216e                HardFault_Handler
+                0x080021fe        0x2 build/stm32f4xx_it.o
+                0x080021fe                HardFault_Handler
  .text.MemManage_Handler
-                0x08002170        0x2 build/stm32f4xx_it.o
-                0x08002170                MemManage_Handler
+                0x08002200        0x2 build/stm32f4xx_it.o
+                0x08002200                MemManage_Handler
  .text.BusFault_Handler
-                0x08002172        0x2 build/stm32f4xx_it.o
-                0x08002172                BusFault_Handler
+                0x08002202        0x2 build/stm32f4xx_it.o
+                0x08002202                BusFault_Handler
  .text.UsageFault_Handler
-                0x08002174        0x2 build/stm32f4xx_it.o
-                0x08002174                UsageFault_Handler
+                0x08002204        0x2 build/stm32f4xx_it.o
+                0x08002204                UsageFault_Handler
  .text.SVC_Handler
-                0x08002176        0x2 build/stm32f4xx_it.o
-                0x08002176                SVC_Handler
+                0x08002206        0x2 build/stm32f4xx_it.o
+                0x08002206                SVC_Handler
  .text.DebugMon_Handler
-                0x08002178        0x2 build/stm32f4xx_it.o
-                0x08002178                DebugMon_Handler
+                0x08002208        0x2 build/stm32f4xx_it.o
+                0x08002208                DebugMon_Handler
  .text.PendSV_Handler
-                0x0800217a        0x2 build/stm32f4xx_it.o
-                0x0800217a                PendSV_Handler
+                0x0800220a        0x2 build/stm32f4xx_it.o
+                0x0800220a                PendSV_Handler
  .text.SysTick_Handler
-                0x0800217c        0x8 build/stm32f4xx_it.o
-                0x0800217c                SysTick_Handler
+                0x0800220c        0x8 build/stm32f4xx_it.o
+                0x0800220c                SysTick_Handler
  .text.DMA1_Stream1_IRQHandler
-                0x08002184       0x10 build/stm32f4xx_it.o
-                0x08002184                DMA1_Stream1_IRQHandler
+                0x08002214       0x10 build/stm32f4xx_it.o
+                0x08002214                DMA1_Stream1_IRQHandler
  .text.SystemInit
-                0x08002194       0x14 build/system_stm32f4xx.o
-                0x08002194                SystemInit
+                0x08002224       0x14 build/system_stm32f4xx.o
+                0x08002224                SystemInit
  .text.VL53L0X_GetOffsetCalibrationDataMicroMeter
-                0x080021a8        0x8 build/vl53l0x_api.o
-                0x080021a8                VL53L0X_GetOffsetCalibrationDataMicroMeter
+                0x08002238        0x8 build/vl53l0x_api.o
+                0x08002238                VL53L0X_GetOffsetCalibrationDataMicroMeter
  .text.VL53L0X_SetDeviceAddress
-                0x080021b0        0xc build/vl53l0x_api.o
-                0x080021b0                VL53L0X_SetDeviceAddress
+                0x08002240        0xc build/vl53l0x_api.o
+                0x08002240                VL53L0X_SetDeviceAddress
  .text.VL53L0X_WaitDeviceBooted
-                0x080021bc        0x6 build/vl53l0x_api.o
-                0x080021bc                VL53L0X_WaitDeviceBooted
- *fill*         0x080021c2        0x2 
+                0x0800224c        0x6 build/vl53l0x_api.o
+                0x0800224c                VL53L0X_WaitDeviceBooted
+ *fill*         0x08002252        0x2 
  .text.VL53L0X_SetDeviceMode
-                0x080021c4       0x24 build/vl53l0x_api.o
-                0x080021c4                VL53L0X_SetDeviceMode
+                0x08002254       0x24 build/vl53l0x_api.o
+                0x08002254                VL53L0X_SetDeviceMode
  .text.VL53L0X_GetDeviceMode
-                0x080021e8        0x8 build/vl53l0x_api.o
-                0x080021e8                VL53L0X_GetDeviceMode
+                0x08002278        0x8 build/vl53l0x_api.o
+                0x08002278                VL53L0X_GetDeviceMode
  .text.VL53L0X_GetFractionEnable
-                0x080021f0       0x18 build/vl53l0x_api.o
-                0x080021f0                VL53L0X_GetFractionEnable
+                0x08002280       0x18 build/vl53l0x_api.o
+                0x08002280                VL53L0X_GetFractionEnable
  .text.VL53L0X_SetMeasurementTimingBudgetMicroSeconds
-                0x08002208        0x8 build/vl53l0x_api.o
-                0x08002208                VL53L0X_SetMeasurementTimingBudgetMicroSeconds
+                0x08002298        0x8 build/vl53l0x_api.o
+                0x08002298                VL53L0X_SetMeasurementTimingBudgetMicroSeconds
  .text.VL53L0X_GetMeasurementTimingBudgetMicroSeconds
-                0x08002210        0x8 build/vl53l0x_api.o
-                0x08002210                VL53L0X_GetMeasurementTimingBudgetMicroSeconds
+                0x080022a0        0x8 build/vl53l0x_api.o
+                0x080022a0                VL53L0X_GetMeasurementTimingBudgetMicroSeconds
  .text.VL53L0X_SetVcselPulsePeriod
-                0x08002218        0x8 build/vl53l0x_api.o
-                0x08002218                VL53L0X_SetVcselPulsePeriod
+                0x080022a8        0x8 build/vl53l0x_api.o
+                0x080022a8                VL53L0X_SetVcselPulsePeriod
  .text.VL53L0X_GetVcselPulsePeriod
-                0x08002220        0x8 build/vl53l0x_api.o
-                0x08002220                VL53L0X_GetVcselPulsePeriod
+                0x080022b0        0x8 build/vl53l0x_api.o
+                0x080022b0                VL53L0X_GetVcselPulsePeriod
  .text.VL53L0X_SetSequenceStepEnable
-                0x08002228       0xbc build/vl53l0x_api.o
-                0x08002228                VL53L0X_SetSequenceStepEnable
+                0x080022b8       0xbc build/vl53l0x_api.o
+                0x080022b8                VL53L0X_SetSequenceStepEnable
  .text.sequence_step_enabled
-                0x080022e4       0x48 build/vl53l0x_api.o
-                0x080022e4                sequence_step_enabled
+                0x08002374       0x48 build/vl53l0x_api.o
+                0x08002374                sequence_step_enabled
  .text.VL53L0X_GetSequenceStepEnables
-                0x0800232c       0x76 build/vl53l0x_api.o
-                0x0800232c                VL53L0X_GetSequenceStepEnables
+                0x080023bc       0x76 build/vl53l0x_api.o
+                0x080023bc                VL53L0X_GetSequenceStepEnables
  .text.VL53L0X_GetInterMeasurementPeriodMilliSeconds
-                0x080023a2       0x38 build/vl53l0x_api.o
-                0x080023a2                VL53L0X_GetInterMeasurementPeriodMilliSeconds
+                0x08002432       0x38 build/vl53l0x_api.o
+                0x08002432                VL53L0X_GetInterMeasurementPeriodMilliSeconds
  .text.VL53L0X_GetXTalkCompensationEnable
-                0x080023da        0x8 build/vl53l0x_api.o
-                0x080023da                VL53L0X_GetXTalkCompensationEnable
+                0x0800246a        0x8 build/vl53l0x_api.o
+                0x0800246a                VL53L0X_GetXTalkCompensationEnable
  .text.VL53L0X_GetXTalkCompensationRateMegaCps
-                0x080023e2       0x32 build/vl53l0x_api.o
-                0x080023e2                VL53L0X_GetXTalkCompensationRateMegaCps
+                0x08002472       0x32 build/vl53l0x_api.o
+                0x08002472                VL53L0X_GetXTalkCompensationRateMegaCps
  .text.VL53L0X_SetLimitCheckEnable
-                0x08002414       0x96 build/vl53l0x_api.o
-                0x08002414                VL53L0X_SetLimitCheckEnable
+                0x080024a4       0x96 build/vl53l0x_api.o
+                0x080024a4                VL53L0X_SetLimitCheckEnable
  .text.VL53L0X_GetLimitCheckEnable
-                0x080024aa       0x1a build/vl53l0x_api.o
-                0x080024aa                VL53L0X_GetLimitCheckEnable
+                0x0800253a       0x1a build/vl53l0x_api.o
+                0x0800253a                VL53L0X_GetLimitCheckEnable
  .text.VL53L0X_SetLimitCheckValue
-                0x080024c4       0x66 build/vl53l0x_api.o
-                0x080024c4                VL53L0X_SetLimitCheckValue
+                0x08002554       0x66 build/vl53l0x_api.o
+                0x08002554                VL53L0X_SetLimitCheckValue
  .text.VL53L0X_GetLimitCheckValue
-                0x0800252a       0xa2 build/vl53l0x_api.o
-                0x0800252a                VL53L0X_GetLimitCheckValue
+                0x080025ba       0xa2 build/vl53l0x_api.o
+                0x080025ba                VL53L0X_GetLimitCheckValue
  .text.VL53L0X_GetWrapAroundCheckEnable
-                0x080025cc       0x3c build/vl53l0x_api.o
-                0x080025cc                VL53L0X_GetWrapAroundCheckEnable
+                0x0800265c       0x3c build/vl53l0x_api.o
+                0x0800265c                VL53L0X_GetWrapAroundCheckEnable
  .text.VL53L0X_GetDeviceParameters
-                0x08002608       0xac build/vl53l0x_api.o
-                0x08002608                VL53L0X_GetDeviceParameters
+                0x08002698       0xac build/vl53l0x_api.o
+                0x08002698                VL53L0X_GetDeviceParameters
  .text.VL53L0X_DataInit
-                0x080026b4      0x1c4 build/vl53l0x_api.o
-                0x080026b4                VL53L0X_DataInit
+                0x08002744      0x1c4 build/vl53l0x_api.o
+                0x08002744                VL53L0X_DataInit
  .text.VL53L0X_PerformRefCalibration
-                0x08002878        0xa build/vl53l0x_api.o
-                0x08002878                VL53L0X_PerformRefCalibration
- *fill*         0x08002882        0x2 
+                0x08002908        0xa build/vl53l0x_api.o
+                0x08002908                VL53L0X_PerformRefCalibration
+ *fill*         0x08002912        0x2 
  .text.VL53L0X_GetRangingMeasurementData
-                0x08002884      0x160 build/vl53l0x_api.o
-                0x08002884                VL53L0X_GetRangingMeasurementData
+                0x08002914      0x160 build/vl53l0x_api.o
+                0x08002914                VL53L0X_GetRangingMeasurementData
  .text.VL53L0X_GetInterruptThresholds
-                0x080029e4       0x44 build/vl53l0x_api.o
-                0x080029e4                VL53L0X_GetInterruptThresholds
+                0x08002a74       0x44 build/vl53l0x_api.o
+                0x08002a74                VL53L0X_GetInterruptThresholds
  .text.VL53L0X_CheckAndLoadInterruptSettings
-                0x08002a28       0x88 build/vl53l0x_api.o
-                0x08002a28                VL53L0X_CheckAndLoadInterruptSettings
+                0x08002ab8       0x88 build/vl53l0x_api.o
+                0x08002ab8                VL53L0X_CheckAndLoadInterruptSettings
  .text.VL53L0X_StartMeasurement
-                0x08002ab0       0xfa build/vl53l0x_api.o
-                0x08002ab0                VL53L0X_StartMeasurement
+                0x08002b40       0xfa build/vl53l0x_api.o
+                0x08002b40                VL53L0X_StartMeasurement
  .text.VL53L0X_PerformSingleMeasurement
-                0x08002baa       0x3a build/vl53l0x_api.o
-                0x08002baa                VL53L0X_PerformSingleMeasurement
+                0x08002c3a       0x3a build/vl53l0x_api.o
+                0x08002c3a                VL53L0X_PerformSingleMeasurement
  .text.VL53L0X_ClearInterruptMask
-                0x08002be4       0x56 build/vl53l0x_api.o
-                0x08002be4                VL53L0X_ClearInterruptMask
+                0x08002c74       0x56 build/vl53l0x_api.o
+                0x08002c74                VL53L0X_ClearInterruptMask
  .text.VL53L0X_PerformSingleRangingMeasurement
-                0x08002c3a       0x30 build/vl53l0x_api.o
-                0x08002c3a                VL53L0X_PerformSingleRangingMeasurement
+                0x08002cca       0x30 build/vl53l0x_api.o
+                0x08002cca                VL53L0X_PerformSingleRangingMeasurement
  .text.VL53L0X_SetGpioConfig
-                0x08002c6a      0x144 build/vl53l0x_api.o
-                0x08002c6a                VL53L0X_SetGpioConfig
- *fill*         0x08002dae        0x2 
+                0x08002cfa      0x144 build/vl53l0x_api.o
+                0x08002cfa                VL53L0X_SetGpioConfig
+ *fill*         0x08002e3e        0x2 
  .text.VL53L0X_StaticInit
-                0x08002db0      0x1e0 build/vl53l0x_api.o
-                0x08002db0                VL53L0X_StaticInit
+                0x08002e40      0x1e0 build/vl53l0x_api.o
+                0x08002e40                VL53L0X_StaticInit
  .text.VL53L0X_GetInterruptMaskStatus
-                0x08002f90       0x2a build/vl53l0x_api.o
-                0x08002f90                VL53L0X_GetInterruptMaskStatus
+                0x08003020       0x2a build/vl53l0x_api.o
+                0x08003020                VL53L0X_GetInterruptMaskStatus
  .text.VL53L0X_GetMeasurementDataReady
-                0x08002fba       0x4a build/vl53l0x_api.o
-                0x08002fba                VL53L0X_GetMeasurementDataReady
+                0x0800304a       0x4a build/vl53l0x_api.o
+                0x0800304a                VL53L0X_GetMeasurementDataReady
  .text.VL53L0X_PerformRefSpadManagement
-                0x08003004        0x8 build/vl53l0x_api.o
-                0x08003004                VL53L0X_PerformRefSpadManagement
+                0x08003094        0x8 build/vl53l0x_api.o
+                0x08003094                VL53L0X_PerformRefSpadManagement
  .text.VL53L0X_get_offset_calibration_data_micro_meter
-                0x0800300c       0x3a build/vl53l0x_api_calibration.o
-                0x0800300c                VL53L0X_get_offset_calibration_data_micro_meter
+                0x0800309c       0x3a build/vl53l0x_api_calibration.o
+                0x0800309c                VL53L0X_get_offset_calibration_data_micro_meter
  .text.get_next_good_spad
-                0x08003046       0x4a build/vl53l0x_api_calibration.o
-                0x08003046                get_next_good_spad
+                0x080030d6       0x4a build/vl53l0x_api_calibration.o
+                0x080030d6                get_next_good_spad
  .text.is_aperture
-                0x08003090       0x18 build/vl53l0x_api_calibration.o
-                0x08003090                is_aperture
+                0x08003120       0x18 build/vl53l0x_api_calibration.o
+                0x08003120                is_aperture
  .text.enable_spad_bit
-                0x080030a8       0x26 build/vl53l0x_api_calibration.o
-                0x080030a8                enable_spad_bit
+                0x08003138       0x26 build/vl53l0x_api_calibration.o
+                0x08003138                enable_spad_bit
  .text.set_ref_spad_map
-                0x080030ce        0xe build/vl53l0x_api_calibration.o
-                0x080030ce                set_ref_spad_map
+                0x0800315e        0xe build/vl53l0x_api_calibration.o
+                0x0800315e                set_ref_spad_map
  .text.get_ref_spad_map
-                0x080030dc        0xe build/vl53l0x_api_calibration.o
-                0x080030dc                get_ref_spad_map
+                0x0800316c        0xe build/vl53l0x_api_calibration.o
+                0x0800316c                get_ref_spad_map
  .text.enable_ref_spads
-                0x080030ea       0xa0 build/vl53l0x_api_calibration.o
-                0x080030ea                enable_ref_spads
+                0x0800317a       0xa0 build/vl53l0x_api_calibration.o
+                0x0800317a                enable_ref_spads
  .text.perform_ref_signal_measurement
-                0x0800318a       0x72 build/vl53l0x_api_calibration.o
-                0x0800318a                perform_ref_signal_measurement
+                0x0800321a       0x72 build/vl53l0x_api_calibration.o
+                0x0800321a                perform_ref_signal_measurement
  .text.VL53L0X_set_reference_spads
-                0x080031fc       0xb4 build/vl53l0x_api_calibration.o
-                0x080031fc                VL53L0X_set_reference_spads
+                0x0800328c       0xb4 build/vl53l0x_api_calibration.o
+                0x0800328c                VL53L0X_set_reference_spads
  .text.VL53L0X_perform_single_ref_calibration
-                0x080032b0       0x34 build/vl53l0x_api_calibration.o
-                0x080032b0                VL53L0X_perform_single_ref_calibration
+                0x08003340       0x34 build/vl53l0x_api_calibration.o
+                0x08003340                VL53L0X_perform_single_ref_calibration
  .text.VL53L0X_ref_calibration_io
-                0x080032e4       0xde build/vl53l0x_api_calibration.o
-                0x080032e4                VL53L0X_ref_calibration_io
+                0x08003374       0xde build/vl53l0x_api_calibration.o
+                0x08003374                VL53L0X_ref_calibration_io
  .text.VL53L0X_perform_vhv_calibration
-                0x080033c2       0x80 build/vl53l0x_api_calibration.o
-                0x080033c2                VL53L0X_perform_vhv_calibration
+                0x08003452       0x80 build/vl53l0x_api_calibration.o
+                0x08003452                VL53L0X_perform_vhv_calibration
  .text.VL53L0X_perform_phase_calibration
-                0x08003442       0x7a build/vl53l0x_api_calibration.o
-                0x08003442                VL53L0X_perform_phase_calibration
+                0x080034d2       0x7a build/vl53l0x_api_calibration.o
+                0x080034d2                VL53L0X_perform_phase_calibration
  .text.VL53L0X_perform_ref_calibration
-                0x080034bc       0x44 build/vl53l0x_api_calibration.o
-                0x080034bc                VL53L0X_perform_ref_calibration
+                0x0800354c       0x44 build/vl53l0x_api_calibration.o
+                0x0800354c                VL53L0X_perform_ref_calibration
  .text.VL53L0X_perform_ref_spad_management
-                0x08003500      0x2d2 build/vl53l0x_api_calibration.o
-                0x08003500                VL53L0X_perform_ref_spad_management
+                0x08003590      0x2d2 build/vl53l0x_api_calibration.o
+                0x08003590                VL53L0X_perform_ref_spad_management
  .text.VL53L0X_measurement_poll_for_completion
-                0x080037d2       0x3c build/vl53l0x_api_core.o
-                0x080037d2                VL53L0X_measurement_poll_for_completion
+                0x08003862       0x3c build/vl53l0x_api_core.o
+                0x08003862                VL53L0X_measurement_poll_for_completion
  .text.VL53L0X_decode_vcsel_period
-                0x0800380e        0xc build/vl53l0x_api_core.o
-                0x0800380e                VL53L0X_decode_vcsel_period
+                0x0800389e        0xc build/vl53l0x_api_core.o
+                0x0800389e                VL53L0X_decode_vcsel_period
  .text.VL53L0X_encode_vcsel_period
-                0x0800381a        0x8 build/vl53l0x_api_core.o
-                0x0800381a                VL53L0X_encode_vcsel_period
+                0x080038aa        0x8 build/vl53l0x_api_core.o
+                0x080038aa                VL53L0X_encode_vcsel_period
  .text.VL53L0X_isqrt
-                0x08003822       0x28 build/vl53l0x_api_core.o
-                0x08003822                VL53L0X_isqrt
+                0x080038b2       0x28 build/vl53l0x_api_core.o
+                0x080038b2                VL53L0X_isqrt
  .text.VL53L0X_device_read_strobe
-                0x0800384a       0x4e build/vl53l0x_api_core.o
-                0x0800384a                VL53L0X_device_read_strobe
+                0x080038da       0x4e build/vl53l0x_api_core.o
+                0x080038da                VL53L0X_device_read_strobe
  .text.VL53L0X_get_info_from_device
-                0x08003898      0x580 build/vl53l0x_api_core.o
-                0x08003898                VL53L0X_get_info_from_device
+                0x08003928      0x580 build/vl53l0x_api_core.o
+                0x08003928                VL53L0X_get_info_from_device
  .text.VL53L0X_calc_macro_period_ps
-                0x08003e18        0xc build/vl53l0x_api_core.o
-                0x08003e18                VL53L0X_calc_macro_period_ps
+                0x08003ea8        0xc build/vl53l0x_api_core.o
+                0x08003ea8                VL53L0X_calc_macro_period_ps
  .text.VL53L0X_encode_timeout
-                0x08003e24       0x24 build/vl53l0x_api_core.o
-                0x08003e24                VL53L0X_encode_timeout
+                0x08003eb4       0x24 build/vl53l0x_api_core.o
+                0x08003eb4                VL53L0X_encode_timeout
  .text.VL53L0X_decode_timeout
-                0x08003e48        0xc build/vl53l0x_api_core.o
-                0x08003e48                VL53L0X_decode_timeout
+                0x08003ed8        0xc build/vl53l0x_api_core.o
+                0x08003ed8                VL53L0X_decode_timeout
  .text.VL53L0X_calc_timeout_mclks
-                0x08003e54       0x2c build/vl53l0x_api_core.o
-                0x08003e54                VL53L0X_calc_timeout_mclks
+                0x08003ee4       0x2c build/vl53l0x_api_core.o
+                0x08003ee4                VL53L0X_calc_timeout_mclks
  .text.VL53L0X_calc_timeout_us
-                0x08003e80       0x2c build/vl53l0x_api_core.o
-                0x08003e80                VL53L0X_calc_timeout_us
+                0x08003f10       0x2c build/vl53l0x_api_core.o
+                0x08003f10                VL53L0X_calc_timeout_us
  .text.get_sequence_step_timeout
-                0x08003eac      0x11c build/vl53l0x_api_core.o
-                0x08003eac                get_sequence_step_timeout
+                0x08003f3c      0x11c build/vl53l0x_api_core.o
+                0x08003f3c                get_sequence_step_timeout
  .text.set_sequence_step_timeout
-                0x08003fc8      0x11a build/vl53l0x_api_core.o
-                0x08003fc8                set_sequence_step_timeout
+                0x08004058      0x11a build/vl53l0x_api_core.o
+                0x08004058                set_sequence_step_timeout
  .text.VL53L0X_set_vcsel_pulse_period
-                0x080040e2      0x308 build/vl53l0x_api_core.o
-                0x080040e2                VL53L0X_set_vcsel_pulse_period
+                0x08004172      0x308 build/vl53l0x_api_core.o
+                0x08004172                VL53L0X_set_vcsel_pulse_period
  .text.VL53L0X_get_vcsel_pulse_period
-                0x080043ea       0x40 build/vl53l0x_api_core.o
-                0x080043ea                VL53L0X_get_vcsel_pulse_period
+                0x0800447a       0x40 build/vl53l0x_api_core.o
+                0x0800447a                VL53L0X_get_vcsel_pulse_period
  .text.VL53L0X_set_measurement_timing_budget_micro_seconds
-                0x0800442a       0xe6 build/vl53l0x_api_core.o
-                0x0800442a                VL53L0X_set_measurement_timing_budget_micro_seconds
+                0x080044ba       0xe6 build/vl53l0x_api_core.o
+                0x080044ba                VL53L0X_set_measurement_timing_budget_micro_seconds
  .text.VL53L0X_get_measurement_timing_budget_micro_seconds
-                0x08004510       0xce build/vl53l0x_api_core.o
-                0x08004510                VL53L0X_get_measurement_timing_budget_micro_seconds
+                0x080045a0       0xce build/vl53l0x_api_core.o
+                0x080045a0                VL53L0X_get_measurement_timing_budget_micro_seconds
  .text.VL53L0X_load_tuning_settings
-                0x080045de       0xac build/vl53l0x_api_core.o
-                0x080045de                VL53L0X_load_tuning_settings
+                0x0800466e       0xac build/vl53l0x_api_core.o
+                0x0800466e                VL53L0X_load_tuning_settings
  .text.VL53L0X_get_total_xtalk_rate
-                0x0800468a       0x30 build/vl53l0x_api_core.o
-                0x0800468a                VL53L0X_get_total_xtalk_rate
+                0x0800471a       0x30 build/vl53l0x_api_core.o
+                0x0800471a                VL53L0X_get_total_xtalk_rate
  .text.VL53L0X_get_total_signal_rate
-                0x080046ba       0x1e build/vl53l0x_api_core.o
-                0x080046ba                VL53L0X_get_total_signal_rate
+                0x0800474a       0x1e build/vl53l0x_api_core.o
+                0x0800474a                VL53L0X_get_total_signal_rate
  .text.VL53L0X_calc_dmax
-                0x080046d8      0x100 build/vl53l0x_api_core.o
-                0x080046d8                VL53L0X_calc_dmax
+                0x08004768      0x100 build/vl53l0x_api_core.o
+                0x08004768                VL53L0X_calc_dmax
  .text.VL53L0X_calc_sigma_estimate
-                0x080047d8      0x268 build/vl53l0x_api_core.o
-                0x080047d8                VL53L0X_calc_sigma_estimate
+                0x08004868      0x268 build/vl53l0x_api_core.o
+                0x08004868                VL53L0X_calc_sigma_estimate
  .text.VL53L0X_get_pal_range_status
-                0x08004a40      0x26c build/vl53l0x_api_core.o
-                0x08004a40                VL53L0X_get_pal_range_status
+                0x08004ad0      0x26c build/vl53l0x_api_core.o
+                0x08004ad0                VL53L0X_get_pal_range_status
  .text._I2CWrite
-                0x08004cac       0x20 build/vl53l0x_platform.o
-                0x08004cac                _I2CWrite
+                0x08004d3c       0x20 build/vl53l0x_platform.o
+                0x08004d3c                _I2CWrite
  .text._I2CRead
-                0x08004ccc       0x22 build/vl53l0x_platform.o
-                0x08004ccc                _I2CRead
- *fill*         0x08004cee        0x2 
+                0x08004d5c       0x22 build/vl53l0x_platform.o
+                0x08004d5c                _I2CRead
+ *fill*         0x08004d7e        0x2 
  .text.VL53L0X_WriteMulti
-                0x08004cf0       0x3c build/vl53l0x_platform.o
-                0x08004cf0                VL53L0X_WriteMulti
+                0x08004d80       0x3c build/vl53l0x_platform.o
+                0x08004d80                VL53L0X_WriteMulti
  .text.VL53L0X_ReadMulti
-                0x08004d2c       0x36 build/vl53l0x_platform.o
-                0x08004d2c                VL53L0X_ReadMulti
- *fill*         0x08004d62        0x2 
+                0x08004dbc       0x36 build/vl53l0x_platform.o
+                0x08004dbc                VL53L0X_ReadMulti
+ *fill*         0x08004df2        0x2 
  .text.VL53L0X_WrByte
-                0x08004d64       0x20 build/vl53l0x_platform.o
-                0x08004d64                VL53L0X_WrByte
+                0x08004df4       0x20 build/vl53l0x_platform.o
+                0x08004df4                VL53L0X_WrByte
  .text.VL53L0X_WrWord
-                0x08004d84       0x24 build/vl53l0x_platform.o
-                0x08004d84                VL53L0X_WrWord
+                0x08004e14       0x24 build/vl53l0x_platform.o
+                0x08004e14                VL53L0X_WrWord
  .text.VL53L0X_RdByte
-                0x08004da8       0x34 build/vl53l0x_platform.o
-                0x08004da8                VL53L0X_RdByte
+                0x08004e38       0x34 build/vl53l0x_platform.o
+                0x08004e38                VL53L0X_RdByte
  .text.VL53L0X_UpdateByte
-                0x08004ddc       0x30 build/vl53l0x_platform.o
-                0x08004ddc                VL53L0X_UpdateByte
+                0x08004e6c       0x30 build/vl53l0x_platform.o
+                0x08004e6c                VL53L0X_UpdateByte
  .text.VL53L0X_RdWord
-                0x08004e0c       0x44 build/vl53l0x_platform.o
-                0x08004e0c                VL53L0X_RdWord
+                0x08004e9c       0x44 build/vl53l0x_platform.o
+                0x08004e9c                VL53L0X_RdWord
  .text.VL53L0X_RdDWord
-                0x08004e50       0x50 build/vl53l0x_platform.o
-                0x08004e50                VL53L0X_RdDWord
+                0x08004ee0       0x50 build/vl53l0x_platform.o
+                0x08004ee0                VL53L0X_RdDWord
  .text.VL53L0X_PollingDelay
-                0x08004ea0        0xc build/vl53l0x_platform.o
-                0x08004ea0                VL53L0X_PollingDelay
+                0x08004f30        0xc build/vl53l0x_platform.o
+                0x08004f30                VL53L0X_PollingDelay
  .text.HAL_InitTick
-                0x08004eac       0x4c build/stm32f4xx_hal.o
-                0x08004eac                HAL_InitTick
+                0x08004f3c       0x4c build/stm32f4xx_hal.o
+                0x08004f3c                HAL_InitTick
  .text.HAL_Init
-                0x08004ef8       0x34 build/stm32f4xx_hal.o
-                0x08004ef8                HAL_Init
+                0x08004f88       0x34 build/stm32f4xx_hal.o
+                0x08004f88                HAL_Init
  .text.HAL_IncTick
-                0x08004f2c       0x18 build/stm32f4xx_hal.o
-                0x08004f2c                HAL_IncTick
+                0x08004fbc       0x18 build/stm32f4xx_hal.o
+                0x08004fbc                HAL_IncTick
  .text.HAL_GetTick
-                0x08004f44        0xc build/stm32f4xx_hal.o
-                0x08004f44                HAL_GetTick
+                0x08004fd4        0xc build/stm32f4xx_hal.o
+                0x08004fd4                HAL_GetTick
  .text.HAL_Delay
-                0x08004f50       0x28 build/stm32f4xx_hal.o
-                0x08004f50                HAL_Delay
+                0x08004fe0       0x28 build/stm32f4xx_hal.o
+                0x08004fe0                HAL_Delay
  .text.HAL_NVIC_SetPriorityGrouping
-                0x08004f78       0x24 build/stm32f4xx_hal_cortex.o
-                0x08004f78                HAL_NVIC_SetPriorityGrouping
+                0x08005008       0x24 build/stm32f4xx_hal_cortex.o
+                0x08005008                HAL_NVIC_SetPriorityGrouping
  .text.HAL_NVIC_SetPriority
-                0x08004f9c       0x68 build/stm32f4xx_hal_cortex.o
-                0x08004f9c                HAL_NVIC_SetPriority
+                0x0800502c       0x68 build/stm32f4xx_hal_cortex.o
+                0x0800502c                HAL_NVIC_SetPriority
  .text.HAL_NVIC_EnableIRQ
-                0x08005004       0x1c build/stm32f4xx_hal_cortex.o
-                0x08005004                HAL_NVIC_EnableIRQ
+                0x08005094       0x1c build/stm32f4xx_hal_cortex.o
+                0x08005094                HAL_NVIC_EnableIRQ
  .text.HAL_SYSTICK_Config
-                0x08005020       0x2c build/stm32f4xx_hal_cortex.o
-                0x08005020                HAL_SYSTICK_Config
+                0x080050b0       0x2c build/stm32f4xx_hal_cortex.o
+                0x080050b0                HAL_SYSTICK_Config
  .text.DMA_SetConfig
-                0x0800504c       0x2c build/stm32f4xx_hal_dma.o
+                0x080050dc       0x2c build/stm32f4xx_hal_dma.o
  .text.DMA_CalcBaseAndBitshift
-                0x08005078       0x44 build/stm32f4xx_hal_dma.o
+                0x08005108       0x44 build/stm32f4xx_hal_dma.o
  .text.DMA_CheckFifoParam
-                0x080050bc       0x8e build/stm32f4xx_hal_dma.o
- *fill*         0x0800514a        0x2 
+                0x0800514c       0x8e build/stm32f4xx_hal_dma.o
+ *fill*         0x080051da        0x2 
  .text.HAL_DMA_Init
-                0x0800514c       0xcc build/stm32f4xx_hal_dma.o
-                0x0800514c                HAL_DMA_Init
+                0x080051dc       0xcc build/stm32f4xx_hal_dma.o
+                0x080051dc                HAL_DMA_Init
  .text.HAL_DMA_Start_IT
-                0x08005218       0x6a build/stm32f4xx_hal_dma.o
-                0x08005218                HAL_DMA_Start_IT
- *fill*         0x08005282        0x2 
+                0x080052a8       0x6a build/stm32f4xx_hal_dma.o
+                0x080052a8                HAL_DMA_Start_IT
+ *fill*         0x08005312        0x2 
  .text.HAL_DMA_IRQHandler
-                0x08005284      0x1dc build/stm32f4xx_hal_dma.o
-                0x08005284                HAL_DMA_IRQHandler
+                0x08005314      0x1dc build/stm32f4xx_hal_dma.o
+                0x08005314                HAL_DMA_IRQHandler
  .text.HAL_GPIO_Init
-                0x08005460      0x1d4 build/stm32f4xx_hal_gpio.o
-                0x08005460                HAL_GPIO_Init
+                0x080054f0      0x1d4 build/stm32f4xx_hal_gpio.o
+                0x080054f0                HAL_GPIO_Init
  .text.HAL_GPIO_ReadPin
-                0x08005634        0xe build/stm32f4xx_hal_gpio.o
-                0x08005634                HAL_GPIO_ReadPin
+                0x080056c4        0xe build/stm32f4xx_hal_gpio.o
+                0x080056c4                HAL_GPIO_ReadPin
  .text.HAL_GPIO_WritePin
-                0x08005642        0xc build/stm32f4xx_hal_gpio.o
-                0x08005642                HAL_GPIO_WritePin
+                0x080056d2        0xc build/stm32f4xx_hal_gpio.o
+                0x080056d2                HAL_GPIO_WritePin
  .text.I2C_IsAcknowledgeFailed
-                0x0800564e       0x32 build/stm32f4xx_hal_i2c.o
+                0x080056de       0x32 build/stm32f4xx_hal_i2c.o
  .text.I2C_WaitOnFlagUntilTimeout
-                0x08005680       0x74 build/stm32f4xx_hal_i2c.o
+                0x08005710       0x74 build/stm32f4xx_hal_i2c.o
  .text.I2C_WaitOnMasterAddressFlagUntilTimeout
-                0x080056f4       0xaa build/stm32f4xx_hal_i2c.o
- *fill*         0x0800579e        0x2 
+                0x08005784       0xaa build/stm32f4xx_hal_i2c.o
+ *fill*         0x0800582e        0x2 
  .text.I2C_MasterRequestWrite
-                0x080057a0       0xb4 build/stm32f4xx_hal_i2c.o
+                0x08005830       0xb4 build/stm32f4xx_hal_i2c.o
  .text.I2C_MasterRequestRead
-                0x08005854      0x120 build/stm32f4xx_hal_i2c.o
+                0x080058e4      0x120 build/stm32f4xx_hal_i2c.o
  .text.I2C_WaitOnTXEFlagUntilTimeout
-                0x08005974       0x54 build/stm32f4xx_hal_i2c.o
+                0x08005a04       0x54 build/stm32f4xx_hal_i2c.o
  .text.I2C_WaitOnBTFFlagUntilTimeout
-                0x080059c8       0x54 build/stm32f4xx_hal_i2c.o
+                0x08005a58       0x54 build/stm32f4xx_hal_i2c.o
  .text.I2C_WaitOnRXNEFlagUntilTimeout
-                0x08005a1c       0x6a build/stm32f4xx_hal_i2c.o
- *fill*         0x08005a86        0x2 
+                0x08005aac       0x6a build/stm32f4xx_hal_i2c.o
+ *fill*         0x08005b16        0x2 
  .text.HAL_I2C_Init
-                0x08005a88      0x1bc build/stm32f4xx_hal_i2c.o
-                0x08005a88                HAL_I2C_Init
+                0x08005b18      0x1bc build/stm32f4xx_hal_i2c.o
+                0x08005b18                HAL_I2C_Init
  .text.HAL_I2C_Master_Transmit
-                0x08005c44      0x178 build/stm32f4xx_hal_i2c.o
-                0x08005c44                HAL_I2C_Master_Transmit
+                0x08005cd4      0x178 build/stm32f4xx_hal_i2c.o
+                0x08005cd4                HAL_I2C_Master_Transmit
  .text.HAL_I2C_Master_Receive
-                0x08005dbc      0x2e8 build/stm32f4xx_hal_i2c.o
-                0x08005dbc                HAL_I2C_Master_Receive
+                0x08005e4c      0x2e8 build/stm32f4xx_hal_i2c.o
+                0x08005e4c                HAL_I2C_Master_Receive
  .text.HAL_RCC_OscConfig
-                0x080060a4      0x3f8 build/stm32f4xx_hal_rcc.o
-                0x080060a4                HAL_RCC_OscConfig
+                0x08006134      0x3f8 build/stm32f4xx_hal_rcc.o
+                0x08006134                HAL_RCC_OscConfig
  .text.HAL_RCC_GetSysClockFreq
-                0x0800649c       0xcc build/stm32f4xx_hal_rcc.o
-                0x0800649c                HAL_RCC_GetSysClockFreq
+                0x0800652c       0xcc build/stm32f4xx_hal_rcc.o
+                0x0800652c                HAL_RCC_GetSysClockFreq
  .text.HAL_RCC_ClockConfig
-                0x08006568      0x160 build/stm32f4xx_hal_rcc.o
-                0x08006568                HAL_RCC_ClockConfig
+                0x080065f8      0x160 build/stm32f4xx_hal_rcc.o
+                0x080065f8                HAL_RCC_ClockConfig
  .text.HAL_RCC_GetHCLKFreq
-                0x080066c8        0xc build/stm32f4xx_hal_rcc.o
-                0x080066c8                HAL_RCC_GetHCLKFreq
+                0x08006758        0xc build/stm32f4xx_hal_rcc.o
+                0x08006758                HAL_RCC_GetHCLKFreq
  .text.HAL_RCC_GetPCLK1Freq
-                0x080066d4       0x20 build/stm32f4xx_hal_rcc.o
-                0x080066d4                HAL_RCC_GetPCLK1Freq
+                0x08006764       0x20 build/stm32f4xx_hal_rcc.o
+                0x08006764                HAL_RCC_GetPCLK1Freq
  .text.HAL_RCC_GetPCLK2Freq
-                0x080066f4       0x20 build/stm32f4xx_hal_rcc.o
-                0x080066f4                HAL_RCC_GetPCLK2Freq
+                0x08006784       0x20 build/stm32f4xx_hal_rcc.o
+                0x08006784                HAL_RCC_GetPCLK2Freq
  .text.TIM_OC1_SetConfig
-                0x08006714       0x68 build/stm32f4xx_hal_tim.o
+                0x080067a4       0x68 build/stm32f4xx_hal_tim.o
  .text.TIM_OC3_SetConfig
-                0x0800677c       0x70 build/stm32f4xx_hal_tim.o
+                0x0800680c       0x70 build/stm32f4xx_hal_tim.o
  .text.TIM_OC4_SetConfig
-                0x080067ec       0x50 build/stm32f4xx_hal_tim.o
+                0x0800687c       0x50 build/stm32f4xx_hal_tim.o
  .text.TIM_TI1_ConfigInputStage
-                0x0800683c       0x24 build/stm32f4xx_hal_tim.o
+                0x080068cc       0x24 build/stm32f4xx_hal_tim.o
  .text.TIM_TI2_ConfigInputStage
-                0x08006860       0x26 build/stm32f4xx_hal_tim.o
+                0x080068f0       0x26 build/stm32f4xx_hal_tim.o
  .text.TIM_ITRx_SetConfig
-                0x08006886       0x10 build/stm32f4xx_hal_tim.o
- *fill*         0x08006896        0x2 
+                0x08006916       0x10 build/stm32f4xx_hal_tim.o
+ *fill*         0x08006926        0x2 
  .text.HAL_TIM_Base_Start
-                0x08006898       0x7c build/stm32f4xx_hal_tim.o
-                0x08006898                HAL_TIM_Base_Start
+                0x08006928       0x7c build/stm32f4xx_hal_tim.o
+                0x08006928                HAL_TIM_Base_Start
  .text.HAL_TIM_PWM_MspInit
-                0x08006914        0x2 build/stm32f4xx_hal_tim.o
-                0x08006914                HAL_TIM_PWM_MspInit
- *fill*         0x08006916        0x2 
+                0x080069a4        0x2 build/stm32f4xx_hal_tim.o
+                0x080069a4                HAL_TIM_PWM_MspInit
+ *fill*         0x080069a6        0x2 
  .text.TIM_Base_SetConfig
-                0x08006918       0xc8 build/stm32f4xx_hal_tim.o
-                0x08006918                TIM_Base_SetConfig
+                0x080069a8       0xc8 build/stm32f4xx_hal_tim.o
+                0x080069a8                TIM_Base_SetConfig
  .text.HAL_TIM_Base_Init
-                0x080069e0       0x58 build/stm32f4xx_hal_tim.o
-                0x080069e0                HAL_TIM_Base_Init
+                0x08006a70       0x58 build/stm32f4xx_hal_tim.o
+                0x08006a70                HAL_TIM_Base_Init
  .text.HAL_TIM_PWM_Init
-                0x08006a38       0x58 build/stm32f4xx_hal_tim.o
-                0x08006a38                HAL_TIM_PWM_Init
+                0x08006ac8       0x58 build/stm32f4xx_hal_tim.o
+                0x08006ac8                HAL_TIM_PWM_Init
  .text.HAL_TIM_Encoder_Init
-                0x08006a90       0xb0 build/stm32f4xx_hal_tim.o
-                0x08006a90                HAL_TIM_Encoder_Init
+                0x08006b20       0xb0 build/stm32f4xx_hal_tim.o
+                0x08006b20                HAL_TIM_Encoder_Init
  .text.TIM_OC2_SetConfig
-                0x08006b40       0x70 build/stm32f4xx_hal_tim.o
-                0x08006b40                TIM_OC2_SetConfig
+                0x08006bd0       0x70 build/stm32f4xx_hal_tim.o
+                0x08006bd0                TIM_OC2_SetConfig
  .text.HAL_TIM_PWM_ConfigChannel
-                0x08006bb0       0xdc build/stm32f4xx_hal_tim.o
-                0x08006bb0                HAL_TIM_PWM_ConfigChannel
+                0x08006c40       0xdc build/stm32f4xx_hal_tim.o
+                0x08006c40                HAL_TIM_PWM_ConfigChannel
  .text.TIM_ETR_SetConfig
-                0x08006c8c       0x18 build/stm32f4xx_hal_tim.o
-                0x08006c8c                TIM_ETR_SetConfig
+                0x08006d1c       0x18 build/stm32f4xx_hal_tim.o
+                0x08006d1c                TIM_ETR_SetConfig
  .text.HAL_TIM_ConfigClockSource
-                0x08006ca4       0xfe build/stm32f4xx_hal_tim.o
-                0x08006ca4                HAL_TIM_ConfigClockSource
+                0x08006d34       0xfe build/stm32f4xx_hal_tim.o
+                0x08006d34                HAL_TIM_ConfigClockSource
  .text.TIM_CCxChannelCmd
-                0x08006da2       0x24 build/stm32f4xx_hal_tim.o
-                0x08006da2                TIM_CCxChannelCmd
- *fill*         0x08006dc6        0x2 
+                0x08006e32       0x24 build/stm32f4xx_hal_tim.o
+                0x08006e32                TIM_CCxChannelCmd
+ *fill*         0x08006e56        0x2 
  .text.HAL_TIM_PWM_Start
-                0x08006dc8      0x104 build/stm32f4xx_hal_tim.o
-                0x08006dc8                HAL_TIM_PWM_Start
+                0x08006e58      0x104 build/stm32f4xx_hal_tim.o
+                0x08006e58                HAL_TIM_PWM_Start
  .text.HAL_TIM_Encoder_Start
-                0x08006ecc       0xc6 build/stm32f4xx_hal_tim.o
-                0x08006ecc                HAL_TIM_Encoder_Start
- *fill*         0x08006f92        0x2 
+                0x08006f5c       0xc6 build/stm32f4xx_hal_tim.o
+                0x08006f5c                HAL_TIM_Encoder_Start
+ *fill*         0x08007022        0x2 
  .text.HAL_TIMEx_MasterConfigSynchronization
-                0x08006f94       0x88 build/stm32f4xx_hal_tim_ex.o
-                0x08006f94                HAL_TIMEx_MasterConfigSynchronization
+                0x08007024       0x88 build/stm32f4xx_hal_tim_ex.o
+                0x08007024                HAL_TIMEx_MasterConfigSynchronization
  .text.UART_EndTxTransfer
-                0x0800701c       0x20 build/stm32f4xx_hal_uart.o
+                0x080070ac       0x20 build/stm32f4xx_hal_uart.o
  .text.UART_EndRxTransfer
-                0x0800703c       0x5c build/stm32f4xx_hal_uart.o
+                0x080070cc       0x5c build/stm32f4xx_hal_uart.o
  .text.UART_SetConfig
-                0x08007098      0x11c build/stm32f4xx_hal_uart.o
+                0x08007128      0x11c build/stm32f4xx_hal_uart.o
  .text.UART_WaitOnFlagUntilTimeout
-                0x080071b4       0x84 build/stm32f4xx_hal_uart.o
+                0x08007244       0x84 build/stm32f4xx_hal_uart.o
  .text.HAL_UART_Init
-                0x08007238       0x5e build/stm32f4xx_hal_uart.o
-                0x08007238                HAL_UART_Init
+                0x080072c8       0x5e build/stm32f4xx_hal_uart.o
+                0x080072c8                HAL_UART_Init
  .text.HAL_UART_Transmit
-                0x08007296       0xd8 build/stm32f4xx_hal_uart.o
-                0x08007296                HAL_UART_Transmit
+                0x08007326       0xd8 build/stm32f4xx_hal_uart.o
+                0x08007326                HAL_UART_Transmit
  .text.HAL_UART_Receive
-                0x0800736e       0xe4 build/stm32f4xx_hal_uart.o
-                0x0800736e                HAL_UART_Receive
+                0x080073fe       0xe4 build/stm32f4xx_hal_uart.o
+                0x080073fe                HAL_UART_Receive
  .text.HAL_UART_RxHalfCpltCallback
-                0x08007452        0x2 build/stm32f4xx_hal_uart.o
-                0x08007452                HAL_UART_RxHalfCpltCallback
+                0x080074e2        0x2 build/stm32f4xx_hal_uart.o
+                0x080074e2                HAL_UART_RxHalfCpltCallback
  .text.HAL_UART_ErrorCallback
-                0x08007454        0x2 build/stm32f4xx_hal_uart.o
-                0x08007454                HAL_UART_ErrorCallback
+                0x080074e4        0x2 build/stm32f4xx_hal_uart.o
+                0x080074e4                HAL_UART_ErrorCallback
  .text.UART_DMAError
-                0x08007456       0x58 build/stm32f4xx_hal_uart.o
+                0x080074e6       0x58 build/stm32f4xx_hal_uart.o
  .text.HAL_UARTEx_RxEventCallback
-                0x080074ae        0x2 build/stm32f4xx_hal_uart.o
-                0x080074ae                HAL_UARTEx_RxEventCallback
+                0x0800753e        0x2 build/stm32f4xx_hal_uart.o
+                0x0800753e                HAL_UARTEx_RxEventCallback
  .text.UART_DMARxHalfCplt
-                0x080074b0       0x1a build/stm32f4xx_hal_uart.o
+                0x08007540       0x1a build/stm32f4xx_hal_uart.o
  .text.UART_DMAReceiveCplt
-                0x080074ca       0x96 build/stm32f4xx_hal_uart.o
+                0x0800755a       0x96 build/stm32f4xx_hal_uart.o
  .text.UART_Start_Receive_DMA
-                0x08007560       0xa8 build/stm32f4xx_hal_uart.o
-                0x08007560                UART_Start_Receive_DMA
+                0x080075f0       0xa8 build/stm32f4xx_hal_uart.o
+                0x080075f0                UART_Start_Receive_DMA
  .text.HAL_UART_Receive_DMA
-                0x08007608       0x38 build/stm32f4xx_hal_uart.o
-                0x08007608                HAL_UART_Receive_DMA
+                0x08007698       0x38 build/stm32f4xx_hal_uart.o
+                0x08007698                HAL_UART_Receive_DMA
  .text.Reset_Handler
-                0x08007640       0x50 build/startup_stm32f407xx.o
-                0x08007640                Reset_Handler
+                0x080076d0       0x50 build/startup_stm32f407xx.o
+                0x080076d0                Reset_Handler
  .text.Default_Handler
-                0x08007690        0x2 build/startup_stm32f407xx.o
-                0x08007690                RTC_Alarm_IRQHandler
-                0x08007690                HASH_RNG_IRQHandler
-                0x08007690                EXTI2_IRQHandler
-                0x08007690                TIM8_CC_IRQHandler
-                0x08007690                TIM1_CC_IRQHandler
-                0x08007690                DMA2_Stream5_IRQHandler
-                0x08007690                DMA1_Stream5_IRQHandler
-                0x08007690                PVD_IRQHandler
-                0x08007690                SDIO_IRQHandler
-                0x08007690                TAMP_STAMP_IRQHandler
-                0x08007690                CAN2_RX1_IRQHandler
-                0x08007690                EXTI3_IRQHandler
-                0x08007690                TIM8_TRG_COM_TIM14_IRQHandler
-                0x08007690                TIM1_UP_TIM10_IRQHandler
-                0x08007690                TIM8_UP_TIM13_IRQHandler
-                0x08007690                I2C3_ER_IRQHandler
-                0x08007690                EXTI0_IRQHandler
-                0x08007690                I2C2_EV_IRQHandler
-                0x08007690                DMA1_Stream2_IRQHandler
-                0x08007690                CAN1_RX0_IRQHandler
-                0x08007690                FPU_IRQHandler
-                0x08007690                OTG_HS_WKUP_IRQHandler
-                0x08007690                CAN2_SCE_IRQHandler
-                0x08007690                DMA2_Stream2_IRQHandler
-                0x08007690                SPI1_IRQHandler
-                0x08007690                TIM6_DAC_IRQHandler
-                0x08007690                TIM1_BRK_TIM9_IRQHandler
-                0x08007690                DCMI_IRQHandler
-                0x08007690                CAN2_RX0_IRQHandler
-                0x08007690                DMA2_Stream3_IRQHandler
-                0x08007690                USART6_IRQHandler
-                0x08007690                USART3_IRQHandler
-                0x08007690                CAN1_RX1_IRQHandler
-                0x08007690                UART5_IRQHandler
-                0x08007690                DMA2_Stream0_IRQHandler
-                0x08007690                TIM4_IRQHandler
-                0x08007690                I2C1_EV_IRQHandler
-                0x08007690                DMA1_Stream6_IRQHandler
-                0x08007690                UART4_IRQHandler
-                0x08007690                TIM3_IRQHandler
-                0x08007690                RCC_IRQHandler
-                0x08007690                TIM8_BRK_TIM12_IRQHandler
-                0x08007690                Default_Handler
-                0x08007690                EXTI15_10_IRQHandler
-                0x08007690                ADC_IRQHandler
-                0x08007690                DMA1_Stream7_IRQHandler
-                0x08007690                TIM7_IRQHandler
-                0x08007690                CAN2_TX_IRQHandler
-                0x08007690                TIM5_IRQHandler
-                0x08007690                DMA2_Stream7_IRQHandler
-                0x08007690                I2C3_EV_IRQHandler
-                0x08007690                EXTI9_5_IRQHandler
-                0x08007690                RTC_WKUP_IRQHandler
-                0x08007690                ETH_WKUP_IRQHandler
-                0x08007690                SPI2_IRQHandler
-                0x08007690                OTG_HS_EP1_IN_IRQHandler
-                0x08007690                DMA1_Stream0_IRQHandler
-                0x08007690                CAN1_TX_IRQHandler
-                0x08007690                EXTI4_IRQHandler
-                0x08007690                FSMC_IRQHandler
-                0x08007690                ETH_IRQHandler
-                0x08007690                OTG_HS_EP1_OUT_IRQHandler
-                0x08007690                WWDG_IRQHandler
-                0x08007690                TIM2_IRQHandler
-                0x08007690                OTG_FS_WKUP_IRQHandler
-                0x08007690                TIM1_TRG_COM_TIM11_IRQHandler
-                0x08007690                OTG_HS_IRQHandler
-                0x08007690                EXTI1_IRQHandler
-                0x08007690                USART2_IRQHandler
-                0x08007690                I2C2_ER_IRQHandler
-                0x08007690                DMA2_Stream1_IRQHandler
-                0x08007690                CAN1_SCE_IRQHandler
-                0x08007690                FLASH_IRQHandler
-                0x08007690                DMA2_Stream4_IRQHandler
-                0x08007690                USART1_IRQHandler
-                0x08007690                OTG_FS_IRQHandler
-                0x08007690                SPI3_IRQHandler
-                0x08007690                DMA1_Stream4_IRQHandler
-                0x08007690                I2C1_ER_IRQHandler
-                0x08007690                DMA2_Stream6_IRQHandler
-                0x08007690                DMA1_Stream3_IRQHandler
- *fill*         0x08007692        0x2 
+                0x08007720        0x2 build/startup_stm32f407xx.o
+                0x08007720                RTC_Alarm_IRQHandler
+                0x08007720                HASH_RNG_IRQHandler
+                0x08007720                EXTI2_IRQHandler
+                0x08007720                TIM8_CC_IRQHandler
+                0x08007720                TIM1_CC_IRQHandler
+                0x08007720                DMA2_Stream5_IRQHandler
+                0x08007720                DMA1_Stream5_IRQHandler
+                0x08007720                PVD_IRQHandler
+                0x08007720                SDIO_IRQHandler
+                0x08007720                TAMP_STAMP_IRQHandler
+                0x08007720                CAN2_RX1_IRQHandler
+                0x08007720                EXTI3_IRQHandler
+                0x08007720                TIM8_TRG_COM_TIM14_IRQHandler
+                0x08007720                TIM1_UP_TIM10_IRQHandler
+                0x08007720                TIM8_UP_TIM13_IRQHandler
+                0x08007720                I2C3_ER_IRQHandler
+                0x08007720                EXTI0_IRQHandler
+                0x08007720                I2C2_EV_IRQHandler
+                0x08007720                DMA1_Stream2_IRQHandler
+                0x08007720                CAN1_RX0_IRQHandler
+                0x08007720                FPU_IRQHandler
+                0x08007720                OTG_HS_WKUP_IRQHandler
+                0x08007720                CAN2_SCE_IRQHandler
+                0x08007720                DMA2_Stream2_IRQHandler
+                0x08007720                SPI1_IRQHandler
+                0x08007720                TIM6_DAC_IRQHandler
+                0x08007720                TIM1_BRK_TIM9_IRQHandler
+                0x08007720                DCMI_IRQHandler
+                0x08007720                CAN2_RX0_IRQHandler
+                0x08007720                DMA2_Stream3_IRQHandler
+                0x08007720                USART6_IRQHandler
+                0x08007720                USART3_IRQHandler
+                0x08007720                CAN1_RX1_IRQHandler
+                0x08007720                UART5_IRQHandler
+                0x08007720                DMA2_Stream0_IRQHandler
+                0x08007720                TIM4_IRQHandler
+                0x08007720                I2C1_EV_IRQHandler
+                0x08007720                DMA1_Stream6_IRQHandler
+                0x08007720                UART4_IRQHandler
+                0x08007720                TIM3_IRQHandler
+                0x08007720                RCC_IRQHandler
+                0x08007720                TIM8_BRK_TIM12_IRQHandler
+                0x08007720                Default_Handler
+                0x08007720                EXTI15_10_IRQHandler
+                0x08007720                ADC_IRQHandler
+                0x08007720                DMA1_Stream7_IRQHandler
+                0x08007720                TIM7_IRQHandler
+                0x08007720                CAN2_TX_IRQHandler
+                0x08007720                TIM5_IRQHandler
+                0x08007720                DMA2_Stream7_IRQHandler
+                0x08007720                I2C3_EV_IRQHandler
+                0x08007720                EXTI9_5_IRQHandler
+                0x08007720                RTC_WKUP_IRQHandler
+                0x08007720                ETH_WKUP_IRQHandler
+                0x08007720                SPI2_IRQHandler
+                0x08007720                OTG_HS_EP1_IN_IRQHandler
+                0x08007720                DMA1_Stream0_IRQHandler
+                0x08007720                CAN1_TX_IRQHandler
+                0x08007720                EXTI4_IRQHandler
+                0x08007720                FSMC_IRQHandler
+                0x08007720                ETH_IRQHandler
+                0x08007720                OTG_HS_EP1_OUT_IRQHandler
+                0x08007720                WWDG_IRQHandler
+                0x08007720                TIM2_IRQHandler
+                0x08007720                OTG_FS_WKUP_IRQHandler
+                0x08007720                TIM1_TRG_COM_TIM11_IRQHandler
+                0x08007720                OTG_HS_IRQHandler
+                0x08007720                EXTI1_IRQHandler
+                0x08007720                USART2_IRQHandler
+                0x08007720                I2C2_ER_IRQHandler
+                0x08007720                DMA2_Stream1_IRQHandler
+                0x08007720                CAN1_SCE_IRQHandler
+                0x08007720                FLASH_IRQHandler
+                0x08007720                DMA2_Stream4_IRQHandler
+                0x08007720                USART1_IRQHandler
+                0x08007720                OTG_FS_IRQHandler
+                0x08007720                SPI3_IRQHandler
+                0x08007720                DMA1_Stream4_IRQHandler
+                0x08007720                I2C1_ER_IRQHandler
+                0x08007720                DMA2_Stream6_IRQHandler
+                0x08007720                DMA1_Stream3_IRQHandler
+ *fill*         0x08007722        0x2 
  .text.__libc_init_array
-                0x08007694       0x48 c:/make/test/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-init.o)
-                0x08007694                __libc_init_array
- .text.memcpy   0x080076dc       0x1c c:/make/test/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-memcpy-stub.o)
-                0x080076dc                memcpy
- .text.memset   0x080076f8       0x10 c:/make/test/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-memset.o)
-                0x080076f8                memset
- .text.strcpy   0x08007708       0x10 c:/make/test/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-strcpy.o)
-                0x08007708                strcpy
+                0x08007724       0x48 c:/make/test/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-init.o)
+                0x08007724                __libc_init_array
+ .text.memcpy   0x0800776c       0x1c c:/make/test/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-memcpy-stub.o)
+                0x0800776c                memcpy
+ .text.memset   0x08007788       0x10 c:/make/test/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-memset.o)
+                0x08007788                memset
+ .text.strcpy   0x08007798       0x10 c:/make/test/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-strcpy.o)
+                0x08007798                strcpy
  *(.glue_7)
- .glue_7        0x08007718        0x0 linker stubs
+ .glue_7        0x080077a8        0x0 linker stubs
  *(.glue_7t)
- .glue_7t       0x08007718        0x0 linker stubs
+ .glue_7t       0x080077a8        0x0 linker stubs
  *(.eh_frame)
- .eh_frame      0x08007718        0x0 c:/make/test/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m+fp/hard/crtbegin.o
+ .eh_frame      0x080077a8        0x0 c:/make/test/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m+fp/hard/crtbegin.o
  *(.init)
- .init          0x08007718        0x4 c:/make/test/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m+fp/hard/crti.o
-                0x08007718                _init
- .init          0x0800771c        0x8 c:/make/test/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m+fp/hard/crtn.o
+ .init          0x080077a8        0x4 c:/make/test/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m+fp/hard/crti.o
+                0x080077a8                _init
+ .init          0x080077ac        0x8 c:/make/test/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m+fp/hard/crtn.o
  *(.fini)
- .fini          0x08007724        0x4 c:/make/test/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m+fp/hard/crti.o
-                0x08007724                _fini
- .fini          0x08007728        0x8 c:/make/test/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m+fp/hard/crtn.o
-                0x08007730                . = ALIGN (0x4)
-                0x08007730                _etext = .
+ .fini          0x080077b4        0x4 c:/make/test/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m+fp/hard/crti.o
+                0x080077b4                _fini
+ .fini          0x080077b8        0x8 c:/make/test/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m+fp/hard/crtn.o
+                0x080077c0                . = ALIGN (0x4)
+                0x080077c0                _etext = .
 
-.vfp11_veneer   0x08007730        0x0
- .vfp11_veneer  0x08007730        0x0 linker stubs
+.vfp11_veneer   0x080077c0        0x0
+ .vfp11_veneer  0x080077c0        0x0 linker stubs
 
-.v4_bx          0x08007730        0x0
- .v4_bx         0x08007730        0x0 linker stubs
+.v4_bx          0x080077c0        0x0
+ .v4_bx         0x080077c0        0x0 linker stubs
 
-.iplt           0x08007730        0x0
- .iplt          0x08007730        0x0 c:/make/test/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m+fp/hard/crtbegin.o
+.iplt           0x080077c0        0x0
+ .iplt          0x080077c0        0x0 c:/make/test/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m+fp/hard/crtbegin.o
 
-.rodata         0x08007730       0x20
-                0x08007730                . = ALIGN (0x4)
+.rodata         0x080077c0       0x20
+                0x080077c0                . = ALIGN (0x4)
  *(.rodata)
  *(.rodata*)
  .rodata.AHBPrescTable
-                0x08007730       0x10 build/system_stm32f4xx.o
-                0x08007730                AHBPrescTable
+                0x080077c0       0x10 build/system_stm32f4xx.o
+                0x080077c0                AHBPrescTable
  .rodata.APBPrescTable
-                0x08007740        0x8 build/system_stm32f4xx.o
-                0x08007740                APBPrescTable
+                0x080077d0        0x8 build/system_stm32f4xx.o
+                0x080077d0                APBPrescTable
  .rodata.flagBitshiftOffset.8557
-                0x08007748        0x8 build/stm32f4xx_hal_dma.o
-                0x08007750                . = ALIGN (0x4)
+                0x080077d8        0x8 build/stm32f4xx_hal_dma.o
+                0x080077e0                . = ALIGN (0x4)
 
-.ARM.extab      0x08007750        0x0
-                0x08007750                . = ALIGN (0x4)
+.ARM.extab      0x080077e0        0x0
+                0x080077e0                . = ALIGN (0x4)
  *(.ARM.extab* .gnu.linkonce.armextab.*)
-                0x08007750                . = ALIGN (0x4)
+                0x080077e0                . = ALIGN (0x4)
 
-.ARM            0x08007750        0x8
-                0x08007750                . = ALIGN (0x4)
-                0x08007750                __exidx_start = .
+.ARM            0x080077e0        0x8
+                0x080077e0                . = ALIGN (0x4)
+                0x080077e0                __exidx_start = .
  *(.ARM.exidx*)
- .ARM.exidx     0x08007750        0x8 c:/make/test/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m+fp/hard\libgcc.a(_udivmoddi4.o)
-                0x08007758                __exidx_end = .
-                0x08007758                . = ALIGN (0x4)
+ .ARM.exidx     0x080077e0        0x8 c:/make/test/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m+fp/hard\libgcc.a(_udivmoddi4.o)
+                0x080077e8                __exidx_end = .
+                0x080077e8                . = ALIGN (0x4)
 
-.rel.dyn        0x08007758        0x0
- .rel.iplt      0x08007758        0x0 c:/make/test/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m+fp/hard/crtbegin.o
+.rel.dyn        0x080077e8        0x0
+ .rel.iplt      0x080077e8        0x0 c:/make/test/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m+fp/hard/crtbegin.o
 
-.preinit_array  0x08007758        0x0
-                0x08007758                . = ALIGN (0x4)
-                0x08007758                PROVIDE (__preinit_array_start = .)
+.preinit_array  0x080077e8        0x0
+                0x080077e8                . = ALIGN (0x4)
+                0x080077e8                PROVIDE (__preinit_array_start = .)
  *(.preinit_array*)
-                0x08007758                PROVIDE (__preinit_array_end = .)
-                0x08007758                . = ALIGN (0x4)
+                0x080077e8                PROVIDE (__preinit_array_end = .)
+                0x080077e8                . = ALIGN (0x4)
 
-.init_array     0x08007758        0x4
-                0x08007758                . = ALIGN (0x4)
-                0x08007758                PROVIDE (__init_array_start = .)
+.init_array     0x080077e8        0x4
+                0x080077e8                . = ALIGN (0x4)
+                0x080077e8                PROVIDE (__init_array_start = .)
  *(SORT_BY_NAME(.init_array.*))
  *(.init_array*)
- .init_array    0x08007758        0x4 c:/make/test/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m+fp/hard/crtbegin.o
-                0x0800775c                PROVIDE (__init_array_end = .)
-                0x0800775c                . = ALIGN (0x4)
+ .init_array    0x080077e8        0x4 c:/make/test/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m+fp/hard/crtbegin.o
+                0x080077ec                PROVIDE (__init_array_end = .)
+                0x080077ec                . = ALIGN (0x4)
 
-.fini_array     0x0800775c        0x4
-                0x0800775c                . = ALIGN (0x4)
+.fini_array     0x080077ec        0x4
+                0x080077ec                . = ALIGN (0x4)
                 [!provide]                PROVIDE (__fini_array_start = .)
  *(SORT_BY_NAME(.fini_array.*))
  *(.fini_array*)
- .fini_array    0x0800775c        0x4 c:/make/test/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m+fp/hard/crtbegin.o
+ .fini_array    0x080077ec        0x4 c:/make/test/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m+fp/hard/crtbegin.o
                 [!provide]                PROVIDE (__fini_array_end = .)
-                0x08007760                . = ALIGN (0x4)
-                0x08007760                _sidata = LOADADDR (.data)
+                0x080077f0                . = ALIGN (0x4)
+                0x080077f0                _sidata = LOADADDR (.data)
 
-.data           0x20000000      0x2ec load address 0x08007760
+.data           0x20000000      0x2f4 load address 0x080077f0
                 0x20000000                . = ALIGN (0x4)
                 0x20000000                _sdata = .
  *(.data)
@@ -2395,43 +2399,48 @@ LOAD c:/make/test/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-non
  .data.buffer   0x2000000b        0x1 build/AML_MPUSensor.o
                 0x2000000b                buffer
  *fill*         0x2000000c        0x4 
- .data.ki       0x20000010        0x8 build/AML_MotorControl.o
-                0x20000010                ki
- .data.kp       0x20000018        0x8 build/AML_MotorControl.o
-                0x20000018                kp
- .data.period   0x20000020        0x4 build/AML_MotorControl.o
-                0x20000020                period
+ .data.Position_Ki
+                0x20000010        0x8 build/AML_MotorControl.o
+                0x20000010                Position_Ki
+ .data.Position_Kp
+                0x20000018        0x8 build/AML_MotorControl.o
+                0x20000018                Position_Kp
+ .data.Speed_Kp
+                0x20000020        0x8 build/AML_MotorControl.o
+                0x20000020                Speed_Kp
+ .data.period   0x20000028        0x4 build/AML_MotorControl.o
+                0x20000028                period
  .data.SystemCoreClock
-                0x20000024        0x4 build/system_stm32f4xx.o
-                0x20000024                SystemCoreClock
+                0x2000002c        0x4 build/system_stm32f4xx.o
+                0x2000002c                SystemCoreClock
  .data.DefaultTuningSettings
-                0x20000028       0xf3 build/vl53l0x_api.o
-                0x20000028                DefaultTuningSettings
- *fill*         0x2000011b        0x1 
+                0x20000030       0xf3 build/vl53l0x_api.o
+                0x20000030                DefaultTuningSettings
+ *fill*         0x20000123        0x1 
  .data.InterruptThresholdSettings
-                0x2000011c      0x1b6 build/vl53l0x_api.o
-                0x2000011c                InterruptThresholdSettings
- *fill*         0x200002d2        0x2 
+                0x20000124      0x1b6 build/vl53l0x_api.o
+                0x20000124                InterruptThresholdSettings
+ *fill*         0x200002da        0x2 
  .data.refArrayQuadrants
-                0x200002d4       0x10 build/vl53l0x_api_calibration.o
-                0x200002d4                refArrayQuadrants
+                0x200002dc       0x10 build/vl53l0x_api_calibration.o
+                0x200002dc                refArrayQuadrants
  .data.uwTickFreq
-                0x200002e4        0x1 build/stm32f4xx_hal.o
-                0x200002e4                uwTickFreq
- *fill*         0x200002e5        0x3 
+                0x200002ec        0x1 build/stm32f4xx_hal.o
+                0x200002ec                uwTickFreq
+ *fill*         0x200002ed        0x3 
  .data.uwTickPrio
-                0x200002e8        0x4 build/stm32f4xx_hal.o
-                0x200002e8                uwTickPrio
+                0x200002f0        0x4 build/stm32f4xx_hal.o
+                0x200002f0                uwTickPrio
  *(.RamFunc)
  *(.RamFunc*)
-                0x200002ec                . = ALIGN (0x4)
-                0x200002ec                _edata = .
-                0x08007a4c                _siccmram = LOADADDR (.ccmram)
+                0x200002f4                . = ALIGN (0x4)
+                0x200002f4                _edata = .
+                0x08007ae4                _siccmram = LOADADDR (.ccmram)
 
-.igot.plt       0x200002ec        0x0 load address 0x08007a4c
- .igot.plt      0x200002ec        0x0 c:/make/test/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m+fp/hard/crtbegin.o
+.igot.plt       0x200002f4        0x0 load address 0x08007ae4
+ .igot.plt      0x200002f4        0x0 c:/make/test/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m+fp/hard/crtbegin.o
 
-.ccmram         0x10000000        0x0 load address 0x08007a4c
+.ccmram         0x10000000        0x0 load address 0x08007ae4
                 0x10000000                . = ALIGN (0x4)
                 0x10000000                _sccmram = .
  *(.ccmram)
@@ -2440,82 +2449,90 @@ LOAD c:/make/test/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-non
                 0x10000000                _eccmram = .
                 0x10000000                . = ALIGN (0x4)
 
-.bss            0x200002f0      0xf34
-                0x200002f0                _sbss = .
-                0x200002f0                __bss_start__ = _sbss
+.bss            0x200002f8     0x1024
+                0x200002f8                _sbss = .
+                0x200002f8                __bss_start__ = _sbss
  *(.bss)
- .bss           0x200002f0       0x1c c:/make/test/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m+fp/hard/crtbegin.o
+ .bss           0x200002f8       0x1c c:/make/test/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m+fp/hard/crtbegin.o
  *(.bss*)
  .bss.EncoderValue
-                0x2000030c        0x2 build/AML_Encoder.o
-                0x2000030c                EncoderValue
- *fill*         0x2000030e        0x2 
+                0x20000314        0x2 build/AML_Encoder.o
+                0x20000314                EncoderValue
+ *fill*         0x20000316        0x2 
  .bss.PreviousAngle
-                0x20000310        0x8 build/AML_MPUSensor.o
-                0x20000310                PreviousAngle
- .bss.SaveAngle
                 0x20000318        0x8 build/AML_MPUSensor.o
-                0x20000318                SaveAngle
+                0x20000318                PreviousAngle
+ .bss.SaveAngle
+                0x20000320        0x8 build/AML_MPUSensor.o
+                0x20000320                SaveAngle
+ .bss.Position_Kd
+                0x20000328        0x8 build/AML_MotorControl.o
+                0x20000328                Position_Kd
+ .bss.Speed_Kd  0x20000330        0x8 build/AML_MotorControl.o
+                0x20000330                Speed_Kd
+ .bss.Speed_Ki  0x20000338        0x8 build/AML_MotorControl.o
+                0x20000338                Speed_Ki
  .bss.direction
-                0x20000320        0x2 build/AML_MotorControl.o
-                0x20000320                direction
- *fill*         0x20000322        0x6 
- .bss.kd        0x20000328        0x8 build/AML_MotorControl.o
-                0x20000328                kd
+                0x20000340        0x2 build/AML_MotorControl.o
+                0x20000340                direction
  *(COMMON)
- COMMON         0x20000330      0xa30 build/AML_LaserSensor.o
-                0x20000330                SensorValue
-                0x200003d8                isApertureSpads
-                0x200003dc                refSpadCount
-                0x200003e0                PhaseCal
-                0x200003e4                Dev_Val
-                0x20000d44                VhvSettings
-                0x20000d48                Laser
- COMMON         0x20000d60       0x29 build/AML_MPUSensor.o
-                0x20000d60                Angle
-                0x20000d68                data
- *fill*         0x20000d89        0x7 
- COMMON         0x20000d90      0x110 build/AML_MotorControl.o
-                0x20000d90                Input_Left
-                0x20000d98                PID_Right
-                0x20000e08                Setpoint_Left
-                0x20000e10                Setpoint_Right
-                0x20000e18                PID_Left
-                0x20000e88                Input_Right
-                0x20000e90                Output_Right
-                0x20000e98                Output_Left
- COMMON         0x20000ea0      0x340 build/main.o
-                0x20000ea0                hi2c3
-                0x20000ef4                htim4
-                0x20000f3c                hdma_usart3_rx
-                0x20000f9c                huart3
-                0x20000fe0                hi2c1
-                0x20001034                LeftEncoderValue
-                0x20001038                debug
-                0x20001100                testAngle
-                0x20001108                RightEncoderValue
-                0x2000110c                htim1
-                0x20001154                huart6
-                0x20001198                htim2
- COMMON         0x200011e0       0x40 build/vl53l0x_platform.o
-                0x200011e0                _I2CBuffer
- COMMON         0x20001220        0x4 build/stm32f4xx_hal.o
-                0x20001220                uwTick
-                0x20001224                . = ALIGN (0x4)
-                0x20001224                _ebss = .
-                0x20001224                __bss_end__ = _ebss
+ *fill*         0x20000342        0x2 
+ COMMON         0x20000344      0xa30 build/AML_LaserSensor.o
+                0x20000344                SensorValue
+                0x200003ec                isApertureSpads
+                0x200003f0                refSpadCount
+                0x200003f4                PhaseCal
+                0x200003f8                Dev_Val
+                0x20000d58                VhvSettings
+                0x20000d5c                Laser
+ *fill*         0x20000d74        0x4 
+ COMMON         0x20000d78       0x29 build/AML_MPUSensor.o
+                0x20000d78                Angle
+                0x20000d80                data
+ *fill*         0x20000da1        0x7 
+ COMMON         0x20000da8      0x1f0 build/AML_MotorControl.o
+                0x20000da8                Input_Left
+                0x20000db0                Setpoint_Left
+                0x20000db8                Setpoint_Right
+                0x20000dc0                Input_Right
+                0x20000dc8                PID_PositionRight
+                0x20000e38                PID_SpeedLeft
+                0x20000ea8                Output_Right
+                0x20000eb0                Output_Left
+                0x20000eb8                PID_PositionLeft
+                0x20000f28                PID_SpeedRight
+ COMMON         0x20000f98      0x340 build/main.o
+                0x20000f98                hi2c3
+                0x20000fec                htim4
+                0x20001034                hdma_usart3_rx
+                0x20001094                huart3
+                0x200010d8                hi2c1
+                0x2000112c                LeftEncoderValue
+                0x20001130                debug
+                0x200011f8                testAngle
+                0x20001200                RightEncoderValue
+                0x20001204                htim1
+                0x2000124c                huart6
+                0x20001290                htim2
+ COMMON         0x200012d8       0x40 build/vl53l0x_platform.o
+                0x200012d8                _I2CBuffer
+ COMMON         0x20001318        0x4 build/stm32f4xx_hal.o
+                0x20001318                uwTick
+                0x2000131c                . = ALIGN (0x4)
+                0x2000131c                _ebss = .
+                0x2000131c                __bss_end__ = _ebss
 
 ._user_heap_stack
-                0x20001224      0x604
-                0x20001228                . = ALIGN (0x8)
- *fill*         0x20001224        0x4 
+                0x2000131c      0x604
+                0x20001320                . = ALIGN (0x8)
+ *fill*         0x2000131c        0x4 
                 [!provide]                PROVIDE (end = .)
-                0x20001228                PROVIDE (_end = .)
-                0x20001428                . = (. + _Min_Heap_Size)
- *fill*         0x20001228      0x200 
-                0x20001828                . = (. + _Min_Stack_Size)
- *fill*         0x20001428      0x400 
-                0x20001828                . = ALIGN (0x8)
+                0x20001320                PROVIDE (_end = .)
+                0x20001520                . = (. + _Min_Heap_Size)
+ *fill*         0x20001320      0x200 
+                0x20001920                . = (. + _Min_Stack_Size)
+ *fill*         0x20001520      0x400 
+                0x20001920                . = ALIGN (0x8)
 
 /DISCARD/
  libc.a(*)
@@ -2603,59 +2620,59 @@ LOAD c:/make/test/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-non
                 0x000006d7       0x1e c:/make/test/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m+fp/hard/crtn.o
 OUTPUT(build/E.elf elf32-littlearm)
 
-.debug_info     0x00000000    0x2b19b
+.debug_info     0x00000000    0x2b3e8
  .debug_info    0x00000000      0x817 build/AML_Encoder.o
  .debug_info    0x00000817      0x2f8 build/AML_Keyboard.o
  .debug_info    0x00000b0f     0x1dcb build/AML_LaserSensor.o
  .debug_info    0x000028da     0x111f build/AML_MPUSensor.o
- .debug_info    0x000039f9     0x1958 build/AML_MotorControl.o
- .debug_info    0x00005351     0x2703 build/main.o
- .debug_info    0x00007a54     0x1280 build/pid.o
- .debug_info    0x00008cd4     0x1572 build/stm32f4xx_hal_msp.o
- .debug_info    0x0000a246      0x4e8 build/stm32f4xx_it.o
- .debug_info    0x0000a72e      0x5b9 build/system_stm32f4xx.o
- .debug_info    0x0000ace7     0x5ca8 build/vl53l0x_api.o
- .debug_info    0x0001098f     0x333b build/vl53l0x_api_calibration.o
- .debug_info    0x00013cca     0x4349 build/vl53l0x_api_core.o
- .debug_info    0x00018013     0x1eba build/vl53l0x_platform.o
- .debug_info    0x00019ecd      0xa79 build/stm32f4xx_hal.o
- .debug_info    0x0001a946     0x1154 build/stm32f4xx_hal_cortex.o
- .debug_info    0x0001ba9a      0xbed build/stm32f4xx_hal_dma.o
- .debug_info    0x0001c687      0x884 build/stm32f4xx_hal_gpio.o
- .debug_info    0x0001cf0b     0x3a0c build/stm32f4xx_hal_i2c.o
- .debug_info    0x00020917      0xb5d build/stm32f4xx_hal_rcc.o
- .debug_info    0x00021474     0x3e3b build/stm32f4xx_hal_tim.o
- .debug_info    0x000252af     0x1bc8 build/stm32f4xx_hal_tim_ex.o
- .debug_info    0x00026e77     0x4302 build/stm32f4xx_hal_uart.o
- .debug_info    0x0002b179       0x22 build/startup_stm32f407xx.o
+ .debug_info    0x000039f9     0x1ba5 build/AML_MotorControl.o
+ .debug_info    0x0000559e     0x2703 build/main.o
+ .debug_info    0x00007ca1     0x1280 build/pid.o
+ .debug_info    0x00008f21     0x1572 build/stm32f4xx_hal_msp.o
+ .debug_info    0x0000a493      0x4e8 build/stm32f4xx_it.o
+ .debug_info    0x0000a97b      0x5b9 build/system_stm32f4xx.o
+ .debug_info    0x0000af34     0x5ca8 build/vl53l0x_api.o
+ .debug_info    0x00010bdc     0x333b build/vl53l0x_api_calibration.o
+ .debug_info    0x00013f17     0x4349 build/vl53l0x_api_core.o
+ .debug_info    0x00018260     0x1eba build/vl53l0x_platform.o
+ .debug_info    0x0001a11a      0xa79 build/stm32f4xx_hal.o
+ .debug_info    0x0001ab93     0x1154 build/stm32f4xx_hal_cortex.o
+ .debug_info    0x0001bce7      0xbed build/stm32f4xx_hal_dma.o
+ .debug_info    0x0001c8d4      0x884 build/stm32f4xx_hal_gpio.o
+ .debug_info    0x0001d158     0x3a0c build/stm32f4xx_hal_i2c.o
+ .debug_info    0x00020b64      0xb5d build/stm32f4xx_hal_rcc.o
+ .debug_info    0x000216c1     0x3e3b build/stm32f4xx_hal_tim.o
+ .debug_info    0x000254fc     0x1bc8 build/stm32f4xx_hal_tim_ex.o
+ .debug_info    0x000270c4     0x4302 build/stm32f4xx_hal_uart.o
+ .debug_info    0x0002b3c6       0x22 build/startup_stm32f407xx.o
 
-.debug_abbrev   0x00000000     0x3f38
+.debug_abbrev   0x00000000     0x3f25
  .debug_abbrev  0x00000000      0x1db build/AML_Encoder.o
  .debug_abbrev  0x000001db      0x150 build/AML_Keyboard.o
  .debug_abbrev  0x0000032b      0x310 build/AML_LaserSensor.o
  .debug_abbrev  0x0000063b      0x2de build/AML_MPUSensor.o
- .debug_abbrev  0x00000919      0x360 build/AML_MotorControl.o
- .debug_abbrev  0x00000c79      0x371 build/main.o
- .debug_abbrev  0x00000fea      0x37e build/pid.o
- .debug_abbrev  0x00001368      0x24c build/stm32f4xx_hal_msp.o
- .debug_abbrev  0x000015b4      0x193 build/stm32f4xx_it.o
- .debug_abbrev  0x00001747      0x148 build/system_stm32f4xx.o
- .debug_abbrev  0x0000188f      0x3ca build/vl53l0x_api.o
- .debug_abbrev  0x00001c59      0x3d0 build/vl53l0x_api_calibration.o
- .debug_abbrev  0x00002029      0x3f1 build/vl53l0x_api_core.o
- .debug_abbrev  0x0000241a      0x311 build/vl53l0x_platform.o
- .debug_abbrev  0x0000272b      0x219 build/stm32f4xx_hal.o
- .debug_abbrev  0x00002944      0x390 build/stm32f4xx_hal_cortex.o
- .debug_abbrev  0x00002cd4      0x2d5 build/stm32f4xx_hal_dma.o
- .debug_abbrev  0x00002fa9      0x21c build/stm32f4xx_hal_gpio.o
- .debug_abbrev  0x000031c5      0x2ab build/stm32f4xx_hal_i2c.o
- .debug_abbrev  0x00003470      0x2ae build/stm32f4xx_hal_rcc.o
- .debug_abbrev  0x0000371e      0x258 build/stm32f4xx_hal_tim.o
- .debug_abbrev  0x00003976      0x26e build/stm32f4xx_hal_tim_ex.o
- .debug_abbrev  0x00003be4      0x342 build/stm32f4xx_hal_uart.o
- .debug_abbrev  0x00003f26       0x12 build/startup_stm32f407xx.o
+ .debug_abbrev  0x00000919      0x34d build/AML_MotorControl.o
+ .debug_abbrev  0x00000c66      0x371 build/main.o
+ .debug_abbrev  0x00000fd7      0x37e build/pid.o
+ .debug_abbrev  0x00001355      0x24c build/stm32f4xx_hal_msp.o
+ .debug_abbrev  0x000015a1      0x193 build/stm32f4xx_it.o
+ .debug_abbrev  0x00001734      0x148 build/system_stm32f4xx.o
+ .debug_abbrev  0x0000187c      0x3ca build/vl53l0x_api.o
+ .debug_abbrev  0x00001c46      0x3d0 build/vl53l0x_api_calibration.o
+ .debug_abbrev  0x00002016      0x3f1 build/vl53l0x_api_core.o
+ .debug_abbrev  0x00002407      0x311 build/vl53l0x_platform.o
+ .debug_abbrev  0x00002718      0x219 build/stm32f4xx_hal.o
+ .debug_abbrev  0x00002931      0x390 build/stm32f4xx_hal_cortex.o
+ .debug_abbrev  0x00002cc1      0x2d5 build/stm32f4xx_hal_dma.o
+ .debug_abbrev  0x00002f96      0x21c build/stm32f4xx_hal_gpio.o
+ .debug_abbrev  0x000031b2      0x2ab build/stm32f4xx_hal_i2c.o
+ .debug_abbrev  0x0000345d      0x2ae build/stm32f4xx_hal_rcc.o
+ .debug_abbrev  0x0000370b      0x258 build/stm32f4xx_hal_tim.o
+ .debug_abbrev  0x00003963      0x26e build/stm32f4xx_hal_tim_ex.o
+ .debug_abbrev  0x00003bd1      0x342 build/stm32f4xx_hal_uart.o
+ .debug_abbrev  0x00003f13       0x12 build/startup_stm32f407xx.o
 
-.debug_aranges  0x00000000     0x15b8
+.debug_aranges  0x00000000     0x15c8
  .debug_aranges
                 0x00000000       0x40 build/AML_Encoder.o
  .debug_aranges
@@ -2665,99 +2682,99 @@ OUTPUT(build/E.elf elf32-littlearm)
  .debug_aranges
                 0x000000a8       0x40 build/AML_MPUSensor.o
  .debug_aranges
-                0x000000e8       0x70 build/AML_MotorControl.o
+                0x000000e8       0x80 build/AML_MotorControl.o
  .debug_aranges
-                0x00000158       0x78 build/main.o
+                0x00000168       0x78 build/main.o
  .debug_aranges
-                0x000001d0       0x90 build/pid.o
+                0x000001e0       0x90 build/pid.o
  .debug_aranges
-                0x00000260       0x68 build/stm32f4xx_hal_msp.o
+                0x00000270       0x68 build/stm32f4xx_hal_msp.o
  .debug_aranges
-                0x000002c8       0x68 build/stm32f4xx_it.o
+                0x000002d8       0x68 build/stm32f4xx_it.o
  .debug_aranges
-                0x00000330       0x28 build/system_stm32f4xx.o
+                0x00000340       0x28 build/system_stm32f4xx.o
  .debug_aranges
-                0x00000358      0x330 build/vl53l0x_api.o
+                0x00000368      0x330 build/vl53l0x_api.o
  .debug_aranges
-                0x00000688       0xd0 build/vl53l0x_api_calibration.o
+                0x00000698       0xd0 build/vl53l0x_api_calibration.o
  .debug_aranges
-                0x00000758       0xe0 build/vl53l0x_api_core.o
+                0x00000768       0xe0 build/vl53l0x_api_core.o
  .debug_aranges
-                0x00000838       0x78 build/vl53l0x_platform.o
+                0x00000848       0x78 build/vl53l0x_platform.o
  .debug_aranges
-                0x000008b0       0xf0 build/stm32f4xx_hal.o
+                0x000008c0       0xf0 build/stm32f4xx_hal.o
  .debug_aranges
-                0x000009a0       0xa8 build/stm32f4xx_hal_cortex.o
+                0x000009b0       0xa8 build/stm32f4xx_hal_cortex.o
  .debug_aranges
-                0x00000a48       0x90 build/stm32f4xx_hal_dma.o
+                0x00000a58       0x90 build/stm32f4xx_hal_dma.o
  .debug_aranges
-                0x00000ad8       0x58 build/stm32f4xx_hal_gpio.o
+                0x00000ae8       0x58 build/stm32f4xx_hal_gpio.o
  .debug_aranges
-                0x00000b30      0x2a0 build/stm32f4xx_hal_i2c.o
+                0x00000b40      0x2a0 build/stm32f4xx_hal_i2c.o
  .debug_aranges
-                0x00000dd0       0x88 build/stm32f4xx_hal_rcc.o
+                0x00000de0       0x88 build/stm32f4xx_hal_rcc.o
  .debug_aranges
-                0x00000e58      0x3d0 build/stm32f4xx_hal_tim.o
+                0x00000e68      0x3d0 build/stm32f4xx_hal_tim.o
  .debug_aranges
-                0x00001228      0x168 build/stm32f4xx_hal_tim_ex.o
+                0x00001238      0x168 build/stm32f4xx_hal_tim_ex.o
  .debug_aranges
-                0x00001390      0x200 build/stm32f4xx_hal_uart.o
+                0x000013a0      0x200 build/stm32f4xx_hal_uart.o
  .debug_aranges
-                0x00001590       0x28 build/startup_stm32f407xx.o
+                0x000015a0       0x28 build/startup_stm32f407xx.o
 
-.debug_ranges   0x00000000     0x14e8
+.debug_ranges   0x00000000     0x14f8
  .debug_ranges  0x00000000       0x30 build/AML_Encoder.o
  .debug_ranges  0x00000030       0x18 build/AML_Keyboard.o
  .debug_ranges  0x00000048       0x30 build/AML_LaserSensor.o
  .debug_ranges  0x00000078       0x30 build/AML_MPUSensor.o
- .debug_ranges  0x000000a8       0x60 build/AML_MotorControl.o
- .debug_ranges  0x00000108       0x68 build/main.o
- .debug_ranges  0x00000170       0x80 build/pid.o
- .debug_ranges  0x000001f0       0x58 build/stm32f4xx_hal_msp.o
- .debug_ranges  0x00000248       0x58 build/stm32f4xx_it.o
- .debug_ranges  0x000002a0       0x18 build/system_stm32f4xx.o
- .debug_ranges  0x000002b8      0x320 build/vl53l0x_api.o
- .debug_ranges  0x000005d8       0xc0 build/vl53l0x_api_calibration.o
- .debug_ranges  0x00000698       0xd0 build/vl53l0x_api_core.o
- .debug_ranges  0x00000768       0x68 build/vl53l0x_platform.o
- .debug_ranges  0x000007d0       0xe0 build/stm32f4xx_hal.o
- .debug_ranges  0x000008b0       0xf8 build/stm32f4xx_hal_cortex.o
- .debug_ranges  0x000009a8       0x80 build/stm32f4xx_hal_dma.o
- .debug_ranges  0x00000a28       0x48 build/stm32f4xx_hal_gpio.o
- .debug_ranges  0x00000a70      0x2a8 build/stm32f4xx_hal_i2c.o
- .debug_ranges  0x00000d18       0x90 build/stm32f4xx_hal_rcc.o
- .debug_ranges  0x00000da8      0x3c0 build/stm32f4xx_hal_tim.o
- .debug_ranges  0x00001168      0x158 build/stm32f4xx_hal_tim_ex.o
- .debug_ranges  0x000012c0      0x208 build/stm32f4xx_hal_uart.o
- .debug_ranges  0x000014c8       0x20 build/startup_stm32f407xx.o
+ .debug_ranges  0x000000a8       0x70 build/AML_MotorControl.o
+ .debug_ranges  0x00000118       0x68 build/main.o
+ .debug_ranges  0x00000180       0x80 build/pid.o
+ .debug_ranges  0x00000200       0x58 build/stm32f4xx_hal_msp.o
+ .debug_ranges  0x00000258       0x58 build/stm32f4xx_it.o
+ .debug_ranges  0x000002b0       0x18 build/system_stm32f4xx.o
+ .debug_ranges  0x000002c8      0x320 build/vl53l0x_api.o
+ .debug_ranges  0x000005e8       0xc0 build/vl53l0x_api_calibration.o
+ .debug_ranges  0x000006a8       0xd0 build/vl53l0x_api_core.o
+ .debug_ranges  0x00000778       0x68 build/vl53l0x_platform.o
+ .debug_ranges  0x000007e0       0xe0 build/stm32f4xx_hal.o
+ .debug_ranges  0x000008c0       0xf8 build/stm32f4xx_hal_cortex.o
+ .debug_ranges  0x000009b8       0x80 build/stm32f4xx_hal_dma.o
+ .debug_ranges  0x00000a38       0x48 build/stm32f4xx_hal_gpio.o
+ .debug_ranges  0x00000a80      0x2a8 build/stm32f4xx_hal_i2c.o
+ .debug_ranges  0x00000d28       0x90 build/stm32f4xx_hal_rcc.o
+ .debug_ranges  0x00000db8      0x3c0 build/stm32f4xx_hal_tim.o
+ .debug_ranges  0x00001178      0x158 build/stm32f4xx_hal_tim_ex.o
+ .debug_ranges  0x000012d0      0x208 build/stm32f4xx_hal_uart.o
+ .debug_ranges  0x000014d8       0x20 build/startup_stm32f407xx.o
 
-.debug_line     0x00000000    0x1c208
+.debug_line     0x00000000    0x1c2b6
  .debug_line    0x00000000      0x27d build/AML_Encoder.o
  .debug_line    0x0000027d      0x1e9 build/AML_Keyboard.o
  .debug_line    0x00000466      0x4bd build/AML_LaserSensor.o
  .debug_line    0x00000923      0x379 build/AML_MPUSensor.o
- .debug_line    0x00000c9c      0x575 build/AML_MotorControl.o
- .debug_line    0x00001211      0xa6d build/main.o
- .debug_line    0x00001c7e      0x6f3 build/pid.o
- .debug_line    0x00002371      0x6c8 build/stm32f4xx_hal_msp.o
- .debug_line    0x00002a39      0x2f6 build/stm32f4xx_it.o
- .debug_line    0x00002d2f      0x28a build/system_stm32f4xx.o
- .debug_line    0x00002fb9     0x282f build/vl53l0x_api.o
- .debug_line    0x000057e8     0x13ee build/vl53l0x_api_calibration.o
- .debug_line    0x00006bd6     0x1ff6 build/vl53l0x_api_core.o
- .debug_line    0x00008bcc      0x645 build/vl53l0x_platform.o
- .debug_line    0x00009211      0x569 build/stm32f4xx_hal.o
- .debug_line    0x0000977a      0x7a6 build/stm32f4xx_hal_cortex.o
- .debug_line    0x00009f20      0xe52 build/stm32f4xx_hal_dma.o
- .debug_line    0x0000ad72      0x733 build/stm32f4xx_hal_gpio.o
- .debug_line    0x0000b4a5     0x5382 build/stm32f4xx_hal_i2c.o
- .debug_line    0x00010827      0xb3a build/stm32f4xx_hal_rcc.o
- .debug_line    0x00011361     0x4afb build/stm32f4xx_hal_tim.o
- .debug_line    0x00015e5c     0x1d1e build/stm32f4xx_hal_tim_ex.o
- .debug_line    0x00017b7a     0x4618 build/stm32f4xx_hal_uart.o
- .debug_line    0x0001c192       0x76 build/startup_stm32f407xx.o
+ .debug_line    0x00000c9c      0x623 build/AML_MotorControl.o
+ .debug_line    0x000012bf      0xa6d build/main.o
+ .debug_line    0x00001d2c      0x6f3 build/pid.o
+ .debug_line    0x0000241f      0x6c8 build/stm32f4xx_hal_msp.o
+ .debug_line    0x00002ae7      0x2f6 build/stm32f4xx_it.o
+ .debug_line    0x00002ddd      0x28a build/system_stm32f4xx.o
+ .debug_line    0x00003067     0x282f build/vl53l0x_api.o
+ .debug_line    0x00005896     0x13ee build/vl53l0x_api_calibration.o
+ .debug_line    0x00006c84     0x1ff6 build/vl53l0x_api_core.o
+ .debug_line    0x00008c7a      0x645 build/vl53l0x_platform.o
+ .debug_line    0x000092bf      0x569 build/stm32f4xx_hal.o
+ .debug_line    0x00009828      0x7a6 build/stm32f4xx_hal_cortex.o
+ .debug_line    0x00009fce      0xe52 build/stm32f4xx_hal_dma.o
+ .debug_line    0x0000ae20      0x733 build/stm32f4xx_hal_gpio.o
+ .debug_line    0x0000b553     0x5382 build/stm32f4xx_hal_i2c.o
+ .debug_line    0x000108d5      0xb3a build/stm32f4xx_hal_rcc.o
+ .debug_line    0x0001140f     0x4afb build/stm32f4xx_hal_tim.o
+ .debug_line    0x00015f0a     0x1d1e build/stm32f4xx_hal_tim_ex.o
+ .debug_line    0x00017c28     0x4618 build/stm32f4xx_hal_uart.o
+ .debug_line    0x0001c240       0x76 build/startup_stm32f407xx.o
 
-.debug_str      0x00000000     0x81f3
+.debug_str      0x00000000     0x82a1
  .debug_str     0x00000000      0x7d8 build/AML_Encoder.o
                                 0x8bb (size before relaxing)
  .debug_str     0x000007d8       0xa9 build/AML_Keyboard.o
@@ -2766,45 +2783,45 @@ OUTPUT(build/E.elf elf32-littlearm)
                                0x1613 (size before relaxing)
  .debug_str     0x00001753      0x2a9 build/AML_MPUSensor.o
                                 0xc02 (size before relaxing)
- .debug_str     0x000019fc      0x3d9 build/AML_MotorControl.o
-                               0x10b3 (size before relaxing)
- .debug_str     0x00001dd5      0xae5 build/main.o
-                               0x1d8f (size before relaxing)
- .debug_str     0x000028ba      0x103 build/pid.o
+ .debug_str     0x000019fc      0x487 build/AML_MotorControl.o
+                               0x1197 (size before relaxing)
+ .debug_str     0x00001e83      0xae5 build/main.o
+                               0x1d8b (size before relaxing)
+ .debug_str     0x00002968      0x103 build/pid.o
                                 0x921 (size before relaxing)
- .debug_str     0x000029bd      0x115 build/stm32f4xx_hal_msp.o
+ .debug_str     0x00002a6b      0x115 build/stm32f4xx_hal_msp.o
                                 0xf31 (size before relaxing)
- .debug_str     0x00002ad2       0xdf build/stm32f4xx_it.o
+ .debug_str     0x00002b80       0xdf build/stm32f4xx_it.o
                                 0x600 (size before relaxing)
- .debug_str     0x00002bb1       0xac build/system_stm32f4xx.o
+ .debug_str     0x00002c5f       0xac build/system_stm32f4xx.o
                                 0x46e (size before relaxing)
- .debug_str     0x00002c5d     0x16c4 build/vl53l0x_api.o
+ .debug_str     0x00002d0b     0x16c4 build/vl53l0x_api.o
                                0x2d68 (size before relaxing)
- .debug_str     0x00004321      0x619 build/vl53l0x_api_calibration.o
+ .debug_str     0x000043cf      0x619 build/vl53l0x_api_calibration.o
                                0x1de6 (size before relaxing)
- .debug_str     0x0000493a      0xbd9 build/vl53l0x_api_core.o
+ .debug_str     0x000049e8      0xbd9 build/vl53l0x_api_core.o
                                0x2418 (size before relaxing)
- .debug_str     0x00005513       0xac build/vl53l0x_platform.o
+ .debug_str     0x000055c1       0xac build/vl53l0x_platform.o
                                0x147f (size before relaxing)
- .debug_str     0x000055bf      0x2c7 build/stm32f4xx_hal.o
+ .debug_str     0x0000566d      0x2c7 build/stm32f4xx_hal.o
                                 0xc00 (size before relaxing)
- .debug_str     0x00005886      0x43e build/stm32f4xx_hal_cortex.o
+ .debug_str     0x00005934      0x43e build/stm32f4xx_hal_cortex.o
                                 0xd3f (size before relaxing)
- .debug_str     0x00005cc4      0x2d4 build/stm32f4xx_hal_dma.o
+ .debug_str     0x00005d72      0x2d4 build/stm32f4xx_hal_dma.o
                                 0x88b (size before relaxing)
- .debug_str     0x00005f98      0x114 build/stm32f4xx_hal_gpio.o
+ .debug_str     0x00006046      0x114 build/stm32f4xx_hal_gpio.o
                                 0x605 (size before relaxing)
- .debug_str     0x000060ac      0x851 build/stm32f4xx_hal_i2c.o
+ .debug_str     0x0000615a      0x851 build/stm32f4xx_hal_i2c.o
                                0x1145 (size before relaxing)
- .debug_str     0x000068fd      0x165 build/stm32f4xx_hal_rcc.o
+ .debug_str     0x000069ab      0x165 build/stm32f4xx_hal_rcc.o
                                 0x7e3 (size before relaxing)
- .debug_str     0x00006a62      0xcb8 build/stm32f4xx_hal_tim.o
+ .debug_str     0x00006b10      0xcb8 build/stm32f4xx_hal_tim.o
                                0x17f0 (size before relaxing)
- .debug_str     0x0000771a      0x521 build/stm32f4xx_hal_tim_ex.o
+ .debug_str     0x000077c8      0x521 build/stm32f4xx_hal_tim_ex.o
                                 0xff1 (size before relaxing)
- .debug_str     0x00007c3b      0x594 build/stm32f4xx_hal_uart.o
+ .debug_str     0x00007ce9      0x594 build/stm32f4xx_hal_uart.o
                                 0xe6d (size before relaxing)
- .debug_str     0x000081cf       0x24 build/startup_stm32f407xx.o
+ .debug_str     0x0000827d       0x24 build/startup_stm32f407xx.o
                                  0x9d (size before relaxing)
 
 .comment        0x00000000       0x79
@@ -2833,61 +2850,61 @@ OUTPUT(build/E.elf elf32-littlearm)
  .comment       0x00000079       0x7a build/stm32f4xx_hal_tim_ex.o
  .comment       0x00000079       0x7a build/stm32f4xx_hal_uart.o
 
-.debug_frame    0x00000000     0x4ab8
+.debug_frame    0x00000000     0x4afc
  .debug_frame   0x00000000       0x6c build/AML_Encoder.o
  .debug_frame   0x0000006c       0x3c build/AML_Keyboard.o
  .debug_frame   0x000000a8       0xbc build/AML_LaserSensor.o
  .debug_frame   0x00000164       0xa8 build/AML_MPUSensor.o
- .debug_frame   0x0000020c      0x120 build/AML_MotorControl.o
- .debug_frame   0x0000032c      0x17c build/main.o
- .debug_frame   0x000004a8      0x258 build/pid.o
- .debug_frame   0x00000700      0x144 build/stm32f4xx_hal_msp.o
- .debug_frame   0x00000844       0xc8 build/stm32f4xx_it.o
- .debug_frame   0x0000090c       0x30 build/system_stm32f4xx.o
- .debug_frame   0x0000093c      0xb78 build/vl53l0x_api.o
- .debug_frame   0x000014b4      0x3bc build/vl53l0x_api_calibration.o
- .debug_frame   0x00001870      0x390 build/vl53l0x_api_core.o
- .debug_frame   0x00001c00      0x1d8 build/vl53l0x_platform.o
- .debug_frame   0x00001dd8      0x200 build/stm32f4xx_hal.o
- .debug_frame   0x00001fd8      0x16c build/stm32f4xx_hal_cortex.o
- .debug_frame   0x00002144      0x1b8 build/stm32f4xx_hal_dma.o
- .debug_frame   0x000022fc       0xec build/stm32f4xx_hal_gpio.o
- .debug_frame   0x000023e8      0xac0 build/stm32f4xx_hal_i2c.o
- .debug_frame   0x00002ea8      0x1ac build/stm32f4xx_hal_rcc.o
- .debug_frame   0x00003054      0xc70 build/stm32f4xx_hal_tim.o
- .debug_frame   0x00003cc4      0x4a8 build/stm32f4xx_hal_tim_ex.o
- .debug_frame   0x0000416c      0x674 build/stm32f4xx_hal_uart.o
- .debug_frame   0x000047e0       0x2c c:/make/test/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-init.o)
- .debug_frame   0x0000480c       0x28 c:/make/test/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-memcpy-stub.o)
- .debug_frame   0x00004834       0x20 c:/make/test/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-memset.o)
- .debug_frame   0x00004854       0x20 c:/make/test/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-strcpy.o)
- .debug_frame   0x00004874       0xac c:/make/test/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m+fp/hard\libgcc.a(_arm_addsubdf3.o)
- .debug_frame   0x00004920       0x50 c:/make/test/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m+fp/hard\libgcc.a(_arm_muldivdf3.o)
- .debug_frame   0x00004970       0xc4 c:/make/test/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m+fp/hard\libgcc.a(_arm_cmpdf2.o)
- .debug_frame   0x00004a34       0x24 c:/make/test/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m+fp/hard\libgcc.a(_arm_fixdfsi.o)
- .debug_frame   0x00004a58       0x2c c:/make/test/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m+fp/hard\libgcc.a(_aeabi_uldivmod.o)
- .debug_frame   0x00004a84       0x34 c:/make/test/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m+fp/hard\libgcc.a(_udivmoddi4.o)
+ .debug_frame   0x0000020c      0x164 build/AML_MotorControl.o
+ .debug_frame   0x00000370      0x17c build/main.o
+ .debug_frame   0x000004ec      0x258 build/pid.o
+ .debug_frame   0x00000744      0x144 build/stm32f4xx_hal_msp.o
+ .debug_frame   0x00000888       0xc8 build/stm32f4xx_it.o
+ .debug_frame   0x00000950       0x30 build/system_stm32f4xx.o
+ .debug_frame   0x00000980      0xb78 build/vl53l0x_api.o
+ .debug_frame   0x000014f8      0x3bc build/vl53l0x_api_calibration.o
+ .debug_frame   0x000018b4      0x390 build/vl53l0x_api_core.o
+ .debug_frame   0x00001c44      0x1d8 build/vl53l0x_platform.o
+ .debug_frame   0x00001e1c      0x200 build/stm32f4xx_hal.o
+ .debug_frame   0x0000201c      0x16c build/stm32f4xx_hal_cortex.o
+ .debug_frame   0x00002188      0x1b8 build/stm32f4xx_hal_dma.o
+ .debug_frame   0x00002340       0xec build/stm32f4xx_hal_gpio.o
+ .debug_frame   0x0000242c      0xac0 build/stm32f4xx_hal_i2c.o
+ .debug_frame   0x00002eec      0x1ac build/stm32f4xx_hal_rcc.o
+ .debug_frame   0x00003098      0xc70 build/stm32f4xx_hal_tim.o
+ .debug_frame   0x00003d08      0x4a8 build/stm32f4xx_hal_tim_ex.o
+ .debug_frame   0x000041b0      0x674 build/stm32f4xx_hal_uart.o
+ .debug_frame   0x00004824       0x2c c:/make/test/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-init.o)
+ .debug_frame   0x00004850       0x28 c:/make/test/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-memcpy-stub.o)
+ .debug_frame   0x00004878       0x20 c:/make/test/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-memset.o)
+ .debug_frame   0x00004898       0x20 c:/make/test/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-strcpy.o)
+ .debug_frame   0x000048b8       0xac c:/make/test/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m+fp/hard\libgcc.a(_arm_addsubdf3.o)
+ .debug_frame   0x00004964       0x50 c:/make/test/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m+fp/hard\libgcc.a(_arm_muldivdf3.o)
+ .debug_frame   0x000049b4       0xc4 c:/make/test/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m+fp/hard\libgcc.a(_arm_cmpdf2.o)
+ .debug_frame   0x00004a78       0x24 c:/make/test/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m+fp/hard\libgcc.a(_arm_fixdfsi.o)
+ .debug_frame   0x00004a9c       0x2c c:/make/test/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m+fp/hard\libgcc.a(_aeabi_uldivmod.o)
+ .debug_frame   0x00004ac8       0x34 c:/make/test/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m+fp/hard\libgcc.a(_udivmoddi4.o)
 
-.debug_loc      0x00000000    0x1c794
+.debug_loc      0x00000000    0x1c82e
  .debug_loc     0x00000000       0xac build/AML_LaserSensor.o
  .debug_loc     0x000000ac       0x42 build/AML_MPUSensor.o
- .debug_loc     0x000000ee      0x130 build/AML_MotorControl.o
- .debug_loc     0x0000021e      0x89a build/pid.o
- .debug_loc     0x00000ab8      0x276 build/stm32f4xx_hal_msp.o
- .debug_loc     0x00000d2e      0x16c build/system_stm32f4xx.o
- .debug_loc     0x00000e9a     0x422d build/vl53l0x_api.o
- .debug_loc     0x000050c7     0x20a0 build/vl53l0x_api_calibration.o
- .debug_loc     0x00007167     0x3610 build/vl53l0x_api_core.o
- .debug_loc     0x0000a777      0xa1f build/vl53l0x_platform.o
- .debug_loc     0x0000b196      0x141 build/stm32f4xx_hal.o
- .debug_loc     0x0000b2d7      0x744 build/stm32f4xx_hal_cortex.o
- .debug_loc     0x0000ba1b      0xbf9 build/stm32f4xx_hal_dma.o
- .debug_loc     0x0000c614      0x513 build/stm32f4xx_hal_gpio.o
- .debug_loc     0x0000cb27     0x4115 build/stm32f4xx_hal_i2c.o
- .debug_loc     0x00010c3c      0x56f build/stm32f4xx_hal_rcc.o
- .debug_loc     0x000111ab     0x4fba build/stm32f4xx_hal_tim.o
- .debug_loc     0x00016165     0x1c84 build/stm32f4xx_hal_tim_ex.o
- .debug_loc     0x00017de9     0x49ab build/stm32f4xx_hal_uart.o
+ .debug_loc     0x000000ee      0x1ca build/AML_MotorControl.o
+ .debug_loc     0x000002b8      0x89a build/pid.o
+ .debug_loc     0x00000b52      0x276 build/stm32f4xx_hal_msp.o
+ .debug_loc     0x00000dc8      0x16c build/system_stm32f4xx.o
+ .debug_loc     0x00000f34     0x422d build/vl53l0x_api.o
+ .debug_loc     0x00005161     0x20a0 build/vl53l0x_api_calibration.o
+ .debug_loc     0x00007201     0x3610 build/vl53l0x_api_core.o
+ .debug_loc     0x0000a811      0xa1f build/vl53l0x_platform.o
+ .debug_loc     0x0000b230      0x141 build/stm32f4xx_hal.o
+ .debug_loc     0x0000b371      0x744 build/stm32f4xx_hal_cortex.o
+ .debug_loc     0x0000bab5      0xbf9 build/stm32f4xx_hal_dma.o
+ .debug_loc     0x0000c6ae      0x513 build/stm32f4xx_hal_gpio.o
+ .debug_loc     0x0000cbc1     0x4115 build/stm32f4xx_hal_i2c.o
+ .debug_loc     0x00010cd6      0x56f build/stm32f4xx_hal_rcc.o
+ .debug_loc     0x00011245     0x4fba build/stm32f4xx_hal_tim.o
+ .debug_loc     0x000161ff     0x1c84 build/stm32f4xx_hal_tim_ex.o
+ .debug_loc     0x00017e83     0x49ab build/stm32f4xx_hal_uart.o
 
 Cross Reference Table
 
@@ -2901,9 +2918,11 @@ AML_Encoder_GetLeftValue                          build/AML_Encoder.o
                                                   build/AML_MotorControl.o
 AML_Encoder_GetRightValue                         build/AML_Encoder.o
                                                   build/main.o
+                                                  build/AML_MotorControl.o
 AML_Encoder_ResetLeftValue                        build/AML_Encoder.o
                                                   build/AML_MotorControl.o
 AML_Encoder_ResetRightValue                       build/AML_Encoder.o
+                                                  build/AML_MotorControl.o
 AML_Encoder_Setup                                 build/AML_Encoder.o
                                                   build/main.o
 AML_Keyboard_GetKey                               build/AML_Keyboard.o
@@ -2924,6 +2943,8 @@ AML_MPUSensor_ResetAngle                          build/AML_MPUSensor.o
 AML_MPUSensor_Setup                               build/AML_MPUSensor.o
                                                   build/main.o
 AML_MotorControl_LeftPWM                          build/AML_MotorControl.o
+AML_MotorControl_MoveLeft                         build/AML_MotorControl.o
+                                                  build/main.o
 AML_MotorControl_PIDSetMode                       build/AML_MotorControl.o
 AML_MotorControl_PIDSetOutputLimits               build/AML_MotorControl.o
 AML_MotorControl_PIDSetSampleTime                 build/AML_MotorControl.o
@@ -2932,7 +2953,7 @@ AML_MotorControl_PIDSetup                         build/AML_MotorControl.o
 AML_MotorControl_RightPWM                         build/AML_MotorControl.o
 AML_MotorControl_SetDirection                     build/AML_MotorControl.o
 AML_MotorControl_SetLeftSpeed                     build/AML_MotorControl.o
-                                                  build/main.o
+AML_MotorControl_SetRightSpeed                    build/AML_MotorControl.o
 AML_MotorControl_Setup                            build/AML_MotorControl.o
                                                   build/main.o
 AML_MotorControl_ToggleDirection                  build/AML_MotorControl.o
@@ -3455,8 +3476,8 @@ PID_GetKp                                         build/pid.o
 PID_GetMode                                       build/pid.o
 PID_Init                                          build/pid.o
                                                   build/AML_MotorControl.o
-PID_Left                                          build/AML_MotorControl.o
-PID_Right                                         build/AML_MotorControl.o
+PID_PositionLeft                                  build/AML_MotorControl.o
+PID_PositionRight                                 build/AML_MotorControl.o
 PID_SetControllerDirection                        build/pid.o
 PID_SetMode                                       build/pid.o
                                                   build/AML_MotorControl.o
@@ -3464,9 +3485,14 @@ PID_SetOutputLimits                               build/pid.o
 PID_SetSampleTime                                 build/pid.o
 PID_SetTunings                                    build/pid.o
 PID_SetTunings2                                   build/pid.o
+PID_SpeedLeft                                     build/AML_MotorControl.o
+PID_SpeedRight                                    build/AML_MotorControl.o
 PVD_IRQHandler                                    build/startup_stm32f407xx.o
 PendSV_Handler                                    build/stm32f4xx_it.o
 PhaseCal                                          build/AML_LaserSensor.o
+Position_Kd                                       build/AML_MotorControl.o
+Position_Ki                                       build/AML_MotorControl.o
+Position_Kp                                       build/AML_MotorControl.o
 PreviousAngle                                     build/AML_MPUSensor.o
 PreviousLeftEncoderValue                          build/AML_MotorControl.o
 PreviousRightEncoderValue                         build/AML_MotorControl.o
@@ -3486,6 +3512,9 @@ SaveAngle                                         build/AML_MPUSensor.o
 SensorValue                                       build/AML_LaserSensor.o
 Setpoint_Left                                     build/AML_MotorControl.o
 Setpoint_Right                                    build/AML_MotorControl.o
+Speed_Kd                                          build/AML_MotorControl.o
+Speed_Ki                                          build/AML_MotorControl.o
+Speed_Kp                                          build/AML_MotorControl.o
 SysTick_Handler                                   build/stm32f4xx_it.o
 SystemClock_Config                                build/main.o
 SystemCoreClock                                   build/system_stm32f4xx.o
@@ -3950,9 +3979,6 @@ huart6                                            build/main.o
 initialise_monitor_handles                        build/syscalls.o
 isApertureSpads                                   build/AML_LaserSensor.o
 is_aperture                                       build/vl53l0x_api_calibration.o
-kd                                                build/AML_MotorControl.o
-ki                                                build/AML_MotorControl.o
-kp                                                build/AML_MotorControl.o
 main                                              build/main.o
                                                   build/startup_stm32f407xx.o
                                                   c:/make/test/gcc-arm-none-eabi-9-2019-q4-major-win32/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/crt0.o

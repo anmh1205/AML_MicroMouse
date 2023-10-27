@@ -166,7 +166,8 @@ int main(void)
     {
       debug[5] = AML_MPUSensor_ResetAngle();
 
-      AML_MotorControl_SetLeftSpeed(20, FW);
+      AML_MotorControl_MoveLeft(20000, FW);
+      // AML_MotorControl_SetLeftSpeed(20, FW);
     }
     else
     {

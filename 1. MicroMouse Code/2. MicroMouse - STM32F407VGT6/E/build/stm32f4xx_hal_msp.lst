@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 1
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -58,7 +58,7 @@ ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 1
   28:Core/Src/stm32f4xx_hal_msp.c **** 
   29:Core/Src/stm32f4xx_hal_msp.c **** /* Private typedef -----------------------------------------------------------*/
   30:Core/Src/stm32f4xx_hal_msp.c **** /* USER CODE BEGIN TD */
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 2
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s 			page 2
 
 
   31:Core/Src/stm32f4xx_hal_msp.c **** 
@@ -118,7 +118,7 @@ ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 1
   40 0004 0091     		str	r1, [sp]
   41              		.loc 1 73 3 view .LVU3
   42 0006 0B4B     		ldr	r3, .L3
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 3
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s 			page 3
 
 
   43 0008 5A6C     		ldr	r2, [r3, #68]
@@ -178,7 +178,7 @@ ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 1
   91              	.LVL0:
   92              	.LFB131:
   82:Core/Src/stm32f4xx_hal_msp.c **** 
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 4
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s 			page 4
 
 
   83:Core/Src/stm32f4xx_hal_msp.c **** /**
@@ -238,7 +238,7 @@ ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 1
  107:Core/Src/stm32f4xx_hal_msp.c ****     GPIO_InitStruct.Alternate = GPIO_AF4_I2C1;
  108:Core/Src/stm32f4xx_hal_msp.c ****     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
  109:Core/Src/stm32f4xx_hal_msp.c **** 
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 5
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s 			page 5
 
 
  110:Core/Src/stm32f4xx_hal_msp.c ****     /* Peripheral clock enable */
@@ -298,7 +298,7 @@ ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 1
  137              	.L9:
  138              		.cfi_restore_state
   98:Core/Src/stm32f4xx_hal_msp.c ****     /**I2C1 GPIO Configuration
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 6
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s 			page 6
 
 
  139              		.loc 1 98 5 is_stmt 1 view .LVU24
@@ -358,7 +358,7 @@ ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 1
  177 0052 05A9     		add	r1, sp, #20
  178 0054 2848     		ldr	r0, .L11+12
  179              	.LVL3:
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 7
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s 			page 7
 
 
  108:Core/Src/stm32f4xx_hal_msp.c **** 
@@ -418,7 +418,7 @@ ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 1
  220              		.loc 1 123 5 view .LVU54
  221              	.LBB7:
  123:Core/Src/stm32f4xx_hal_msp.c ****     /**I2C3 GPIO Configuration
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 8
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s 			page 8
 
 
  222              		.loc 1 123 5 view .LVU55
@@ -478,7 +478,7 @@ ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 1
  260 00b8 FFF7FEFF 		bl	HAL_GPIO_Init
  261              	.LVL7:
  135:Core/Src/stm32f4xx_hal_msp.c ****     GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 9
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s 			page 9
 
 
  262              		.loc 1 135 5 is_stmt 1 view .LVU72
@@ -538,7 +538,7 @@ ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 1
  300 00e8 9AE7     		b	.L5
  301              	.L12:
  302 00ea 00BF     		.align	2
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 10
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s 			page 10
 
 
  303              	.L11:
@@ -598,7 +598,7 @@ ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 1
  169:Core/Src/stm32f4xx_hal_msp.c ****     PB9     ------> I2C1_SDA
  170:Core/Src/stm32f4xx_hal_msp.c ****     */
  171:Core/Src/stm32f4xx_hal_msp.c ****     HAL_GPIO_DeInit(GPIOB, GPIO_PIN_6);
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 11
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s 			page 11
 
 
  172:Core/Src/stm32f4xx_hal_msp.c **** 
@@ -658,7 +658,7 @@ ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 1
  362 0024 FFF7FEFF 		bl	HAL_GPIO_DeInit
  363              	.LVL13:
  173:Core/Src/stm32f4xx_hal_msp.c **** 
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 12
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s 			page 12
 
 
  364              		.loc 1 173 5 is_stmt 1 view .LVU101
@@ -718,7 +718,7 @@ ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 1
  204:Core/Src/stm32f4xx_hal_msp.c **** * This function configures the hardware resources used in this example
  205:Core/Src/stm32f4xx_hal_msp.c **** * @param htim_encoder: TIM_Encoder handle pointer
  206:Core/Src/stm32f4xx_hal_msp.c **** * @retval None
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 13
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s 			page 13
 
 
  207:Core/Src/stm32f4xx_hal_msp.c **** */
@@ -778,7 +778,7 @@ ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 1
  234:Core/Src/stm32f4xx_hal_msp.c ****   }
  235:Core/Src/stm32f4xx_hal_msp.c ****   else if(htim_encoder->Instance==TIM4)
  440              		.loc 1 235 8 is_stmt 1 view .LVU114
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 14
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s 			page 14
 
 
  441              		.loc 1 235 10 is_stmt 0 view .LVU115
@@ -838,7 +838,7 @@ ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 1
  460 0024 0092     		str	r2, [sp]
  217:Core/Src/stm32f4xx_hal_msp.c **** 
  461              		.loc 1 217 5 view .LVU119
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 15
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s 			page 15
 
 
  462 0026 2E4B     		ldr	r3, .L27+8
@@ -898,7 +898,7 @@ ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 1
  227:Core/Src/stm32f4xx_hal_msp.c ****     GPIO_InitStruct.Alternate = GPIO_AF1_TIM1;
  501              		.loc 1 227 5 is_stmt 1 view .LVU135
  227:Core/Src/stm32f4xx_hal_msp.c ****     GPIO_InitStruct.Alternate = GPIO_AF1_TIM1;
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 16
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s 			page 16
 
 
  502              		.loc 1 227 27 is_stmt 0 view .LVU136
@@ -958,7 +958,7 @@ ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 1
  543 008a 1A63     		str	r2, [r3, #48]
  243:Core/Src/stm32f4xx_hal_msp.c ****     __HAL_RCC_GPIOB_CLK_ENABLE();
  544              		.loc 1 243 5 view .LVU150
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 17
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s 			page 17
 
 
  545 008c 1A6B     		ldr	r2, [r3, #48]
@@ -1018,7 +1018,7 @@ ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 1
  582              		.loc 1 253 5 is_stmt 1 view .LVU167
  253:Core/Src/stm32f4xx_hal_msp.c ****     HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
  583              		.loc 1 253 31 is_stmt 0 view .LVU168
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 18
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s 			page 18
 
 
  584 00b8 0995     		str	r5, [sp, #36]
@@ -1078,7 +1078,7 @@ ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 1
  625              	.LFE133:
  627              		.section	.text.HAL_TIM_Base_MspInit,"ax",%progbits
  628              		.align	1
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 19
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s 			page 19
 
 
  629              		.global	HAL_TIM_Base_MspInit
@@ -1138,7 +1138,7 @@ ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 1
  667 0020 0193     		str	r3, [sp, #4]
  668              		.loc 1 284 5 view .LVU192
  669 0022 019B     		ldr	r3, [sp, #4]
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 20
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s 			page 20
 
 
  670              	.LBE14:
@@ -1198,7 +1198,7 @@ ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 1
  715 0010 0368     		ldr	r3, [r0]
  716              		.loc 1 295 5 view .LVU201
  717 0012 B3F1804F 		cmp	r3, #1073741824
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 21
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s 			page 21
 
 
  718 0016 02D0     		beq	.L41
@@ -1258,7 +1258,7 @@ ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 1
  744              		.loc 1 301 5 view .LVU207
  745 0034 009A     		ldr	r2, [sp]
  746              	.LBE15:
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 22
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s 			page 22
 
 
  301:Core/Src/stm32f4xx_hal_msp.c ****     /**TIM2 GPIO Configuration
@@ -1318,7 +1318,7 @@ ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 1
  789              		.fpu fpv4-sp-d16
  791              	HAL_TIM_Encoder_MspDeInit:
  792              	.LVL34:
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 23
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s 			page 23
 
 
  793              	.LFB136:
@@ -1378,7 +1378,7 @@ ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 1
  349:Core/Src/stm32f4xx_hal_msp.c ****   /* USER CODE END TIM4_MspDeInit 0 */
  350:Core/Src/stm32f4xx_hal_msp.c ****     /* Peripheral clock disable */
  351:Core/Src/stm32f4xx_hal_msp.c ****     __HAL_RCC_TIM4_CLK_DISABLE();
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 24
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s 			page 24
 
 
  352:Core/Src/stm32f4xx_hal_msp.c **** 
@@ -1438,7 +1438,7 @@ ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 1
  849 0040 8021     		movs	r1, #128
  850 0042 0648     		ldr	r0, .L50+16
  851 0044 FFF7FEFF 		bl	HAL_GPIO_DeInit
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 25
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s 			page 25
 
 
  852              	.LVL42:
@@ -1498,7 +1498,7 @@ ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 1
  386:Core/Src/stm32f4xx_hal_msp.c ****   }
  387:Core/Src/stm32f4xx_hal_msp.c **** 
  388:Core/Src/stm32f4xx_hal_msp.c **** }
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 26
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s 			page 26
 
 
  889              		.loc 1 388 1 view .LVU242
@@ -1558,7 +1558,7 @@ ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 1
  934 000a 0793     		str	r3, [sp, #28]
  935 000c 0893     		str	r3, [sp, #32]
  936 000e 0993     		str	r3, [sp, #36]
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 27
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s 			page 27
 
 
  399:Core/Src/stm32f4xx_hal_msp.c ****   if(huart->Instance==USART3)
@@ -1618,7 +1618,7 @@ ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 1
  947 001a 9342     		cmp	r3, r2
  948 001c 40D0     		beq	.L63
  949              	.LVL45:
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 28
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s 			page 28
 
 
  950              	.L57:
@@ -1678,7 +1678,7 @@ ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 1
  975 0038 0192     		str	r2, [sp, #4]
  405:Core/Src/stm32f4xx_hal_msp.c **** 
  976              		.loc 1 405 5 view .LVU260
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 29
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s 			page 29
 
 
  977 003a 019A     		ldr	r2, [sp, #4]
@@ -1738,7 +1738,7 @@ ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 1
  1014 0062 0993     		str	r3, [sp, #36]
  417:Core/Src/stm32f4xx_hal_msp.c **** 
  1015              		.loc 1 417 5 is_stmt 1 view .LVU278
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 30
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s 			page 30
 
 
  1016 0064 05A9     		add	r1, sp, #20
@@ -1798,7 +1798,7 @@ ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 1
  1051              		.loc 1 429 34 is_stmt 0 view .LVU297
  1052 0088 0562     		str	r5, [r0, #32]
  430:Core/Src/stm32f4xx_hal_msp.c ****     if (HAL_DMA_Init(&hdma_usart3_rx) != HAL_OK)
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 31
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s 			page 31
 
 
  1053              		.loc 1 430 5 is_stmt 1 view .LVU298
@@ -1858,7 +1858,7 @@ ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 1
  1093 00b6 0399     		ldr	r1, [sp, #12]
  1094              	.LBE18:
  448:Core/Src/stm32f4xx_hal_msp.c **** 
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 32
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s 			page 32
 
 
  1095              		.loc 1 448 5 view .LVU313
@@ -1918,7 +1918,7 @@ ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 1
  1132 00de 05A9     		add	r1, sp, #20
  1133 00e0 0748     		ldr	r0, .L65+24
  1134              	.LVL52:
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 33
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s 			page 33
 
 
  460:Core/Src/stm32f4xx_hal_msp.c **** 
@@ -1978,7 +1978,7 @@ ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 1
  478:Core/Src/stm32f4xx_hal_msp.c ****   {
  479:Core/Src/stm32f4xx_hal_msp.c ****   /* USER CODE BEGIN USART3_MspDeInit 0 */
  480:Core/Src/stm32f4xx_hal_msp.c **** 
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 34
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s 			page 34
 
 
  481:Core/Src/stm32f4xx_hal_msp.c ****   /* USER CODE END USART3_MspDeInit 0 */
@@ -2038,7 +2038,7 @@ ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 1
  1197 001e 1364     		str	r3, [r2, #64]
  489:Core/Src/stm32f4xx_hal_msp.c **** 
  1198              		.loc 1 489 5 view .LVU343
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 35
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s 			page 35
 
 
  1199 0020 4FF44061 		mov	r1, #3072
@@ -2097,41 +2097,41 @@ ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 1
  1248              		.file 12 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h"
  1249              		.file 13 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h"
  1250              		.file 14 "Core/Inc/main.h"
-ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s 			page 36
+ARM GAS  C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s 			page 36
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 stm32f4xx_hal_msp.c
-C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s:18     .text.HAL_MspInit:00000000 $t
-C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s:26     .text.HAL_MspInit:00000000 HAL_MspInit
-C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s:78     .text.HAL_MspInit:00000034 $d
-C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s:83     .text.HAL_I2C_MspInit:00000000 $t
-C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s:90     .text.HAL_I2C_MspInit:00000000 HAL_I2C_MspInit
-C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s:304    .text.HAL_I2C_MspInit:000000ec $d
-C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s:314    .text.HAL_I2C_MspDeInit:00000000 $t
-C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s:321    .text.HAL_I2C_MspDeInit:00000000 HAL_I2C_MspDeInit
-C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s:394    .text.HAL_I2C_MspDeInit:00000058 $d
-C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s:403    .text.HAL_TIM_Encoder_MspInit:00000000 $t
-C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s:410    .text.HAL_TIM_Encoder_MspInit:00000000 HAL_TIM_Encoder_MspInit
-C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s:618    .text.HAL_TIM_Encoder_MspInit:000000d8 $d
-C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s:628    .text.HAL_TIM_Base_MspInit:00000000 $t
-C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s:635    .text.HAL_TIM_Base_MspInit:00000000 HAL_TIM_Base_MspInit
-C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s:680    .text.HAL_TIM_Base_MspInit:00000028 $d
-C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s:685    .text.HAL_TIM_MspPostInit:00000000 $t
-C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s:692    .text.HAL_TIM_MspPostInit:00000000 HAL_TIM_MspPostInit
-C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s:778    .text.HAL_TIM_MspPostInit:00000050 $d
-C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s:784    .text.HAL_TIM_Encoder_MspDeInit:00000000 $t
-C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s:791    .text.HAL_TIM_Encoder_MspDeInit:00000000 HAL_TIM_Encoder_MspDeInit
-C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s:858    .text.HAL_TIM_Encoder_MspDeInit:0000004c $d
-C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s:867    .text.HAL_TIM_Base_MspDeInit:00000000 $t
-C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s:874    .text.HAL_TIM_Base_MspDeInit:00000000 HAL_TIM_Base_MspDeInit
-C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s:902    .text.HAL_TIM_Base_MspDeInit:00000018 $d
-C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s:907    .text.HAL_UART_MspInit:00000000 $t
-C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s:914    .text.HAL_UART_MspInit:00000000 HAL_UART_MspInit
-C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s:1143   .text.HAL_UART_MspInit:000000e8 $d
-C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s:1154   .text.HAL_UART_MspDeInit:00000000 $t
-C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s:1161   .text.HAL_UART_MspDeInit:00000000 HAL_UART_MspDeInit
-C:\Users\anmh1\AppData\Local\Temp\ccWs8dQr.s:1229   .text.HAL_UART_MspDeInit:00000048 $d
+C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s:18     .text.HAL_MspInit:00000000 $t
+C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s:26     .text.HAL_MspInit:00000000 HAL_MspInit
+C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s:78     .text.HAL_MspInit:00000034 $d
+C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s:83     .text.HAL_I2C_MspInit:00000000 $t
+C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s:90     .text.HAL_I2C_MspInit:00000000 HAL_I2C_MspInit
+C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s:304    .text.HAL_I2C_MspInit:000000ec $d
+C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s:314    .text.HAL_I2C_MspDeInit:00000000 $t
+C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s:321    .text.HAL_I2C_MspDeInit:00000000 HAL_I2C_MspDeInit
+C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s:394    .text.HAL_I2C_MspDeInit:00000058 $d
+C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s:403    .text.HAL_TIM_Encoder_MspInit:00000000 $t
+C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s:410    .text.HAL_TIM_Encoder_MspInit:00000000 HAL_TIM_Encoder_MspInit
+C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s:618    .text.HAL_TIM_Encoder_MspInit:000000d8 $d
+C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s:628    .text.HAL_TIM_Base_MspInit:00000000 $t
+C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s:635    .text.HAL_TIM_Base_MspInit:00000000 HAL_TIM_Base_MspInit
+C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s:680    .text.HAL_TIM_Base_MspInit:00000028 $d
+C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s:685    .text.HAL_TIM_MspPostInit:00000000 $t
+C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s:692    .text.HAL_TIM_MspPostInit:00000000 HAL_TIM_MspPostInit
+C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s:778    .text.HAL_TIM_MspPostInit:00000050 $d
+C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s:784    .text.HAL_TIM_Encoder_MspDeInit:00000000 $t
+C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s:791    .text.HAL_TIM_Encoder_MspDeInit:00000000 HAL_TIM_Encoder_MspDeInit
+C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s:858    .text.HAL_TIM_Encoder_MspDeInit:0000004c $d
+C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s:867    .text.HAL_TIM_Base_MspDeInit:00000000 $t
+C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s:874    .text.HAL_TIM_Base_MspDeInit:00000000 HAL_TIM_Base_MspDeInit
+C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s:902    .text.HAL_TIM_Base_MspDeInit:00000018 $d
+C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s:907    .text.HAL_UART_MspInit:00000000 $t
+C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s:914    .text.HAL_UART_MspInit:00000000 HAL_UART_MspInit
+C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s:1143   .text.HAL_UART_MspInit:000000e8 $d
+C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s:1154   .text.HAL_UART_MspDeInit:00000000 $t
+C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s:1161   .text.HAL_UART_MspDeInit:00000000 HAL_UART_MspDeInit
+C:\Users\anmh1\AppData\Local\Temp\ccltHnwV.s:1229   .text.HAL_UART_MspDeInit:00000048 $d
 
 UNDEFINED SYMBOLS
 HAL_GPIO_Init

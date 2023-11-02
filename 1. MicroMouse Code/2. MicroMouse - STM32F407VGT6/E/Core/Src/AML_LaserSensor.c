@@ -2,7 +2,7 @@
 
 #define I2C_TIMEOUT 100
 
-uint8_t LaserSensorAddress[] = {0x29, 0x30, 0x31, 0x32, 0x57, 0x58};
+uint8_t LaserSensorAddress[] = {0x29, 0x59, 0x31, 0x32, 0x57, 0x58};
 
 extern I2C_HandleTypeDef hi2c1;
 extern int16_t debug[100];
@@ -41,16 +41,16 @@ void AML_LaserSensor_Init(uint8_t i)
     // Enable/Disable Sigma and Signal check
     VL53L0X_SetLimitCheckEnable(Laser[i], VL53L0X_CHECKENABLE_SIGMA_FINAL_RANGE, 1);
     VL53L0X_SetLimitCheckEnable(Laser[i], VL53L0X_CHECKENABLE_SIGNAL_RATE_FINAL_RANGE, 1);
-    VL53L0X_SetLimitCheckValue(Laser[i], VL53L0X_CHECKENABLE_SIGNAL_RATE_FINAL_RANGE, (FixPoint1616_t)(0.1 * 65536));
-    VL53L0X_SetLimitCheckValue(Laser[i], VL53L0X_CHECKENABLE_SIGMA_FINAL_RANGE, (FixPoint1616_t)(60 * 65536));
-    VL53L0X_SetMeasurementTimingBudgetMicroSeconds(Laser[i], 20000);
+    VL53L0X_SetLimitCheckValue(Laser[i], VL53L0X_CHECKENABLE_SIGNAL_RATE_FINAL_RANGE, (FixPoint1616_t)(0.25 * 65536));
+    VL53L0X_SetLimitCheckValue(Laser[i], VL53L0X_CHECKENABLE_SIGMA_FINAL_RANGE, (FixPoint1616_t)(18 * 65536));
+    VL53L0X_SetMeasurementTimingBudgetMicroSeconds(Laser[i], 33000);
     VL53L0X_SetVcselPulsePeriod(Laser[i], VL53L0X_VCSEL_PERIOD_PRE_RANGE, 18);
     VL53L0X_SetVcselPulsePeriod(Laser[i], VL53L0X_VCSEL_PERIOD_FINAL_RANGE, 14);
 }
 
 uint8_t AML_LaserSensor_Setup()
 {
-    uint8_t DelayTime = 50;
+    uint8_t DelayTime = 80;
     // disable all laser
     HAL_GPIO_WritePin(XSHUT_FL_GPIO_Port, XSHUT_FL_Pin, GPIO_PIN_RESET);
     HAL_GPIO_WritePin(XSHUT_FF_GPIO_Port, XSHUT_FF_Pin, GPIO_PIN_RESET);
@@ -124,5 +124,6 @@ void AML_LaserSensor_ReadAll()
 uint16_t AML_LaserSensor_ReadSingle(uint8_t name)
 {
     VL53L0X_PerformSingleRangingMeasurement(Laser[name], &SensorValue[name]);
+    // VL53L0X_GetRangingMeasurementData(Laser[name], &SensorValue[name]);
     return SensorValue[name].RangeMilliMeter;
 }

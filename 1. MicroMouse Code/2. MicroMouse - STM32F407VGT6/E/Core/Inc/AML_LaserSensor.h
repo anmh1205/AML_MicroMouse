@@ -8,7 +8,7 @@
 
 typedef enum
 {
-    FL,
+    FL, 
     FF,
     FR,
     BR,

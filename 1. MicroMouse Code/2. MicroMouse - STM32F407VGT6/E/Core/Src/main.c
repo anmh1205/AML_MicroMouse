@@ -42,6 +42,15 @@
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
 
+/*
+ note daay mpu
+ 1 5v
+ 2 rx (cua mpu)
+ 3 tx (cua mpu)
+ 4 gnd
+
+*/
+
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
@@ -144,7 +153,11 @@ int main(void)
   {
 
     // AML_MPUSensor_ResetAngle();
-    AML_LaserSensor_ReadAll();
+    // AML_LaserSensor_ReadAll();
+    for (int i = 0; i < 5; i++)
+    {
+      debug[i] = AML_LaserSensor_ReadSingle(i);
+    }
     // AML_LaserSensor_ReadSingle(FL);
 
     LeftEncoderValue = AML_Encoder_GetLeftValue();
@@ -166,7 +179,9 @@ int main(void)
     {
       debug[5] = AML_MPUSensor_ResetAngle();
 
-      AML_MotorControl_SetLeftSpeed(20, FW);
+      // AML_MotorControl_SetLeftSpeed(20, FW);
+      AML_MotorControl_LeftPWM(100);
+      AML_MotorControl_RightPWM(100);
     }
     else
     {

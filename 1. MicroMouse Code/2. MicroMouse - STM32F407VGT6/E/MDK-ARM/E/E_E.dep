@@ -1,7 +1,7 @@
 Dependencies for Project 'E', Target 'E': (DO NOT MODIFY !)
 CompilerVersion: 5060750::V5.06 update 6 (build 750)::.\ARMCC
 F (startup_stm32f407xx.s)(0x65393A1B)(--cpu Cortex-M4.fp.sp -g --apcs=interwork -I.\RTE\_E-ID:\ARM\CMSIS\5.7.0\CMSIS\Core\Include-ID:\Keil\STM32F4xx_DFP\2.17.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include--pd "__UVISION_VERSION SETA 531" --pd "_RTE_ SETA 1" --pd "STM32F407xx SETA 1" --pd "_RTE_ SETA 1"--list startup_stm32f407xx.lst --xref -o e\startup_stm32f407xx.o --depend e\startup_stm32f407xx.d)
-F (../Core/Src/main.c)(0x653A6CBD)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_E-ID:\ARM\CMSIS\5.7.0\CMSIS\Core\Include-ID:\Keil\STM32F4xx_DFP\2.17.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="531" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o e\main.o --omf_browse e\main.crf --depend e\main.d)
+F (../Core/Src/main.c)(0x653F6CDC)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_E-ID:\ARM\CMSIS\5.7.0\CMSIS\Core\Include-ID:\Keil\STM32F4xx_DFP\2.17.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="531" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o e\main.o --omf_browse e\main.crf --depend e\main.d)
 I (../Core/Inc/main.h)(0x653A6C84)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x649FE1F6)
 I (../Core/Inc/stm32f4xx_hal_conf.h)(0x65392722)
@@ -38,7 +38,7 @@ I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h)(0x649FE1F6)
 I (../Core/Inc/AML_MPUSensor.h)(0x6537ECDF)
 I (../Core/Inc/pid.h)(0x64C01D5D)
 I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x5EC78414)
-I (../Core/Inc/AML_LaserSensor.h)(0x65380666)
+I (../Core/Inc/AML_LaserSensor.h)(0x653F6CDC)
 I (../Core/Inc/vl53l0x_api.h)(0x6524F814)
 I (../Core/Inc/vl53l0x_api_strings.h)(0x6524F814)
 I (../Core/Inc/vl53l0x_def.h)(0x6524F814)
@@ -49,7 +49,7 @@ I (../Core/Inc/vl53l0x_platform_log.h)(0x6524F814)
 I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5EC7840C)
 I (../Core/Inc/AML_Keyboard.h)(0x653927AA)
 I (../Core/Inc/AML_Encoder.h)(0x6537EC79)
-I (../Core/Inc/AML_MotorControl.h)(0x653A40BD)
+I (../Core/Inc/AML_MotorControl.h)(0x653F6A4F)
 I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x5EC78414)
 F (../Core/Src/stm32f4xx_it.c)(0x65392721)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_E-ID:\ARM\CMSIS\5.7.0\CMSIS\Core\Include-ID:\Keil\STM32F4xx_DFP\2.17.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="531" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o e\stm32f4xx_it.o --omf_browse e\stm32f4xx_it.crf --depend e\stm32f4xx_it.d)
 I (../Core/Inc/main.h)(0x653A6C84)
@@ -189,8 +189,8 @@ I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h)(0x649FE1F6)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h)(0x649FE1F6)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h)(0x649FE1F6)
 I (../Core/Inc/main.h)(0x653A6C84)
-F (..\Core\Src\AML_LaserSensor.c)(0x653809DE)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_E-ID:\ARM\CMSIS\5.7.0\CMSIS\Core\Include-ID:\Keil\STM32F4xx_DFP\2.17.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="531" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o e\aml_lasersensor.o --omf_browse e\aml_lasersensor.crf --depend e\aml_lasersensor.d)
-I (../Core/Inc/AML_LaserSensor.h)(0x65380666)
+F (..\Core\Src\AML_LaserSensor.c)(0x653F6CDC)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_E-ID:\ARM\CMSIS\5.7.0\CMSIS\Core\Include-ID:\Keil\STM32F4xx_DFP\2.17.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="531" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o e\aml_lasersensor.o --omf_browse e\aml_lasersensor.crf --depend e\aml_lasersensor.d)
+I (../Core/Inc/AML_LaserSensor.h)(0x653F6CDC)
 I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h)(0x649FE1C2)
 I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h)(0x649FE1C2)
 I (../Drivers/CMSIS/Include/core_cm4.h)(0x649FE1C6)
@@ -233,8 +233,8 @@ I (../Core/Inc/vl53l0x_platform_log.h)(0x6524F814)
 I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5EC7840C)
 I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x5EC78414)
 I (../Core/Inc/main.h)(0x653A6C84)
-F (..\Core\Src\AML_MotorControl.c)(0x653A69B1)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_E-ID:\ARM\CMSIS\5.7.0\CMSIS\Core\Include-ID:\Keil\STM32F4xx_DFP\2.17.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="531" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o e\aml_motorcontrol.o --omf_browse e\aml_motorcontrol.crf --depend e\aml_motorcontrol.d)
-I (../Core/Inc/AML_MotorControl.h)(0x653A40BD)
+F (..\Core\Src\AML_MotorControl.c)(0x653F6A4F)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_E-ID:\ARM\CMSIS\5.7.0\CMSIS\Core\Include-ID:\Keil\STM32F4xx_DFP\2.17.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="531" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o e\aml_motorcontrol.o --omf_browse e\aml_motorcontrol.crf --depend e\aml_motorcontrol.d)
+I (../Core/Inc/AML_MotorControl.h)(0x653F6A4F)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x649FE1F6)
 I (../Core/Inc/stm32f4xx_hal_conf.h)(0x65392722)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h)(0x649FE1F6)

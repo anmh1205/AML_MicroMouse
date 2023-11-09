@@ -135,7 +135,12 @@ int main(void)
   // AML_Keyboard_WaitStartKey();
 
   // AML_LaserSensor_ScanI2CDevice(&hi2c1);
-
+ 
+  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_SET);
+  for (int i = 0; i < 100; i++)
+  {
+    debug[i] = i;
+  }
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -146,7 +151,10 @@ int main(void)
     // AML_MPUSensor_ResetAngle();
     AML_LaserSensor_ReadAll();
     // AML_LaserSensor_ReadSingle(FL);
-
+    HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, GPIO_PIN_SET);
+    HAL_Delay(100);
+    HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, GPIO_PIN_RESET);
+    HAL_Delay(100);
     LeftEncoderValue = AML_Encoder_GetLeftValue();
     RightEncoderValue = AML_Encoder_GetRightValue();
 
@@ -158,15 +166,15 @@ int main(void)
     // HAL_Delay(500);
 
     // AML_MotorControl_LeftPWM(10);
-    // AML_MotorControl_SetLeftSpeed(20, FW);
-    // AML_MotorControl_SetLeftSpeed(30, BW);
+    AML_MotorControl_SetLeftSpeed(20, FW);
+    AML_MotorControl_SetRightSpeed(30, BW);
 
-    debug[7] = AML_Keyboard_GetKey();
+    // debug[7] = AML_Keyboard_GetKey();
     if (debug[7])
     {
-      debug[5] = AML_MPUSensor_ResetAngle();
+      // debug[5] = AML_MPUSensor_ResetAngle();
 
-      AML_MotorControl_MoveLeft(20000, FW);
+      // AML_MotorControl_MoveLeft(20000, FW);
       // AML_MotorControl_SetLeftSpeed(20, FW);
     }
     else

@@ -4,6 +4,8 @@
 
 uint8_t LaserSensorAddress[] = {0x29, 0x59, 0x60, 0x32, 0x57, 0x58};
 
+SimpleKalmanFilter KalmanFilter[5];
+
 extern I2C_HandleTypeDef hi2c1;
 extern int16_t debug[100];
 
@@ -50,7 +52,7 @@ void AML_LaserSensor_Init(uint8_t i)
 
 uint8_t AML_LaserSensor_Setup()
 {
-    uint8_t DelayTime = 50;
+    uint8_t DelayTime = 20;
     // disable all laser
     HAL_GPIO_WritePin(XSHUT_FL_GPIO_Port, XSHUT_FL_Pin, GPIO_PIN_RESET);
     HAL_GPIO_WritePin(XSHUT_FF_GPIO_Port, XSHUT_FF_Pin, GPIO_PIN_RESET);
@@ -109,20 +111,34 @@ uint8_t AML_LaserSensor_Setup()
     Laser[BL]->I2cDevAddr = LaserSensorAddress[BL];
     AML_LaserSensor_Init(BL);
 
+    for (uint8_t i = 0; i < 5; i++)
+    {
+        SimpleKalmanFilter_Init(&KalmanFilter[i], 0.01, 0.01, 0.001);
+    }
+    
     return 1;
 }
 
 void AML_LaserSensor_ReadAll()
 {
+    uint8_t LaserString[100];
+    char temp[10];
     VL53L0X_PerformSingleRangingMeasurement(Laser[FL], &SensorValue[FL]);
     VL53L0X_PerformSingleRangingMeasurement(Laser[FF], &SensorValue[FF]);
     VL53L0X_PerformSingleRangingMeasurement(Laser[FR], &SensorValue[FR]);
     VL53L0X_PerformSingleRangingMeasurement(Laser[BR], &SensorValue[BR]);
     VL53L0X_PerformSingleRangingMeasurement(Laser[BL], &SensorValue[BL]);
+
+    for (uint8_t i = 0; i < 5; i++)
+    {
+        SensorValue[i].RangeMilliMeter = SimpleKalmanFilter_updateEstimate(&KalmanFilter[i], SensorValue[i].RangeMilliMeter);
+    }
 }
 
 uint16_t AML_LaserSensor_ReadSingle(uint8_t name)
 {
+    
     VL53L0X_PerformSingleRangingMeasurement(Laser[name], &SensorValue[name]);
+    SensorValue[name].RangeMilliMeter = SimpleKalmanFilter_updateEstimate(&KalmanFilter[name], SensorValue[name].RangeMilliMeter);
     return SensorValue[name].RangeMilliMeter;
 }

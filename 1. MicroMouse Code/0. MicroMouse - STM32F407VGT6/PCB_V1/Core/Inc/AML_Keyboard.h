@@ -3,8 +3,15 @@
 
 #include "stm32f4xx_hal.h"
 #include "main.h"
+#include "AML_MotorControl.h"
 
 // Button number
 #define ButtonPORT GPIOE
+
+
+
+uint8_t AML_Keyboard_GetKey(short key);
+
+
 
 #endif // AML_KEYBOARD_H

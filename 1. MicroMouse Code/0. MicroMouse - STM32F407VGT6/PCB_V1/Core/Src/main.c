@@ -27,6 +27,7 @@
 #include "AML_Encoder.h"
 #include "AML_MotorControl.h"
 #include "AML_DebugDevice.h"
+#include "AML_Remote.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -46,7 +47,6 @@
 
 /* Private variables ---------------------------------------------------------*/
 I2C_HandleTypeDef hi2c1;
-I2C_HandleTypeDef hi2c3;
 
 TIM_HandleTypeDef htim1;
 TIM_HandleTypeDef htim2;
@@ -60,6 +60,8 @@ DMA_HandleTypeDef hdma_usart3_rx;
 int16_t debug[100];
 uint8_t checkWorking[] = {0xFF, 0xAA, 0x52};
 
+uint8_t ReadButton[5];
+
 double testAngle;
 int32_t LeftEncoderValue, RightEncoderValue;
 /* USER CODE END PV */
@@ -69,12 +71,11 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_DMA_Init(void);
 static void MX_I2C1_Init(void);
-static void MX_USART3_UART_Init(void);
 static void MX_TIM1_Init(void);
 static void MX_TIM2_Init(void);
 static void MX_TIM4_Init(void);
 static void MX_USART6_UART_Init(void);
-static void MX_I2C3_Init(void);
+static void MX_USART3_UART_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -114,18 +115,20 @@ int main(void)
   MX_GPIO_Init();
   MX_DMA_Init();
   MX_I2C1_Init();
-  MX_USART3_UART_Init();
   MX_TIM1_Init();
   MX_TIM2_Init();
   MX_TIM4_Init();
   MX_USART6_UART_Init();
-  MX_I2C3_Init();
+  MX_USART3_UART_Init();
   /* USER CODE BEGIN 2 */
   AML_MPUSensor_Setup();
   // AML_Keyboard_Setup();
   AML_LaserSensor_Setup();
   AML_Encoder_Setup();
   AML_MotorControl_Setup();
+  AML_Remote_Setup();
+
+  debug[8] = 8;
 
   // AML_Keyboard_WaitStartKey();
 
@@ -143,14 +146,16 @@ int main(void)
   {
     // AML_MPUSensor_ResetAngle();
     AML_LaserSensor_ReadAll();
-    for (int i = 0; i < 8; i++)
-    {
-      debug[i] = AML_LaserSensor_ReadSingle(i);
-    }
+    // for (int i = 0; i < 8; i++)
+    // {
+    //   debug[i] = AML_LaserSensor_ReadSingle(i);
+    // }
+
+    // debug[5]++;
     // AML_LaserSensor_ReadSingle(FL);
 
-    LeftEncoderValue = AML_Encoder_GetLeftValue();
-    RightEncoderValue = AML_Encoder_GetRightValue();
+    // LeftEncoderValue = AML_Encoder_GetLeftValue();
+    // RightEncoderValue = AML_Encoder_GetRightValue();
 
 
     // HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, GPIO_PIN_SET);
@@ -159,46 +164,43 @@ int main(void)
     // HAL_Delay(100);
     // AML_MotorControl_SetRightSpeed(4, FW);
 
-    if (debug[8] == 1)
+    for (int i = 0; i < 5; i++)
     {
-      AML_MotorControl_SetLeftSpeed(4, FW);
-      AML_DebugDevice_TurnOnLED(0);
+      if (!AML_Keyboard_GetKey(i))
+      {
+        debug[8] = i;
+      }
+    }
+
+    if (debug[8] == 0)
+    {
+      AML_MotorControl_SetLeftSpeed(2, FW);
+      // AML_DebugDevice_TurnOnLED(0);
+    }
+    else if (debug[8] == 1)
+    {
+      AML_MotorControl_LeftPWM(0);
+      AML_MotorControl_RightPWM(0);
+      // AML_DebugDevice_TurnOffLED(0);
+      // AML_DebugDevice_TurnOffLED(1);
     }
     else if (debug[8] == 2)
     {
-      AML_MotorControl_LeftPWM(0);
-      AML_DebugDevice_TurnOffLED(0);
-      AML_DebugDevice_TurnOffLED(1);
+      AML_MotorControl_LeftPWM(40);
+      AML_MotorControl_RightPWM(40);
+      // AML_DebugDevice_TurnOnLED(1);
     }
     else if (debug[8] == 3)
     {
-      AML_MotorControl_LeftPWM(10);
-      AML_DebugDevice_TurnOnLED(1);
+      AML_MotorControl_SetRightSpeed(4, FW);
+      AML_MotorControl_RightPWM(20);
+      // AML_DebugDevice_TurnOnLED(2);
     }
     else if (debug[8] == 4)
     {
-      AML_MotorControl_SetRightSpeed(4, FW);
-      AML_DebugDevice_TurnOnLED(2);
-    }
-    else if (debug[8] == 5)
-    {
       AML_MotorControl_RightPWM(0);
-      AML_DebugDevice_TurnOffLED(2);
+      // AML_DebugDevice_TurnOffLED(2);
     }
-    // AML_MotorControl_LeftPWM(30);
-    // AML_MotorControl_RightPWM(30);
- 
-    // AML_MotorControl_SetRightSpeed(2, FW);
-
-    // AML_DebugDevice_SetAllLED(GPIO_PIN_SET);
-    // HAL_Delay(500);
-    // AML_DebugDevice_SetAllLED(GPIO_PIN_RESET);
-    // HAL_Delay(500);
-
-    // HAL_Delay(1000);
-    // AML_MotorControl_LeftPWM(-20);
-    // AML_MotorControl_RightPWM(-20);
-    // HAL_Delay(1000);
 
     testAngle = AML_MPUSensor_GetAngle();
 
@@ -270,7 +272,7 @@ static void MX_I2C1_Init(void)
 
   /* USER CODE END I2C1_Init 1 */
   hi2c1.Instance = I2C1;
-  hi2c1.Init.ClockSpeed = 300000;
+  hi2c1.Init.ClockSpeed = 400000;
   hi2c1.Init.DutyCycle = I2C_DUTYCYCLE_2;
   hi2c1.Init.OwnAddress1 = 0;
   hi2c1.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
@@ -285,40 +287,6 @@ static void MX_I2C1_Init(void)
   /* USER CODE BEGIN I2C1_Init 2 */
 
   /* USER CODE END I2C1_Init 2 */
-
-}
-
-/**
-  * @brief I2C3 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_I2C3_Init(void)
-{
-
-  /* USER CODE BEGIN I2C3_Init 0 */
-
-  /* USER CODE END I2C3_Init 0 */
-
-  /* USER CODE BEGIN I2C3_Init 1 */
-
-  /* USER CODE END I2C3_Init 1 */
-  hi2c3.Instance = I2C3;
-  hi2c3.Init.ClockSpeed = 100000;
-  hi2c3.Init.DutyCycle = I2C_DUTYCYCLE_2;
-  hi2c3.Init.OwnAddress1 = 0;
-  hi2c3.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
-  hi2c3.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
-  hi2c3.Init.OwnAddress2 = 0;
-  hi2c3.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
-  hi2c3.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
-  if (HAL_I2C_Init(&hi2c3) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN I2C3_Init 2 */
-
-  /* USER CODE END I2C3_Init 2 */
 
 }
 
@@ -346,7 +314,7 @@ static void MX_TIM1_Init(void)
   htim1.Init.Period = 65535;
   htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim1.Init.RepetitionCounter = 0;
-  htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
+  htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   sConfig.EncoderMode = TIM_ENCODERMODE_TI12;
   sConfig.IC1Polarity = TIM_ICPOLARITY_RISING;
   sConfig.IC1Selection = TIM_ICSELECTION_DIRECTTI;
@@ -605,7 +573,7 @@ static void MX_GPIO_Init(void)
                            PE1 */
   GPIO_InitStruct.Pin = GPIO_PIN_2|GPIO_PIN_3|GPIO_PIN_4|GPIO_PIN_5
                           |GPIO_PIN_1;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
 
@@ -644,22 +612,6 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(XSHUT_FL_GPIO_Port, &GPIO_InitStruct);
-
-  /* EXTI interrupt init*/
-  HAL_NVIC_SetPriority(EXTI1_IRQn, 1, 0);
-  HAL_NVIC_EnableIRQ(EXTI1_IRQn);
-
-  HAL_NVIC_SetPriority(EXTI2_IRQn, 1, 0);
-  HAL_NVIC_EnableIRQ(EXTI2_IRQn);
-
-  HAL_NVIC_SetPriority(EXTI3_IRQn, 1, 0);
-  HAL_NVIC_EnableIRQ(EXTI3_IRQn);
-
-  HAL_NVIC_SetPriority(EXTI4_IRQn, 1, 0);
-  HAL_NVIC_EnableIRQ(EXTI4_IRQn);
-
-  HAL_NVIC_SetPriority(EXTI9_5_IRQn, 1, 0);
-  HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
 
 /* USER CODE BEGIN MX_GPIO_Init_2 */
 /* USER CODE END MX_GPIO_Init_2 */

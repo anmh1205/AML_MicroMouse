@@ -478,6 +478,16 @@
               <FileType>1</FileType>
               <FilePath>..\Core\Src\AML_DebugDevice.c</FilePath>
             </File>
+            <File>
+              <FileName>AML_Remote.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\AML_Remote.c</FilePath>
+            </File>
+            <File>
+              <FileName>KalmanFilter.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\KalmanFilter.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

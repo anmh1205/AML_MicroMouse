@@ -12,26 +12,35 @@ int32_t PreviousLeftEncoderValue = 0, PreviousRightEncoderValue = 0;
 short direction = 1;
 uint32_t period = (16000000 / 5000) - 1;
 
-PID_TypeDef PID_SpeedLeft;
-PID_TypeDef PID_SpeedRight;
-
-PID_TypeDef PID_PositionLeft;
-PID_TypeDef PID_PositionRight;
-
 double Input_Left, Output_Left, Setpoint_Left;
 double Input_Right, Output_Right, Setpoint_Right;
 
-double Speed_Kp_Left = 2.0;
-double Speed_Ki_Left = 0.0;
-double Speed_Kd_Left = 0;
+PID_TypeDef PID_SpeedLeft;
+double Speed_Kp_Left = 1.0;
+double Speed_Ki_Left = 0.1;
+double Speed_Kd_Left = 0.1;
 
-double Speed_Kp_Right = 2.0;
-double Speed_Ki_Right = 1.0;
+PID_TypeDef PID_SpeedRight;
+double Speed_Kp_Right = 1.0;
+double Speed_Ki_Right = 0.0;
 double Speed_Kd_Right = 0;
 
+PID_TypeDef PID_PositionLeft;
 double Position_Kp = 0.005;
 double Position_Ki = 0.007;
 double Position_Kd = 0.0;
+
+PID_TypeDef PID_PositionRight;
+
+PID_TypeDef PID_LeftWallFollow;
+double LeftWallDistance, SetpointDistance;
+
+PID_TypeDef PID_RightWallFollow;
+double RightWallDistance, SetpointDistance;
+
+double WallFollow_Kp = 0.005;
+double WallFollow_Ki = 0.007;
+double WallFollow_Kd = 0.0;
 
 short OutputMin = 0;
 short OutputMax = 70;
@@ -53,6 +62,15 @@ double ABS(double value)
 //     PID_SpeedRight.Ki = Ki;
 //     PID_SpeedRight.Kd = Kd;
 // }
+
+short AML_MotorControl_PIDSetTunnings(double Kp, double Ki, double Kd)
+{
+    PID_TypeDef *pid = &PID_LeftWallFollow;
+    pid->Kp = Kp;
+    pid->Ki = Ki;
+    pid->Kd = Kd;
+    return 1;
+}
 
 void AML_MotorControl_PIDSetSampleTime(uint32_t NewSampleTime)
 {
@@ -101,6 +119,8 @@ void AML_MotorControl_PIDSetup()
     PID(&PID_PositionLeft, &Input_Left, &Output_Left, &Setpoint_Left, Position_Kp, Position_Ki, Position_Kd, _PID_P_ON_E, PID_PositionLeft.ControllerDirection);
     PID(&PID_PositionRight, &Input_Right, &Output_Right, &Setpoint_Right, Position_Kp, Position_Ki, Position_Kd, _PID_P_ON_E, PID_PositionRight.ControllerDirection);
 
+    PID(&PID_LeftWallFollow, &LeftWallDistance, &Output_Left, &SetpointDistance, WallFollow_Kp, WallFollow_Ki, WallFollow_Kd, _PID_P_ON_E, PID_LeftWallFollow.ControllerDirection);
+    PID(&PID_RightWallFollow, &RightWallDistance, &Output_Right, &SetpointDistance, WallFollow_Kp, WallFollow_Ki, WallFollow_Kd, _PID_P_ON_E, PID_RightWallFollow.ControllerDirection);
     // AML_MotorControl_PIDSetTunings();
 
     AML_MotorControl_PIDSetSampleTime(5);
@@ -109,6 +129,8 @@ void AML_MotorControl_PIDSetup()
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// init motor control
 void AML_MotorControl_Setup()
 {
     HAL_TIM_Base_Start(&htim2);
@@ -220,4 +242,15 @@ void AML_MotorControl_MoveRight(double distance, short direction)
     PID_Compute(&PID_PositionRight);
 
     AML_MotorControl_RightPWM(Output_Right * direction);
+}
+
+void AML_MotorControl_LeftWallFollow()
+{
+    uint16_t LeftWallDistance = AML_LaserSensor_ReadSingle(BL);
+    SetpointDistance = 20;
+
+    PID_Compute(&PID_LeftWallFollow);
+    
+
+
 }

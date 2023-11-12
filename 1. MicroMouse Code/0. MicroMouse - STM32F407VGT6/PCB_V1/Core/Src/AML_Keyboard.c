@@ -25,24 +25,11 @@ void AML_Keyboard_Setup()
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-    if (GPIO_Pin == Button[0])
+    for (int i = 0; i < 5; i++)
     {
-        debug[8] = 1;
-    }
-    else if (GPIO_Pin == Button[1])
-    {
-        debug[8] = 2;
-    }
-    else if (GPIO_Pin == Button[2])
-    {
-        debug[8] = 3;
-    }
-    else if (GPIO_Pin == Button[3])
-    {
-        debug[8] = 4;
-    }
-    else if (GPIO_Pin == Button[4])
-    {
-        debug[8] = 5;
+        if (GPIO_Pin == Button[i])
+        {
+            debug[8] = i;
+        }
     }
 }

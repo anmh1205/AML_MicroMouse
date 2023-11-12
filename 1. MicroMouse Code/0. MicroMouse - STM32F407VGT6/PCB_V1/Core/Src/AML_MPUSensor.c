@@ -5,13 +5,23 @@ uint8_t ResetCommand[] = {0xFF, 0xAA, 0x52};
 extern UART_HandleTypeDef huart3;
 extern DMA_HandleTypeDef hdma_usart3_rx;
 
-uint8_t data[33];
+extern UART_HandleTypeDef huart6;
+extern DMA_HandleTypeDef hdma_usart6_rx;
+
+uint8_t data[35];
 uint8_t buffer = 119;
 extern int16_t debug[100];
 double Angle, PreviousAngle = 0, SaveAngle = 0;
 
+uint8_t AML_MPUSensor_ResetAngle()
+{
+    SaveAngle = 0;
+    return HAL_UART_Transmit(&huart3, ResetCommand, 3, 1000);
+}
+
 void AML_MPUSensor_Setup()
 {
+    AML_MPUSensor_ResetAngle();
     HAL_UART_Receive_DMA(&huart3, data, 33);
 }
 
@@ -52,15 +62,16 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
         }
         HAL_UART_Receive_DMA(&huart3, data, 33);
     }
+    else if (huart->Instance == USART6)
+    {
+        AML_Remote_Handle();
+    }
 }
 
-uint8_t AML_MPUSensor_ResetAngle()
-{
-    SaveAngle = 0;
-    return HAL_UART_Transmit(&huart3, ResetCommand, 3, 1000);
-}
+
 
 double AML_MPUSensor_GetAngle()
 {
+
     return Angle - SaveAngle;
 }

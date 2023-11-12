@@ -43,6 +43,7 @@ Core/Src/AML_LaserSensor.c \
 Core/Src/AML_MPUSensor.c \
 Core/Src/AML_MotorControl.c \
 Core/Src/AML_Remote.c \
+Core/Src/KalmanFilter.c \
 Core/Src/main.c \
 Core/Src/pid.c \
 Core/Src/stm32f4xx_hal_msp.c \

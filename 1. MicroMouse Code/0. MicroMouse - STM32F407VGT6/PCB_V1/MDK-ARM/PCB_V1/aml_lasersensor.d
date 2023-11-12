@@ -43,3 +43,11 @@ pcb_v1\aml_lasersensor.o: ../Core/Inc/vl53l0x_platform_log.h
 pcb_v1\aml_lasersensor.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 pcb_v1\aml_lasersensor.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 pcb_v1\aml_lasersensor.o: ../Core/Inc/main.h
+pcb_v1\aml_lasersensor.o: ../Core/Inc/KalmanFilter.h
+pcb_v1\aml_lasersensor.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
+pcb_v1\aml_lasersensor.o: ../Core/Inc/AML_Remote.h
+pcb_v1\aml_lasersensor.o: ../Core/Inc/AML_MotorControl.h
+pcb_v1\aml_lasersensor.o: ../Core/Inc/AML_LaserSensor.h
+pcb_v1\aml_lasersensor.o: ../Core/Inc/AML_Encoder.h
+pcb_v1\aml_lasersensor.o: ../Core/Inc/pid.h
+pcb_v1\aml_lasersensor.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h

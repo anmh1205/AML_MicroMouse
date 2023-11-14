@@ -50,5 +50,6 @@ pcb_v1\aml_mpusensor.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 pcb_v1\aml_mpusensor.o: ../Core/Inc/KalmanFilter.h
 pcb_v1\aml_mpusensor.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
 pcb_v1\aml_mpusensor.o: ../Core/Inc/AML_Remote.h
-pcb_v1\aml_mpusensor.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 pcb_v1\aml_mpusensor.o: ../Core/Inc/AML_Encoder.h
+pcb_v1\aml_mpusensor.o: ../Core/Inc/AML_DebugDevice.h
+pcb_v1\aml_mpusensor.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h

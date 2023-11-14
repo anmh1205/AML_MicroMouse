@@ -49,6 +49,7 @@ pcb_v1\aml_keyboard.o: ../Core/Inc/KalmanFilter.h
 pcb_v1\aml_keyboard.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
 pcb_v1\aml_keyboard.o: ../Core/Inc/AML_Remote.h
 pcb_v1\aml_keyboard.o: ../Core/Inc/AML_MotorControl.h
+pcb_v1\aml_keyboard.o: ../Core/Inc/AML_DebugDevice.h
 pcb_v1\aml_keyboard.o: ../Core/Inc/pid.h
 pcb_v1\aml_keyboard.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 pcb_v1\aml_keyboard.o: ../Core/Inc/AML_Encoder.h

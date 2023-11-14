@@ -7,7 +7,7 @@
 #include "AML_Remote.h"
 
 void AML_MPUSensor_Setup(void);
-uint8_t AML_MPUSensor_ResetAngle(void);
+void AML_MPUSensor_ResetAngle(void);
 double AML_MPUSensor_GetAngle(void);
 
 #endif /* test_h */

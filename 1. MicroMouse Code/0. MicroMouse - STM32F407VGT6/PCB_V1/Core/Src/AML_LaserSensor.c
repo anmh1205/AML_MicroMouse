@@ -7,11 +7,10 @@ uint8_t LaserSensorAddress[] = {0x29, 0x59, 0x60, 0x32, 0x57, 0x58};
 SimpleKalmanFilter KalmanFilter[5];
 
 extern I2C_HandleTypeDef hi2c1;
-extern int16_t debug[100];
 
-VL53L0X_RangingMeasurementData_t SensorValue[6];
-VL53L0X_Dev_t Dev_Val[6];
-VL53L0X_DEV Laser[6];
+volatile VL53L0X_RangingMeasurementData_t SensorValue[6];
+volatile VL53L0X_Dev_t Dev_Val[6];
+volatile VL53L0X_DEV Laser[6];
 
 uint32_t refSpadCount;
 uint8_t isApertureSpads;
@@ -26,7 +25,7 @@ void AML_LaserSensor_ScanI2CDevice(I2C_HandleTypeDef *hi2c)
         if (HAL_I2C_IsDeviceReady(hi2c, i << 1, 2, I2C_TIMEOUT) == HAL_OK)
         {
             // printf("I2C device found at address 0x%X\n", i);
-            debug[i] = 1;
+            // debug[i] = 1;
         }
     }
 }
@@ -50,7 +49,7 @@ void AML_LaserSensor_Init(uint8_t i)
     VL53L0X_SetVcselPulsePeriod(Laser[i], VL53L0X_VCSEL_PERIOD_FINAL_RANGE, 14);
 }
 
-uint8_t AML_LaserSensor_Setup()
+void AML_LaserSensor_Setup()
 {
     uint8_t DelayTime = 20;
     // disable all laser
@@ -116,7 +115,7 @@ uint8_t AML_LaserSensor_Setup()
         SimpleKalmanFilter_Init(&KalmanFilter[i], 0.01, 0.01, 0.001);
     }
     
-    return 1;
+    // return 1;
 }
 
 void AML_LaserSensor_ReadAll()
@@ -137,8 +136,8 @@ void AML_LaserSensor_ReadAll()
 
 uint16_t AML_LaserSensor_ReadSingle(uint8_t name)
 {
-    
     VL53L0X_PerformSingleRangingMeasurement(Laser[name], &SensorValue[name]);
     SensorValue[name].RangeMilliMeter = SimpleKalmanFilter_updateEstimate(&KalmanFilter[name], SensorValue[name].RangeMilliMeter);
     return SensorValue[name].RangeMilliMeter;
 }
+

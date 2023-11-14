@@ -5,30 +5,31 @@
 #define Ratio 90 / 14
 #define PulsePerRound 96
 
-extern TIM_HandleTypeDef htim2;
-extern int32_t LeftEncoderValue, RightEncoderValue;
-int32_t PreviousLeftEncoderValue = 0, PreviousRightEncoderValue = 0;
+#define MouseSpeed 30
 
-short direction = 1;
-uint32_t period = (16000000 / 5000) - 1;
+extern TIM_HandleTypeDef htim2;
+// int32_t LeftValue, RightValue;
+// int32_t PreviousLeftEncoderValue = 0, PreviousRightEncoderValue = 0;
+
+GPIO_PinState direction = 1;
 
 double Input_Left, Output_Left, Setpoint_Left;
 double Input_Right, Output_Right, Setpoint_Right;
 
 PID_TypeDef PID_SpeedLeft;
-double Speed_Kp_Left = 1.0;
-double Speed_Ki_Left = 0.1;
-double Speed_Kd_Left = 0.1;
+double Speed_Kp_Left = 1.0f;
+double Speed_Ki_Left = 0.1f;
+double Speed_Kd_Left = 0.1f;
 
 PID_TypeDef PID_SpeedRight;
-double Speed_Kp_Right = 1.0;
-double Speed_Ki_Right = 0.0;
-double Speed_Kd_Right = 0;
+double Speed_Kp_Right = 1.0f;
+double Speed_Ki_Right = 0.0f;
+double Speed_Kd_Right = 0.f;
 
 PID_TypeDef PID_PositionLeft;
-double Position_Kp = 0.005;
-double Position_Ki = 0.007;
-double Position_Kd = 0.0;
+double Position_Kp = 0.005f;
+double Position_Ki = 0.007f;
+double Position_Kd = 0.0f;
 
 PID_TypeDef PID_PositionRight;
 
@@ -38,14 +39,17 @@ double LeftWallDistance, SetpointDistance;
 PID_TypeDef PID_RightWallFollow;
 double RightWallDistance, SetpointDistance;
 
-double WallFollow_Kp = 0.005;
-double WallFollow_Ki = 0.007;
-double WallFollow_Kd = 0.0;
+double WallFollow_Kp = 0.5f;
+double WallFollow_Ki = 0.0f;
+double WallFollow_Kd = 0.00f;
 
-short OutputMin = 0;
-short OutputMax = 70;
+uint16_t MinLeftWallDistance, MaxLeftWallDistance;
+uint16_t MinRightWallDistance, MaxRightWallDistance;
 
-int64_t PreviousTime = 0;
+uint8_t OutputMin = 0;
+uint8_t OutputMax = 70;
+
+// int64_t PreviousTime = 0;
 
 double ABS(double value)
 {
@@ -63,13 +67,12 @@ double ABS(double value)
 //     PID_SpeedRight.Kd = Kd;
 // }
 
-short AML_MotorControl_PIDSetTunnings(double Kp, double Ki, double Kd)
+void AML_MotorControl_PIDSetTunnings(double Kp, double Ki, double Kd)
 {
     PID_TypeDef *pid = &PID_LeftWallFollow;
     pid->Kp = Kp;
     pid->Ki = Ki;
     pid->Kd = Kd;
-    return 1;
 }
 
 void AML_MotorControl_PIDSetSampleTime(uint32_t NewSampleTime)
@@ -79,6 +82,9 @@ void AML_MotorControl_PIDSetSampleTime(uint32_t NewSampleTime)
 
     PID_PositionLeft.SampleTime = NewSampleTime;
     PID_PositionRight.SampleTime = NewSampleTime;
+
+    PID_LeftWallFollow.SampleTime = NewSampleTime;
+    PID_RightWallFollow.SampleTime = NewSampleTime;
 }
 
 void AML_MotorControl_PIDSetOutputLimits(double Min, double Max)
@@ -94,6 +100,12 @@ void AML_MotorControl_PIDSetOutputLimits(double Min, double Max)
 
     PID_PositionRight.OutMin = Min;
     PID_PositionRight.OutMax = Max;
+
+    PID_LeftWallFollow.OutMin = -MouseSpeed;
+    PID_LeftWallFollow.OutMax = MouseSpeed;
+
+    PID_RightWallFollow.OutMin = -MouseSpeed;
+    PID_RightWallFollow.OutMax = MouseSpeed;
 }
 
 void AML_MotorControl_PIDSetMode(PIDMode_TypeDef Mode)
@@ -103,6 +115,9 @@ void AML_MotorControl_PIDSetMode(PIDMode_TypeDef Mode)
 
     PID_SetMode(&PID_PositionLeft, Mode);
     PID_SetMode(&PID_PositionRight, Mode);
+
+    PID_SetMode(&PID_LeftWallFollow, Mode);
+    PID_SetMode(&PID_RightWallFollow, Mode);
 }
 
 void AML_MotorControl_PIDSetup()
@@ -123,7 +138,7 @@ void AML_MotorControl_PIDSetup()
     PID(&PID_RightWallFollow, &RightWallDistance, &Output_Right, &SetpointDistance, WallFollow_Kp, WallFollow_Ki, WallFollow_Kd, _PID_P_ON_E, PID_RightWallFollow.ControllerDirection);
     // AML_MotorControl_PIDSetTunings();
 
-    AML_MotorControl_PIDSetSampleTime(5);
+    AML_MotorControl_PIDSetSampleTime(10);
     AML_MotorControl_PIDSetOutputLimits(OutputMin, OutputMax);
     AML_MotorControl_PIDSetMode(_PID_MODE_AUTOMATIC);
 }
@@ -137,62 +152,54 @@ void AML_MotorControl_Setup()
     HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
     HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_2);
     HAL_GPIO_WritePin(STBY_GPIO_Port, STBY_Pin, GPIO_PIN_SET);
-    htim2.Instance->ARR = period;
-
     AML_MotorControl_PIDSetup();
 }
 
-void AML_MotorControl_LeftPWM(int16_t PWMValue)
+void AML_MotorControl_LeftPWM(int32_t PWMValue)
 {
     if (PWMValue > 0)
     {
         HAL_GPIO_WritePin(AIN1_GPIO_Port, AIN1_Pin, direction);
         HAL_GPIO_WritePin(AIN2_GPIO_Port, AIN2_Pin, !direction);
-        // __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, PWMValue);
-        htim2.Instance->CCR1 = (period * PWMValue) / 100;
+        __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, PWMValue);
     }
     else if (PWMValue < 0)
     {
         HAL_GPIO_WritePin(AIN1_GPIO_Port, AIN1_Pin, !direction);
         HAL_GPIO_WritePin(AIN2_GPIO_Port, AIN2_Pin, direction);
-        // __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, PWMValue);
-        htim2.Instance->CCR1 = (period * (-PWMValue)) / 100;
+        __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, -PWMValue);
     }
-    else if (!PWMValue)
+    else if (PWMValue == 0)
     {
         HAL_GPIO_WritePin(AIN1_GPIO_Port, AIN1_Pin, GPIO_PIN_RESET);
         HAL_GPIO_WritePin(AIN2_GPIO_Port, AIN2_Pin, GPIO_PIN_RESET);
-        // __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, 0);
-        htim2.Instance->CCR1 = 0;
+        __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, 0);
     }
 }
 
-void AML_MotorControl_RightPWM(int16_t PWMValue)
+void AML_MotorControl_RightPWM(int32_t PWMValue)
 {
     if (PWMValue > 0)
     {
         HAL_GPIO_WritePin(BIN1_GPIO_Port, BIN1_Pin, !direction);
         HAL_GPIO_WritePin(BIN2_GPIO_Port, BIN2_Pin, direction);
-        // __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_2, PWMValue);
-        htim2.Instance->CCR2 = (period * PWMValue) / 100;
+        __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_2, PWMValue);
     }
     else if (PWMValue < 0)
     {
         HAL_GPIO_WritePin(BIN1_GPIO_Port, BIN1_Pin, direction);
         HAL_GPIO_WritePin(BIN2_GPIO_Port, BIN2_Pin, !direction);
-        // __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_2, PWMValue);
-        htim2.Instance->CCR2 = (period * -(PWMValue)) / 100;
+        __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_2, -PWMValue);
     }
-    else if (!PWMValue)
+    else if (PWMValue == 0)
     {
         HAL_GPIO_WritePin(BIN1_GPIO_Port, BIN1_Pin, GPIO_PIN_RESET);
         HAL_GPIO_WritePin(BIN2_GPIO_Port, BIN2_Pin, GPIO_PIN_RESET);
-        // __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_2, 0);
-        htim2.Instance->CCR2 = 0;
+        __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_2, 0);
     }
 }
 
-void AML_MotorControl_SetDirection(short dir)
+void AML_MotorControl_SetDirection(GPIO_PinState dir)
 {
     direction = dir;
 }
@@ -202,7 +209,7 @@ void AML_MotorControl_ToggleDirection()
     direction = ~direction;
 }
 
-void AML_MotorControl_SetLeftSpeed(double speed, short direction)
+void AML_MotorControl_SetLeftSpeed(double speed, GPIO_PinState direction)
 {
     Setpoint_Left = speed * Ratio;
     Input_Left = ABS((double)AML_Encoder_GetLeftValue() / PulsePerRound);
@@ -213,7 +220,7 @@ void AML_MotorControl_SetLeftSpeed(double speed, short direction)
     AML_MotorControl_LeftPWM(Output_Left * direction);
 }
 
-void AML_MotorControl_SetRightSpeed(double speed, short direction)
+void AML_MotorControl_SetRightSpeed(double speed, GPIO_PinState direction)
 {
     Setpoint_Right = speed * Ratio;
     Input_Right = ABS((double)AML_Encoder_GetRightValue() / PulsePerRound);
@@ -224,33 +231,42 @@ void AML_MotorControl_SetRightSpeed(double speed, short direction)
     AML_MotorControl_RightPWM(Output_Right * direction);
 }
 
-void AML_MotorControl_MoveLeft(double distance, short direction)
+void AML_MotorControl_Stop()
 {
-    Setpoint_Left = distance;
-    Input_Left = abs(AML_Encoder_GetLeftValue());
-
-    PID_Compute(&PID_PositionLeft);
-
-    AML_MotorControl_LeftPWM(Output_Left * direction);
+    AML_MotorControl_LeftPWM(0);
+    AML_MotorControl_RightPWM(0);
 }
 
-void AML_MotorControl_MoveRight(double distance, short direction)
+void AML_MotorControl_SetLeftWallValue()
 {
-    Setpoint_Right = distance;
-    Input_Right = abs(AML_Encoder_GetRightValue());
+    MinLeftWallDistance = AML_LaserSensor_ReadSingle(BL);
+    MaxRightWallDistance = AML_LaserSensor_ReadSingle(BR);
+}
 
-    PID_Compute(&PID_PositionRight);
-
-    AML_MotorControl_RightPWM(Output_Right * direction);
+void AML_MotorControl_SetRightWallValue()
+{
+    MaxLeftWallDistance = AML_LaserSensor_ReadSingle(BL);
+    MinRightWallDistance = AML_LaserSensor_ReadSingle(BR);
 }
 
 void AML_MotorControl_LeftWallFollow()
 {
-    uint16_t LeftWallDistance = AML_LaserSensor_ReadSingle(BL);
-    SetpointDistance = 20;
+    LeftWallDistance = AML_LaserSensor_ReadSingle(BL);
+    SetpointDistance = MinLeftWallDistance + 35;
 
     PID_Compute(&PID_LeftWallFollow);
-    
 
+    AML_MotorControl_LeftPWM(MouseSpeed + Output_Left);
+    AML_MotorControl_RightPWM(MouseSpeed - Output_Left);
+}
 
+void AML_MotorControl_RightWallFollow()
+{
+    RightWallDistance = AML_LaserSensor_ReadSingle(BR);
+    SetpointDistance = MinRightWallDistance + 35;
+
+    PID_Compute(&PID_RightWallFollow);
+
+    AML_MotorControl_LeftPWM(MouseSpeed - Output_Right);
+    AML_MotorControl_RightPWM(MouseSpeed + Output_Right);
 }

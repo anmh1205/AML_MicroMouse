@@ -50,4 +50,5 @@ pcb_v1\aml_lasersensor.o: ../Core/Inc/AML_MotorControl.h
 pcb_v1\aml_lasersensor.o: ../Core/Inc/AML_LaserSensor.h
 pcb_v1\aml_lasersensor.o: ../Core/Inc/AML_Encoder.h
 pcb_v1\aml_lasersensor.o: ../Core/Inc/pid.h
+pcb_v1\aml_lasersensor.o: ../Core/Inc/AML_DebugDevice.h
 pcb_v1\aml_lasersensor.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h

@@ -5,7 +5,7 @@
 #include "main.h"
 
 // Led number
-#define LEDPORT GPIOC
+// #define LEDPORT GPIOC
 
 typedef enum
 {
@@ -19,10 +19,12 @@ typedef enum
     PINK
 } COLOR;
 
+void AML_DebugDevice_BuzzerBeep();
+
 void AML_DebugDevice_TurnOnLED(COLOR color);
 void AML_DebugDevice_TurnOffLED(COLOR color);
 void AML_DebugDevice_ToggleLED(COLOR color);
-void AML_DebugDevice_SetLED(COLOR color, uint8_t state);
-void AML_DebugDevice_SetAllLED(uint8_t state);
+void AML_DebugDevice_SetLED(COLOR color, GPIO_PinState state);
+void AML_DebugDevice_SetAllLED(GPIO_PinState state);
 
 #endif // AML_DEBUGDEVICE_H

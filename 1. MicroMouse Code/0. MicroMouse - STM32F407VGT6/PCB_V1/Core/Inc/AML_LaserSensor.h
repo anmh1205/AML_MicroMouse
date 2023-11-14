@@ -19,7 +19,7 @@ typedef enum
 } LaserName;
 
 void AML_LaserSensor_ScanI2CDevice(I2C_HandleTypeDef *hi2c);
-uint8_t AML_LaserSensor_Setup(void);
+void AML_LaserSensor_Setup(void);
 void AML_LaserSensor_ReadAll(void);
 uint16_t AML_LaserSensor_ReadSingle(uint8_t name);
 

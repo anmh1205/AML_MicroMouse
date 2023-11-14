@@ -50,7 +50,7 @@ pcb_v1\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 pcb_v1\main.o: ../Core/Inc/KalmanFilter.h
 pcb_v1\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
 pcb_v1\main.o: ../Core/Inc/AML_Remote.h
-pcb_v1\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 pcb_v1\main.o: ../Core/Inc/AML_Encoder.h
-pcb_v1\main.o: ../Core/Inc/AML_Keyboard.h
 pcb_v1\main.o: ../Core/Inc/AML_DebugDevice.h
+pcb_v1\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
+pcb_v1\main.o: ../Core/Inc/AML_Keyboard.h

@@ -9,9 +9,9 @@ typedef enum
     SW5
 } SW;
 
-volatile uint16_t Button[5] = {GPIO_PIN_1, GPIO_PIN_2, GPIO_PIN_3, GPIO_PIN_4, GPIO_PIN_5};
+uint16_t Button[] = {GPIO_PIN_1, GPIO_PIN_2, GPIO_PIN_3, GPIO_PIN_4, GPIO_PIN_5};
 
-GPIO_PinState AML_Keyboard_GetKey(short key)
+GPIO_PinState AML_Keyboard_GetKey(uint8_t key)
 {
     return HAL_GPIO_ReadPin(ButtonPORT, Button[key]);
 }

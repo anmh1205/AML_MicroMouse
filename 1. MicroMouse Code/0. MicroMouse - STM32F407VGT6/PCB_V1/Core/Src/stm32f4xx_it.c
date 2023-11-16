@@ -56,7 +56,7 @@
 
 /* External variables --------------------------------------------------------*/
 extern DMA_HandleTypeDef hdma_usart3_rx;
-extern UART_HandleTypeDef huart6;
+extern UART_HandleTypeDef huart3;
 /* USER CODE BEGIN EV */
 
 /* USER CODE END EV */
@@ -85,7 +85,10 @@ void NMI_Handler(void)
 void HardFault_Handler(void)
 {
   /* USER CODE BEGIN HardFault_IRQn 0 */
-
+  if (CoreDebug->DHCSR & 1)
+  { // check C_DEBUGEN == 1 -> Debugger Connected
+    __breakpoint(0); //halt program execution here
+  }
   /* USER CODE END HardFault_IRQn 0 */
   while (1)
   {
@@ -215,17 +218,17 @@ void DMA1_Stream1_IRQHandler(void)
 }
 
 /**
-  * @brief This function handles USART6 global interrupt.
+  * @brief This function handles USART3 global interrupt.
   */
-void USART6_IRQHandler(void)
+void USART3_IRQHandler(void)
 {
-  /* USER CODE BEGIN USART6_IRQn 0 */
+  /* USER CODE BEGIN USART3_IRQn 0 */
 
-  /* USER CODE END USART6_IRQn 0 */
-  HAL_UART_IRQHandler(&huart6);
-  /* USER CODE BEGIN USART6_IRQn 1 */
+  /* USER CODE END USART3_IRQn 0 */
+  HAL_UART_IRQHandler(&huart3);
+  /* USER CODE BEGIN USART3_IRQn 1 */
 
-  /* USER CODE END USART6_IRQn 1 */
+  /* USER CODE END USART3_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */

@@ -1,20 +1,21 @@
 #include "AML_MotorControl.h"
 
-#define Pi 3.14159265359
-#define WheelDiameter 48
-#define Ratio 90 / 14
-#define PulsePerRound 96
+#define Pi 3.14159265359 // Pi number
+#define WheelDiameter 50 // mm
+#define Ratio 90 / 14    // 90:14
+#define PulsePerRound 96 // 96 pulse per round encoder
 
-#define MouseSpeed 30
+#define MouseSpeed 30 // % PWM
 
 extern TIM_HandleTypeDef htim2;
+extern int16_t debug[100];
 // int32_t LeftValue, RightValue;
 // int32_t PreviousLeftEncoderValue = 0, PreviousRightEncoderValue = 0;
 
-GPIO_PinState direction = 1;
+GPIO_PinState direction = GPIO_PIN_SET;
 
-double Input_Left, Output_Left, Setpoint_Left;
-double Input_Right, Output_Right, Setpoint_Right;
+volatile double Input_Left, Output_Left, Setpoint_Left;
+volatile double Input_Right, Output_Right, Setpoint_Right;
 
 PID_TypeDef PID_SpeedLeft;
 double Speed_Kp_Left = 1.0f;
@@ -39,9 +40,9 @@ double LeftWallDistance, SetpointDistance;
 PID_TypeDef PID_RightWallFollow;
 double RightWallDistance, SetpointDistance;
 
-double WallFollow_Kp = 0.5f;
-double WallFollow_Ki = 0.0f;
-double WallFollow_Kd = 0.00f;
+volatile double WallFollow_Kp = 0.03f;
+volatile double WallFollow_Ki = 0.0f;
+volatile double WallFollow_Kd = 0.12f;
 
 uint16_t MinLeftWallDistance, MaxLeftWallDistance;
 uint16_t MinRightWallDistance, MaxRightWallDistance;
@@ -138,7 +139,7 @@ void AML_MotorControl_PIDSetup()
     PID(&PID_RightWallFollow, &RightWallDistance, &Output_Right, &SetpointDistance, WallFollow_Kp, WallFollow_Ki, WallFollow_Kd, _PID_P_ON_E, PID_RightWallFollow.ControllerDirection);
     // AML_MotorControl_PIDSetTunings();
 
-    AML_MotorControl_PIDSetSampleTime(10);
+    AML_MotorControl_PIDSetSampleTime(25);
     AML_MotorControl_PIDSetOutputLimits(OutputMin, OutputMax);
     AML_MotorControl_PIDSetMode(_PID_MODE_AUTOMATIC);
 }
@@ -152,11 +153,24 @@ void AML_MotorControl_Setup()
     HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
     HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_2);
     HAL_GPIO_WritePin(STBY_GPIO_Port, STBY_Pin, GPIO_PIN_SET);
+
     AML_MotorControl_PIDSetup();
 }
 
 void AML_MotorControl_LeftPWM(int32_t PWMValue)
 {
+    // set PWM Limit
+    if (PWMValue > (MouseSpeed * 2))
+    {
+        PWMValue = MouseSpeed * 2;
+    }
+    else if (PWMValue < -MouseSpeed * 2)
+    {
+        PWMValue = -MouseSpeed * 2;
+    }
+
+    // debug[0] = PWMValue;
+
     if (PWMValue > 0)
     {
         HAL_GPIO_WritePin(AIN1_GPIO_Port, AIN1_Pin, direction);
@@ -179,6 +193,18 @@ void AML_MotorControl_LeftPWM(int32_t PWMValue)
 
 void AML_MotorControl_RightPWM(int32_t PWMValue)
 {
+    // set PWM Limit
+    if (PWMValue > (MouseSpeed * 2))
+    {
+        PWMValue = MouseSpeed * 2;
+    }
+    else if (PWMValue < -MouseSpeed * 2)
+    {
+        PWMValue = -MouseSpeed * 2;
+    }
+
+    // debug[1] = PWMValue;
+
     if (PWMValue > 0)
     {
         HAL_GPIO_WritePin(BIN1_GPIO_Port, BIN1_Pin, !direction);
@@ -212,8 +238,8 @@ void AML_MotorControl_ToggleDirection()
 void AML_MotorControl_SetLeftSpeed(double speed, GPIO_PinState direction)
 {
     Setpoint_Left = speed * Ratio;
-    Input_Left = ABS((double)AML_Encoder_GetLeftValue() / PulsePerRound);
-    AML_Encoder_ResetLeftValue();
+    // Input_Left = ABS((double)AML_Encoder_GetLeftValue() / PulsePerRound);
+    // AML_Encoder_ResetLeftValue();
 
     PID_Compute(&PID_SpeedLeft);
 
@@ -223,8 +249,8 @@ void AML_MotorControl_SetLeftSpeed(double speed, GPIO_PinState direction)
 void AML_MotorControl_SetRightSpeed(double speed, GPIO_PinState direction)
 {
     Setpoint_Right = speed * Ratio;
-    Input_Right = ABS((double)AML_Encoder_GetRightValue() / PulsePerRound);
-    AML_Encoder_ResetRightValue();
+    // Input_Right = ABS((double)AML_Encoder_GetRightValue() / PulsePerRound);
+    // AML_Encoder_ResetRightValue();
 
     PID_Compute(&PID_SpeedRight);
 
@@ -252,21 +278,21 @@ void AML_MotorControl_SetRightWallValue()
 void AML_MotorControl_LeftWallFollow()
 {
     LeftWallDistance = AML_LaserSensor_ReadSingle(BL);
-    SetpointDistance = MinLeftWallDistance + 35;
+    SetpointDistance = MinLeftWallDistance + 30;
 
     PID_Compute(&PID_LeftWallFollow);
 
-    AML_MotorControl_LeftPWM(MouseSpeed + Output_Left);
-    AML_MotorControl_RightPWM(MouseSpeed - Output_Left);
+    AML_MotorControl_LeftPWM((MouseSpeed + Output_Left));
+    AML_MotorControl_RightPWM((MouseSpeed - Output_Left));
 }
 
 void AML_MotorControl_RightWallFollow()
 {
     RightWallDistance = AML_LaserSensor_ReadSingle(BR);
-    SetpointDistance = MinRightWallDistance + 35;
+    SetpointDistance = MinRightWallDistance + 30;
 
     PID_Compute(&PID_RightWallFollow);
 
-    AML_MotorControl_LeftPWM(MouseSpeed - Output_Right);
-    AML_MotorControl_RightPWM(MouseSpeed + Output_Right);
+    AML_MotorControl_LeftPWM((MouseSpeed - Output_Right));
+    AML_MotorControl_RightPWM((MouseSpeed + Output_Right));
 }

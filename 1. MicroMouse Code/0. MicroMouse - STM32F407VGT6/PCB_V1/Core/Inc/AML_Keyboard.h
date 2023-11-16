@@ -10,7 +10,7 @@
 
 
 
-GPIO_PinState AML_Keyboard_GetKey(short key);
+GPIO_PinState AML_Keyboard_GetKey(uint8_t key);
 
 
 

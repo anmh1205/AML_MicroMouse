@@ -37,7 +37,6 @@ pcb_v1\main.o: ../Core/Inc/AML_MPUSensor.h
 pcb_v1\main.o: ../Core/Inc/pid.h
 pcb_v1\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 pcb_v1\main.o: ../Core/Inc/AML_Remote.h
-pcb_v1\main.o: ../Core/Inc/AML_MotorControl.h
 pcb_v1\main.o: ../Core/Inc/AML_LaserSensor.h
 pcb_v1\main.o: ../Core/Inc/vl53l0x_api.h
 pcb_v1\main.o: ../Core/Inc/vl53l0x_api_strings.h
@@ -50,7 +49,7 @@ pcb_v1\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 pcb_v1\main.o: ../Core/Inc/KalmanFilter.h
 pcb_v1\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
 pcb_v1\main.o: ../Core/Inc/AML_Remote.h
+pcb_v1\main.o: ../Core/Inc/AML_Keyboard.h
+pcb_v1\main.o: ../Core/Inc/AML_MotorControl.h
 pcb_v1\main.o: ../Core/Inc/AML_Encoder.h
 pcb_v1\main.o: ../Core/Inc/AML_DebugDevice.h
-pcb_v1\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
-pcb_v1\main.o: ../Core/Inc/AML_Keyboard.h

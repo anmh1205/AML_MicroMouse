@@ -8,7 +8,7 @@
 #include "pid.h"
 // #include "math.h"
 
-void AML_MotorControl_Setup(void);
+void AML_MotorControl_Setup();
 
 void AML_MotorControl_PIDSetTunnings(double Kp, double Ki, double Kd);
 

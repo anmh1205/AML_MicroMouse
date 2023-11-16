@@ -47,8 +47,5 @@ pcb_v1\aml_motorcontrol.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 pcb_v1\aml_motorcontrol.o: ../Core/Inc/KalmanFilter.h
 pcb_v1\aml_motorcontrol.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
 pcb_v1\aml_motorcontrol.o: ../Core/Inc/AML_Remote.h
-pcb_v1\aml_motorcontrol.o: ../Core/Inc/AML_MotorControl.h
-pcb_v1\aml_motorcontrol.o: ../Core/Inc/AML_DebugDevice.h
-pcb_v1\aml_motorcontrol.o: ../Core/Inc/pid.h
-pcb_v1\aml_motorcontrol.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 pcb_v1\aml_motorcontrol.o: ../Core/Inc/AML_Encoder.h
+pcb_v1\aml_motorcontrol.o: ../Core/Inc/pid.h

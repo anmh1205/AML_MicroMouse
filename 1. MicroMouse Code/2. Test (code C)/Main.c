@@ -97,12 +97,7 @@ typedef struct Stack
 
 } Stack;
 
-
-
 FILE *fp;
-
-
-
 
 Node *new_Node(const short i, const short j)
 {
@@ -291,7 +286,6 @@ void print_map(Maze *this_maze, int x, int y, int direction)
                 }
             }
 
-
             // (đọc hàm isWall) check nếu có tường ở hướng tây thì sẽ ghi kí tự | để biểu diễn tường, không có thì ghi kí tự space để căn chỉnh cho thẳng cột
             if (isWall(this_maze, i, j, EAST))
             {
@@ -337,8 +331,6 @@ int main()
     //     printf("Error opening file\n");
     //     return 0;
     // }
-
-
 
     Maze *myMaze = new_Maze();
     myMaze->map[0][0]->down = NULL;

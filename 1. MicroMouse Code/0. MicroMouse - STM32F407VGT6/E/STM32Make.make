@@ -39,6 +39,7 @@ C_SOURCES =  \
 Core/Src/AML_Encoder.c \
 Core/Src/AML_Keyboard.c \
 Core/Src/AML_LaserSensor.c \
+Core/Src/AML_LedDebug.c \
 Core/Src/AML_MPUSensor.c \
 Core/Src/AML_MotorControl.c \
 Core/Src/main.c \

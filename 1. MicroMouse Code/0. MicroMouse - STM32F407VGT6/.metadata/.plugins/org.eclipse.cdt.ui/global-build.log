@@ -1,0 +1,13 @@
+23:31:33 **** Incremental Build of configuration Debug for project PCB_V1 ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/AML_Remote.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F407xx -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/AML_Remote.d" -MT"Core/Src/AML_Remote.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/AML_Remote.o"
+Error: Cannot find the specified linker script. Check the linker settings in the build configuration.
+make: *** [makefile:87: fail-specified-linker-script-missing] Error 2
+make: *** Waiting for unfinished jobs....
+In file included from ../Core/Inc/AML_MotorControl.h:8,
+                 from ../Core/Inc/AML_Remote.h:6,
+                 from ../Core/Src/AML_Remote.c:1:
+../Core/Inc/pid.h:93: warning: ignoring '#pragma diag_suppress ' [-Wunknown-pragmas]
+   93 |         #pragma diag_suppress 177     /* Disable 'unused function' warning */
+      | 
+"make -j16 all" terminated with exit code 2. Build might be incomplete.

@@ -16,6 +16,7 @@
 "e\vl53l0x_api_strings.o"
 "e\vl53l0x_platform.o"
 "e\vl53l0x_platform_log.o"
+"e\aml_leddebug.o"
 "e\stm32f4xx_hal_i2c.o"
 "e\stm32f4xx_hal_i2c_ex.o"
 "e\stm32f4xx_hal_rcc.o"

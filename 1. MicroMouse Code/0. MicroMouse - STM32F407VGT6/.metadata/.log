@@ -1,0 +1,73 @@
+!SESSION 2023-11-12 23:22:50.756 -----------------------------------------------
+eclipse.buildId=Version 1.13.1
+java.version=17.0.6
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_US
+Framework arguments:  E:\1. Phenikaa University\AML\0. Project\5. MicroMouse\3. Github Repo\1. MicroMouse Code\0. MicroMouse - STM32F407VGT6\PCB_V1\.project
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 E:\1. Phenikaa University\AML\0. Project\5. MicroMouse\3. Github Repo\1. MicroMouse Code\0. MicroMouse - STM32F407VGT6\PCB_V1\.project
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2023-11-12 23:23:34.301
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2023-11-12 23:23:34.314
+!MESSAGE Log4j2 initialized with config file E:\1. Phenikaa University\AML\0. Project\5. MicroMouse\3. Github Repo\1. MicroMouse Code\0. MicroMouse - STM32F407VGT6\.metadata\.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2023-11-12 23:23:39.151
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY org.eclipse.cdt.core 1 0 2023-11-12 23:23:48.579
+!MESSAGE Indexed 'PCB_V1' (40 sources, 142 headers) in 7.34 sec: 14,761 declarations; 79,363 references; 6 unresolved inclusions; 1,168 syntax errors; 1,593 unresolved names (1.7%)
+!SESSION 2023-11-12 23:25:29.927 -----------------------------------------------
+eclipse.buildId=Version 1.13.1
+java.version=17.0.6
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_US
+Command-line arguments:  -os win32 -ws win32 -arch x86_64
+
+!ENTRY org.eclipse.core.resources 2 10035 2023-11-12 23:27:16.532
+!MESSAGE The workspace exited with unsaved changes in the previous session; refreshing workspace to recover changes.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2023-11-12 23:27:22.352
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2023-11-12 23:27:22.353
+!MESSAGE Log4j2 initialized with config file E:\1. Phenikaa University\AML\0. Project\5. MicroMouse\3. Github Repo\1. MicroMouse Code\0. MicroMouse - STM32F407VGT6\.metadata\.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2023-11-12 23:27:25.076
+!MESSAGE Started RMI Server, listening on port 41337
+!SESSION 2023-11-12 23:27:43.910 -----------------------------------------------
+eclipse.buildId=Version 1.13.1
+java.version=17.0.6
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_US
+Command-line arguments:  -os win32 -ws win32 -arch x86_64
+
+!ENTRY org.eclipse.core.resources 2 10035 2023-11-12 23:27:52.679
+!MESSAGE The workspace exited with unsaved changes in the previous session; refreshing workspace to recover changes.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2023-11-12 23:27:58.623
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2023-11-12 23:27:58.624
+!MESSAGE Log4j2 initialized with config file E:\1. Phenikaa University\AML\0. Project\5. MicroMouse\3. Github Repo\1. MicroMouse Code\0. MicroMouse - STM32F407VGT6\.metadata\.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2023-11-12 23:28:01.164
+!MESSAGE Started RMI Server, listening on port 41337
+!SESSION 2023-11-12 23:28:20.075 -----------------------------------------------
+eclipse.buildId=Version 1.13.1
+java.version=17.0.6
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_US
+Command-line arguments:  -os win32 -ws win32 -arch x86_64
+
+!ENTRY org.eclipse.core.resources 2 10035 2023-11-12 23:28:25.041
+!MESSAGE The workspace exited with unsaved changes in the previous session; refreshing workspace to recover changes.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2023-11-12 23:28:32.832
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2023-11-12 23:28:32.834
+!MESSAGE Log4j2 initialized with config file E:\1. Phenikaa University\AML\0. Project\5. MicroMouse\3. Github Repo\1. MicroMouse Code\0. MicroMouse - STM32F407VGT6\.metadata\.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2023-11-12 23:28:36.357
+!MESSAGE Started RMI Server, listening on port 41337

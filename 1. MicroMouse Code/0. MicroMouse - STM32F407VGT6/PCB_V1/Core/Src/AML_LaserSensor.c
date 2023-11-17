@@ -1,6 +1,6 @@
 #include "AML_LaserSensor.h"
 
-uint8_t LaserSensorAddress[] = {0x29, 0x59, 0x60, 0x32, 0x57, 0x58};
+uint8_t LaserSensorAddress[] = {0x31, 0x31, 0x32, 0x33, 0x52};
 
 SimpleKalmanFilter KalmanFilter[5];
 
@@ -29,12 +29,12 @@ void AML_LaserSensor_Init(uint8_t i)
     // Enable/Disable Sigma and Signal check
     VL53L0X_SetLimitCheckEnable(Laser[i], VL53L0X_CHECKENABLE_SIGMA_FINAL_RANGE, 1);
     VL53L0X_SetLimitCheckEnable(Laser[i], VL53L0X_CHECKENABLE_SIGNAL_RATE_FINAL_RANGE, 1);
-    VL53L0X_SetLimitCheckValue(Laser[i], VL53L0X_CHECKENABLE_SIGNAL_RATE_FINAL_RANGE, (FixPoint1616_t)(0.1 * 65536));
-    VL53L0X_SetLimitCheckValue(Laser[i], VL53L0X_CHECKENABLE_SIGMA_FINAL_RANGE, (FixPoint1616_t)(60 * 65536));
+    VL53L0X_SetLimitCheckValue(Laser[i], VL53L0X_CHECKENABLE_SIGNAL_RATE_FINAL_RANGE, (FixPoint1616_t)(0.25 * 65536));
+    VL53L0X_SetLimitCheckValue(Laser[i], VL53L0X_CHECKENABLE_SIGMA_FINAL_RANGE, (FixPoint1616_t)(32 * 65536));
     VL53L0X_SetMeasurementTimingBudgetMicroSeconds(Laser[i], 20000);
     VL53L0X_SetVcselPulsePeriod(Laser[i], VL53L0X_VCSEL_PERIOD_PRE_RANGE, 18);
     VL53L0X_SetVcselPulsePeriod(Laser[i], VL53L0X_VCSEL_PERIOD_FINAL_RANGE, 14);
-    
+
     // VL53L0X_StartMeasurement(Laser[i]);
 }
 
@@ -95,15 +95,14 @@ void AML_LaserSensor_Setup()
     Laser[BL] = &Dev_Val[BL];
     Laser[BL]->I2cHandle = &hi2c1;
     Laser[BL]->I2cDevAddr = 0x52;
-    VL53L0X_SetDeviceAddress(Laser[BL], LaserSensorAddress[BL]);
-    Laser[BL]->I2cDevAddr = LaserSensorAddress[BL];
+    // VL53L0X_SetDeviceAddress(Laser[BL], LaserSensorAddress[BL]);
+    // Laser[BL]->I2cDevAddr = LaserSensorAddress[BL];
     AML_LaserSensor_Init(BL);
 
     for (uint8_t i = 0; i < 5; i++)
     {
         SimpleKalmanFilter_Init(&KalmanFilter[i], 0.01, 0.01, 0.001);
     }
-
 }
 
 void AML_LaserSensor_ReadAll()
@@ -116,10 +115,20 @@ void AML_LaserSensor_ReadAll()
     }
 }
 
-uint16_t AML_LaserSensor_ReadSingle(uint8_t name)
+int32_t AML_LaserSensor_ReadSingle(uint8_t name)
 {
     // VL53L0X_GetRangingMeasurementData(Laser[name], &SensorValue[name]);
     VL53L0X_PerformSingleRangingMeasurement(Laser[name], &SensorValue[name]);
+
+    if (SensorValue[name].RangeMilliMeter > 500)
+    {
+        SensorValue[name].RangeMilliMeter = 500;
+    }
+    else if (SensorValue[name].RangeMilliMeter < 0)
+    {
+        SensorValue[name].RangeMilliMeter = 0;
+    }
+
     SensorValue[name].RangeMilliMeter = (uint16_t)SimpleKalmanFilter_updateEstimate(&KalmanFilter[name], SensorValue[name].RangeMilliMeter);
     return SensorValue[name].RangeMilliMeter;
 }

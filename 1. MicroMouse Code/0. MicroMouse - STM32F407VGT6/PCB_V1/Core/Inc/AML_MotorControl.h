@@ -6,6 +6,8 @@
 #include "AML_LaserSensor.h"
 #include "AML_Encoder.h"
 #include "pid.h"
+#include <stdint.h>
+#include <limits.h>
 // #include "math.h"
 
 void AML_MotorControl_Setup();

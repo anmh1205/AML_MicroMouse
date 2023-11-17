@@ -20,6 +20,6 @@ typedef enum
 
 void AML_LaserSensor_Setup();
 void AML_LaserSensor_ReadAll();
-uint16_t AML_LaserSensor_ReadSingle(uint8_t name);
+int32_t AML_LaserSensor_ReadSingle(uint8_t name);
 
 #endif

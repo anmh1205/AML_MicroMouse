@@ -67,6 +67,7 @@
     "aml_encoder.h": "c",
     "aml_remote.h": "c",
     "windows.h": "c",
-    "aml_mpusensor.h": "c"
+    "aml_mpusensor.h": "c",
+    "stm32f4xx_hal.h": "c"
   }
 }

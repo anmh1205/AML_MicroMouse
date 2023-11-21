@@ -7,9 +7,6 @@ pcb_v1\vl53l0x_api_ranging.o: ../Core/Inc/vl53l0x_types.h
 pcb_v1\vl53l0x_api_ranging.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 pcb_v1\vl53l0x_api_ranging.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
 pcb_v1\vl53l0x_api_ranging.o: ../Core/Inc/vl53l0x_platform.h
-pcb_v1\vl53l0x_api_ranging.o: ../Core/Inc/vl53l0x_platform_log.h
-pcb_v1\vl53l0x_api_ranging.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
-pcb_v1\vl53l0x_api_ranging.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 pcb_v1\vl53l0x_api_ranging.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
 pcb_v1\vl53l0x_api_ranging.o: ../Core/Inc/stm32f4xx_hal_conf.h
 pcb_v1\vl53l0x_api_ranging.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h
@@ -41,5 +38,9 @@ pcb_v1\vl53l0x_api_ranging.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_
 pcb_v1\vl53l0x_api_ranging.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h
 pcb_v1\vl53l0x_api_ranging.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h
 pcb_v1\vl53l0x_api_ranging.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
+pcb_v1\vl53l0x_api_ranging.o: ../Core/Inc/vl53l0x_platform_log.h
+pcb_v1\vl53l0x_api_ranging.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+pcb_v1\vl53l0x_api_ranging.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+pcb_v1\vl53l0x_api_ranging.o: ../Core/Inc/vl53l0x_tof.h
 pcb_v1\vl53l0x_api_ranging.o: ../Core/Inc/vl53l0x_api_core.h
 pcb_v1\vl53l0x_api_ranging.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h

@@ -18,14 +18,18 @@ void HAL_UART_TxHalfCpltCallback(UART_HandleTypeDef *huart)
 
     if (huart->Instance == USART3)
     {
-       
     }
 }
 
 void AML_MPUSensor_ResetAngle()
 {
-    SaveAngle = 0;
+    HAL_UART_DMAStop(&huart3);
     HAL_UART_Transmit(&huart3, ResetCommand, 3, 1000);
+    SaveAngle = 0;
+    PreviousAngle = 0;
+    Angle = 0;
+    HAL_Delay(10);
+    HAL_UART_Receive_DMA(&huart3, MPUData, 33);
 }
 
 void AML_MPUSensor_Setup()
@@ -53,31 +57,28 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
         {
             handle();
             return;
-            // error = 1;
         }
 
-        // if (!error)
-        // {
         PreviousAngle = Angle;
         Angle = (((MPUData[6] << 8) | MPUData[5]) / 32768.0) * 180;
-        // memset(MPUData, 0, 33);
 
-        if (Angle != 0)
+        // if (Angle != 0)
+        // {
+        if (Angle - PreviousAngle > 250) // 0 -> 360 degree
         {
-            if (Angle - PreviousAngle > 350) // 0 -> 360 degree
-            {
-                SaveAngle = 360;
-            }
-            else if (Angle - PreviousAngle < -350) // 360 -> 0 degree
-            {
-                SaveAngle = 0;
-            }
+            SaveAngle = 360;
         }
-
-        HAL_UART_Receive_DMA(&huart3, MPUData, 33);
+        else if (Angle - PreviousAngle < -250) // 360 -> 0 degree
+        {
+            SaveAngle = 0;
+        }
         // }
 
-        // error = 0;
+        HAL_UART_Receive_DMA(&huart3, MPUData, 33);
+    }
+    else if (huart->Instance == USART6)
+    {
+        AML_Remote_Handle();
     }
 }
 

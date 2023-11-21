@@ -6,6 +6,7 @@
 #include "main.h"
 #include "KalmanFilter.h"
 #include "AML_Remote.h"
+#include "AML_Parameter.h"
 
 
 
@@ -21,5 +22,7 @@ typedef enum
 void AML_LaserSensor_Setup();
 void AML_LaserSensor_ReadAll();
 int32_t AML_LaserSensor_ReadSingle(uint8_t name);
+
+uint8_t AML_LaserSensor_WallFavor();
 
 #endif

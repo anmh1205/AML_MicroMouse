@@ -1,30 +1,16 @@
-/*******************************************************************************
- Copyright © 2016, STMicroelectronics International N.V.
- All rights reserved.
-
- Redistribution and use in source and binary forms, with or without
- modification, are permitted provided that the following conditions are met:
- * Redistributions of source code must retain the above copyright
- notice, this list of conditions and the following disclaimer.
- * Redistributions in binary form must reproduce the above copyright
- notice, this list of conditions and the following disclaimer in the
- documentation and/or other materials provided with the distribution.
- * Neither the name of STMicroelectronics nor the
- names of its contributors may be used to endorse or promote products
- derived from this software without specific prior written permission.
-
- THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND
- NON-INFRINGEMENT OF INTELLECTUAL PROPERTY RIGHTS ARE DISCLAIMED.
- IN NO EVENT SHALL STMICROELECTRONICS INTERNATIONAL N.V. BE LIABLE FOR ANY
- DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
- ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- ******************************************************************************/
+/**
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
+  */
 
 #include "vl53l0x_api.h"
 #include "vl53l0x_tuning.h"
@@ -369,7 +355,6 @@ VL53L0X_Error VL53L0X_DataInit(VL53L0X_DEV Dev)
 	VL53L0X_Error Status = VL53L0X_ERROR_NONE;
 	VL53L0X_DeviceParameters_t CurrentParameters;
 	int i;
-	uint8_t StopVariable;
 
 	LOG_FUNCTION_START("");
 
@@ -425,15 +410,6 @@ VL53L0X_Error VL53L0X_DataInit(VL53L0X_DEV Dev)
 
 	/* Use internal default settings */
 	PALDevDataSet(Dev, UseInternalTuningSettings, 1);
-
-	Status |= VL53L0X_WrByte(Dev, 0x80, 0x01);
-	Status |= VL53L0X_WrByte(Dev, 0xFF, 0x01);
-	Status |= VL53L0X_WrByte(Dev, 0x00, 0x00);
-	Status |= VL53L0X_RdByte(Dev, 0x91, &StopVariable);
-	PALDevDataSet(Dev, StopVariable, StopVariable);
-	Status |= VL53L0X_WrByte(Dev, 0x00, 0x01);
-	Status |= VL53L0X_WrByte(Dev, 0xFF, 0x00);
-	Status |= VL53L0X_WrByte(Dev, 0x80, 0x00);
 
 	/* Enable all check */
 	for (i = 0; i < VL53L0X_CHECKENABLE_NUMBER_OF_CHECKS; i++) {
@@ -560,7 +536,7 @@ VL53L0X_Error VL53L0X_StaticInit(VL53L0X_DEV Dev)
 	uint32_t refSpadCount = 0;
 	uint8_t ApertureSpads = 0;
 	uint8_t vcselPulsePeriodPCLK;
-	uint32_t seqTimeoutMicroSecs;
+	FixPoint1616_t seqTimeoutMilliSecs;
 
 	LOG_FUNCTION_START("");
 
@@ -694,32 +670,32 @@ VL53L0X_Error VL53L0X_StaticInit(VL53L0X_DEV Dev)
 
 	/* Store pre-range timeout */
 	if (Status == VL53L0X_ERROR_NONE) {
-		Status = get_sequence_step_timeout(
+		Status = VL53L0X_GetSequenceStepTimeout(
 			Dev,
 			VL53L0X_SEQUENCESTEP_PRE_RANGE,
-			&seqTimeoutMicroSecs);
+			&seqTimeoutMilliSecs);
 	}
 
 	if (Status == VL53L0X_ERROR_NONE) {
 		VL53L0X_SETDEVICESPECIFICPARAMETER(
 			Dev,
 			PreRangeTimeoutMicroSecs,
-			seqTimeoutMicroSecs);
+			seqTimeoutMilliSecs);
 	}
 
 	/* Store final-range timeout */
 	if (Status == VL53L0X_ERROR_NONE) {
-		Status = get_sequence_step_timeout(
+		Status = VL53L0X_GetSequenceStepTimeout(
 			Dev,
 			VL53L0X_SEQUENCESTEP_FINAL_RANGE,
-			&seqTimeoutMicroSecs);
+			&seqTimeoutMilliSecs);
 	}
 
 	if (Status == VL53L0X_ERROR_NONE) {
 		VL53L0X_SETDEVICESPECIFICPARAMETER(
 			Dev,
 			FinalRangeTimeoutMicroSecs,
-			seqTimeoutMicroSecs);
+			seqTimeoutMilliSecs);
 	}
 
 	LOG_FUNCTION_END(Status);
@@ -755,8 +731,6 @@ VL53L0X_Error VL53L0X_ResetDevice(VL53L0X_DEV Dev)
 		} while (Byte != 0x00);
 	}
 
-	VL53L0X_PollingDelay(Dev);
-
 	/* Release reset */
 	Status = VL53L0X_WrByte(Dev, VL53L0X_REG_SOFT_RESET_GO2_SOFT_RESET_N,
 		0x01);
@@ -768,8 +742,6 @@ VL53L0X_Error VL53L0X_ResetDevice(VL53L0X_DEV Dev)
 			VL53L0X_REG_IDENTIFICATION_MODEL_ID, &Byte);
 		} while (Byte == 0x00);
 	}
-
-	VL53L0X_PollingDelay(Dev);
 
 	/* Set PAL State to VL53L0X_STATE_POWERDOWN */
 	if (Status == VL53L0X_ERROR_NONE)
@@ -1305,14 +1277,17 @@ VL53L0X_Error VL53L0X_GetSequenceStepTimeout(VL53L0X_DEV Dev,
 {
 	VL53L0X_Error Status = VL53L0X_ERROR_NONE;
 	uint32_t TimeoutMicroSeconds;
+	uint32_t WholeNumber_ms = 0;
+	uint32_t Fraction_ms = 0;
 	LOG_FUNCTION_START("");
 
 	Status = get_sequence_step_timeout(Dev, SequenceStepId,
 		&TimeoutMicroSeconds);
 	if (Status == VL53L0X_ERROR_NONE) {
-		TimeoutMicroSeconds <<= 8;
-		*pTimeOutMilliSecs = (TimeoutMicroSeconds + 500)/1000;
-		*pTimeOutMilliSecs <<= 8;
+		WholeNumber_ms = TimeoutMicroSeconds / 1000;
+		Fraction_ms = TimeoutMicroSeconds - (WholeNumber_ms * 1000);
+		*pTimeOutMilliSecs = (WholeNumber_ms << 16)
+			+ (((Fraction_ms * 0xffff) + 500) / 1000);
 	}
 
 	LOG_FUNCTION_END(Status);
@@ -2021,7 +1996,7 @@ VL53L0X_Error VL53L0X_SetDmaxCalParameters(VL53L0X_DEV Dev,
 	 * value are get from NVM */
 	if ((RangeMilliMeter == 0) || (SignalRateRtnMegaCps == 0)) {
 		/* NVM parameters */
-		/* Run VL53L0X_get_info_from_device wit option 4 to get
+		/* Run VL53L0X_get_info_from_device with option 4 to get
 		 * signal rate at 400 mm if the value have been already
 		 * get this function will return with no access to device */
 		VL53L0X_get_info_from_device(Dev, 4);
@@ -2215,14 +2190,6 @@ VL53L0X_Error VL53L0X_StartMeasurement(VL53L0X_DEV Dev)
 	/* Get Current DeviceMode */
 	VL53L0X_GetDeviceMode(Dev, &DeviceMode);
 
-	Status = VL53L0X_WrByte(Dev, 0x80, 0x01);
-	Status = VL53L0X_WrByte(Dev, 0xFF, 0x01);
-	Status = VL53L0X_WrByte(Dev, 0x00, 0x00);
-	Status = VL53L0X_WrByte(Dev, 0x91, PALDevDataGet(Dev, StopVariable));
-	Status = VL53L0X_WrByte(Dev, 0x00, 0x01);
-	Status = VL53L0X_WrByte(Dev, 0xFF, 0x00);
-	Status = VL53L0X_WrByte(Dev, 0x80, 0x00);
-
 	switch (DeviceMode) {
 	case VL53L0X_DEVICEMODE_SINGLE_RANGING:
 		Status = VL53L0X_WrByte(Dev, VL53L0X_REG_SYSRANGE_START, 0x01);
@@ -2291,14 +2258,7 @@ VL53L0X_Error VL53L0X_StopMeasurement(VL53L0X_DEV Dev)
 	VL53L0X_Error Status = VL53L0X_ERROR_NONE;
 	LOG_FUNCTION_START("");
 
-	Status = VL53L0X_WrByte(Dev, VL53L0X_REG_SYSRANGE_START,
-	VL53L0X_REG_SYSRANGE_MODE_SINGLESHOT);
-
-	Status = VL53L0X_WrByte(Dev, 0xFF, 0x01);
-	Status = VL53L0X_WrByte(Dev, 0x00, 0x00);
-	Status = VL53L0X_WrByte(Dev, 0x91, 0x00);
-	Status = VL53L0X_WrByte(Dev, 0x00, 0x01);
-	Status = VL53L0X_WrByte(Dev, 0xFF, 0x00);
+	Status = VL53L0X_WrByte(Dev, VL53L0X_REG_SYSRANGE_START, 0x00);
 
 	if (Status == VL53L0X_ERROR_NONE) {
 		/* Set PAL State to Idle */
@@ -2520,20 +2480,13 @@ VL53L0X_Error VL53L0X_GetMeasurementRefSignal(VL53L0X_DEV Dev,
 	FixPoint1616_t *pMeasurementRefSignal)
 {
 	VL53L0X_Error Status = VL53L0X_ERROR_NONE;
-	uint8_t SignalRefClipLimitCheckEnable = 0;
 	LOG_FUNCTION_START("");
 
-	Status = VL53L0X_GetLimitCheckEnable(Dev,
-			VL53L0X_CHECKENABLE_SIGNAL_REF_CLIP,
-			&SignalRefClipLimitCheckEnable);
-	if (SignalRefClipLimitCheckEnable != 0) {
-		*pMeasurementRefSignal = PALDevDataGet(Dev, LastSignalRefMcps);
-	} else {
-		Status = VL53L0X_ERROR_INVALID_COMMAND;
-	}
-	LOG_FUNCTION_END(Status);
+	*pMeasurementRefSignal = PALDevDataGet(Dev, LastSignalRefMcps);
 
+	LOG_FUNCTION_END(Status);
 	return Status;
+
 }
 
 VL53L0X_Error VL53L0X_GetHistogramMeasurementData(VL53L0X_DEV Dev,
@@ -2849,17 +2802,6 @@ VL53L0X_Error VL53L0X_GetStopCompletedStatus(VL53L0X_DEV Dev,
 		Status = VL53L0X_WrByte(Dev, 0xFF, 0x0);
 
 	*pStopStatus = Byte;
-
-	if (Byte == 0) {
-		Status = VL53L0X_WrByte(Dev, 0x80, 0x01);
-		Status = VL53L0X_WrByte(Dev, 0xFF, 0x01);
-		Status = VL53L0X_WrByte(Dev, 0x00, 0x00);
-		Status = VL53L0X_WrByte(Dev, 0x91,
-			PALDevDataGet(Dev, StopVariable));
-		Status = VL53L0X_WrByte(Dev, 0x00, 0x01);
-		Status = VL53L0X_WrByte(Dev, 0xFF, 0x00);
-		Status = VL53L0X_WrByte(Dev, 0x80, 0x00);
-	}
 
 	LOG_FUNCTION_END(Status);
 	return Status;

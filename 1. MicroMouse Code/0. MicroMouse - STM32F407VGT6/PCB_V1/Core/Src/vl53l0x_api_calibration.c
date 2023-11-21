@@ -1,30 +1,16 @@
-/*******************************************************************************
- Copyright © 2016, STMicroelectronics International N.V.
- All rights reserved.
-
- Redistribution and use in source and binary forms, with or without
- modification, are permitted provided that the following conditions are met:
- * Redistributions of source code must retain the above copyright
- notice, this list of conditions and the following disclaimer.
- * Redistributions in binary form must reproduce the above copyright
- notice, this list of conditions and the following disclaimer in the
- documentation and/or other materials provided with the distribution.
- * Neither the name of STMicroelectronics nor the
- names of its contributors may be used to endorse or promote products
- derived from this software without specific prior written permission.
-
- THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND
- NON-INFRINGEMENT OF INTELLECTUAL PROPERTY RIGHTS ARE DISCLAIMED.
- IN NO EVENT SHALL STMICROELECTRONICS INTERNATIONAL N.V. BE LIABLE FOR ANY
- DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
- ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- ******************************************************************************/
+/**
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
+  */
 
 #include "vl53l0x_api.h"
 #include "vl53l0x_api_core.h"
@@ -704,7 +690,7 @@ VL53L0X_Error VL53L0X_perform_ref_spad_management(VL53L0X_DEV Dev,
 	 * signal rate and should be performed once during initialization.
 	 *
 	 * Either aperture or non-aperture spads are applied but never both.
-	 * Firstly non-aperture spads are set, begining with 5 spads, and
+	 * Firstly non-aperture spads are set, beginning with 5 spads, and
 	 * increased one spad at a time until the closest measurement to the
 	 * target rate is achieved.
 	 *
@@ -860,19 +846,16 @@ VL53L0X_Error VL53L0X_perform_ref_spad_management(VL53L0X_DEV Dev,
 				break;
 			}
 
+			(refSpadCount_int)++;
+
 			/* Cannot combine Aperture and Non-Aperture spads, so
 			 * ensure the current spad is of the correct type.
 			 */
 			if (is_aperture((uint32_t)startSelect + nextGoodSpad) !=
 					needAptSpads) {
-				/* At this point we have enabled the maximum
-				 * number of Aperture spads.
-				 */
-				complete = 1;
+				Status = VL53L0X_ERROR_REF_SPAD_INIT;
 				break;
 			}
-
-			(refSpadCount_int)++;
 
 			currentSpadIndex = nextGoodSpad;
 			Status = enable_spad_bit(

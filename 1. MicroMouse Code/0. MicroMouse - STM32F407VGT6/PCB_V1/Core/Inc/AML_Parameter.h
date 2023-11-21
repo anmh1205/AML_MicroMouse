@@ -1,0 +1,35 @@
+#ifndef AML_Parameter_H
+#define AML_Parameter_H
+
+#include "stm32f4xx.h"
+
+// store all the parameters
+
+#define NO_RIGHT_WALL 255
+#define NO_LEFT_WALL 265
+
+#define RIGHT_WALL 240
+#define LEFT_WALL 260
+#define FRONT_WALL 250
+
+#define WALL_IN_FRONT_OPENING_RIGHT 315
+#define WALL_IN_FRONT_OPENING_LEFT 330
+
+#define WALL_IN_FRONT_RIGHT_SENSOR 960
+#define WALL_IN_FRONT_LEFT_SENSOR 1080
+
+#define NO_WALL_IN_FRONT_RIGHT_SENSOR 1200
+#define NO_WALL_IN_FRONT_LEFT_SENSOR 1300
+
+#define FLOOD_WALL_IN_FRONT_RIGHT 800
+#define FLOOD_WALL_IN_FRONT_LEFT 940
+#define FLOOD_WALL_IN_FRONT 870
+
+#define FLOOD_BACK_RIGHT_WALL 220
+#define FLOOD_BACK_LEFT_WALL 220
+
+#define ENCODER_TICKS_ONE_CELL 15150
+
+
+
+#endif // AML_Parameter_H

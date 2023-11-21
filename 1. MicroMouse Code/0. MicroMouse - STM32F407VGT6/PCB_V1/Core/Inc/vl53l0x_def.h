@@ -1,38 +1,19 @@
-/*******************************************************************************
-Copyright © 2016, STMicroelectronics International N.V.
-All rights reserved.
-
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met:
-	* Redistributions of source code must retain the above copyright
-	  notice, this list of conditions and the following disclaimer.
-	* Redistributions in binary form must reproduce the above copyright
-	  notice, this list of conditions and the following disclaimer in the
-	  documentation and/or other materials provided with the distribution.
-	* Neither the name of STMicroelectronics nor the
-	  names of its contributors may be used to endorse or promote products
-	  derived from this software without specific prior written permission.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
-ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND
-NON-INFRINGEMENT OF INTELLECTUAL PROPERTY RIGHTS ARE DISCLAIMED.
-IN NO EVENT SHALL STMICROELECTRONICS INTERNATIONAL N.V. BE LIABLE FOR ANY
-DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
-ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*******************************************************************************/
-
 /**
- * @file VL53L0X_def.h
- *
- * @brief Type definitions for VL53L0X API.
- *
- */
-
+  ******************************************************************************
+  * @file    VL53L0X_def.h
+  * @brief   Type definitions for VL53L0X API
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
+  */
 
 #ifndef _VL53L0X_DEF_H_
 #define _VL53L0X_DEF_H_
@@ -80,10 +61,10 @@ extern "C" {
 /** VL53L0X PAL IMPLEMENTATION minor version */
 #define VL53L0X_IMPLEMENTATION_VER_MINOR	  0
 /** VL53L0X PAL IMPLEMENTATION sub version */
-#define VL53L0X_IMPLEMENTATION_VER_SUB	  2
+#define VL53L0X_IMPLEMENTATION_VER_SUB	  0
 /** VL53L0X PAL IMPLEMENTATION sub version */
-#define VL53L0X_IMPLEMENTATION_VER_REVISION	  4823
-#define VL53L0X_DEFAULT_MAX_LOOP 2000
+#define VL53L0X_IMPLEMENTATION_VER_REVISION	  4570
+#define VL53L0X_DEFAULT_MAX_LOOP 200
 #define VL53L0X_MAX_STRING_LENGTH 32
 
 
@@ -323,7 +304,7 @@ typedef struct {
 		 *	 reflectance.*/
 	FixPoint1616_t AmbientRateRtnMegaCps;
 		/*!< Return ambient rate (MCPS)\n these is a 16.16 fix point
-		 *	value, which is effectively a measure of the ambien
+		 *	value, which is effectively a measure of the ambient
 		 *	t light.*/
 
 	uint16_t EffectiveSpadRtnCount;
@@ -463,8 +444,6 @@ typedef struct {
 	uint16_t SigmaEstEffAmbWidth;
 	/*!< Effective Ambient width for sigma estimate in 1/100th of ns
 	* e.g. 500 = 5.0ns */
-	uint8_t StopVariable;
-	/*!< StopVariable used during the stop sequence */
 	uint16_t targetRefRate;
 	/*!< Target Ambient Rate for Ref spad management */
 	FixPoint1616_t SigmaEstimate;

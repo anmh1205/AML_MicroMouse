@@ -33,22 +33,26 @@ void setRightEncoderValue(uint32_t value)
 {
 	rightEncoderValue = value;
 }
-void resetLeftEncoder(void) {
+void resetLeftEncoder(void)
+{
 	HAL_TIM_Encoder_Stop(&htim2, TIM_CHANNEL_ALL);
 	TIM2->CNT = MAX_ENCODER_VALUE;
 	HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_ALL);
 }
-void resetRightEncoder(void) {
+void resetRightEncoder(void)
+{
 	HAL_TIM_Encoder_Stop(&htim5, TIM_CHANNEL_ALL);
 	TIM5->CNT = MAX_ENCODER_VALUE;
 	HAL_TIM_Encoder_Start(&htim5, TIM_CHANNEL_ALL);
 }
-void advanceTicks(uint32_t ticks) {
+void advanceTicks(uint32_t ticks)
+{
 	uint32_t encoder_val = MAX_ENCODER_VALUE;
 	resetLeftEncoder();
-	while(encoder_val > (MAX_ENCODER_VALUE - ticks) ) {
+	while (encoder_val > (MAX_ENCODER_VALUE - ticks))
+	{
 		if (getLeftADCValue() >= WALL_IN_FRONT_LEFT_SENSOR &&
-				getRightADCValue() >= WALL_IN_FRONT_RIGHT_SENSOR)
+			getRightADCValue() >= WALL_IN_FRONT_RIGHT_SENSOR)
 		{
 			break;
 		}
@@ -58,13 +62,13 @@ void advanceTicks(uint32_t ticks) {
 	resetLeftEncoder();
 }
 
-void uncontrolledAdvanceTicks(uint32_t ticks) {
+void uncontrolledAdvanceTicks(uint32_t ticks)
+{
 	uint32_t encoder_val = MAX_ENCODER_VALUE;
 	resetLeftEncoder();
-	while(encoder_val > (MAX_ENCODER_VALUE - ticks) ) {
+	while (encoder_val > (MAX_ENCODER_VALUE - ticks))
+	{
 		setLeftEncoderValue(TIM2->CNT);
 		encoder_val = getLeftEncoderValue();
 	}
 }
-
-

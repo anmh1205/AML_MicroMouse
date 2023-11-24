@@ -11,9 +11,7 @@
 #include "stdlib.h"
 #include "string.h"
 
-
-void AML_Remote_Setup();
-void AML_Remote_Handle();
-
+void AML_Remote_Setup(void);
+void AML_Remote_Handle(void);
 
 #endif // AML_REMOTE_H

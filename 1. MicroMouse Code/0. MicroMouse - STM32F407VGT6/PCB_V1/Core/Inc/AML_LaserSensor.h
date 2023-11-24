@@ -19,10 +19,10 @@ typedef enum
     BL
 } LaserName;
 
-void AML_LaserSensor_Setup();
-void AML_LaserSensor_ReadAll();
+void AML_LaserSensor_Setup(void);
+void AML_LaserSensor_ReadAll(void);
 int32_t AML_LaserSensor_ReadSingle(uint8_t name);
 
-uint8_t AML_LaserSensor_WallFavor();
+uint8_t AML_LaserSensor_WallFavor(void);
 
 #endif

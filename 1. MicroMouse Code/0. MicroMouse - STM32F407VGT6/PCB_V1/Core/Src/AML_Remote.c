@@ -11,7 +11,7 @@ uint8_t SuccessString[] = "S";
 
 double ki, kp, kd;
 
-void AML_Remote_Setup()
+void AML_Remote_Setup(void)
 {
     HAL_UART_Receive_IT(&huart6, &RemoteBuffer, 1);
 }

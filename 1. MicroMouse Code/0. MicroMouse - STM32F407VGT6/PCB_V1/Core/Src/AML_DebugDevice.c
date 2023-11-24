@@ -2,10 +2,15 @@
 
 uint16_t Led[8] = {GPIO_PIN_0, GPIO_PIN_1, GPIO_PIN_2, GPIO_PIN_3, GPIO_PIN_4, GPIO_PIN_5, GPIO_PIN_8, GPIO_PIN_10};
 
-void AML_DebugDevice_BuzzerBeep()
+void AML_DebugDevice_BuzzerBeep(uint16_t delay)
 {
+    uint32_t InitTime = HAL_GetTick();
+
     HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, GPIO_PIN_RESET);
-    HAL_Delay(20);
+
+    while (HAL_GetTick() - InitTime < (uint32_t)delay)
+        ;
+
     HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, GPIO_PIN_SET);
 }
 

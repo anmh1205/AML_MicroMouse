@@ -60,6 +60,7 @@
     "main.h": "c",
     "flood.h": "c",
     "motors.h": "c",
-    "adc.h": "c"
+    "adc.h": "c",
+    "FLOOD.H": "cpp"
   }
 }

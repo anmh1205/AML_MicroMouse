@@ -11,9 +11,11 @@ typedef enum
 
 uint16_t Button[] = {GPIO_PIN_1, GPIO_PIN_2, GPIO_PIN_3, GPIO_PIN_4, GPIO_PIN_5};
 extern int16_t debug[100];
-extern uint8_t ReadButton;
 
-void AML_Keyboard_Setup()
+extern uint8_t ReadButton;
+extern uint8_t ButtonPressed;
+
+void AML_Keyboard_Setup(void)
 {
 }
 
@@ -25,7 +27,7 @@ GPIO_PinState AML_Keyboard_GetKey(uint8_t key)
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
     UNUSED(GPIO_Pin);
-    
+
     if (GPIO_Pin == Button[SW1])
     {
         ReadButton = 0;
@@ -48,4 +50,6 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
     {
         ReadButton = 4;
     }
+
+    ButtonPressed = 1;
 }

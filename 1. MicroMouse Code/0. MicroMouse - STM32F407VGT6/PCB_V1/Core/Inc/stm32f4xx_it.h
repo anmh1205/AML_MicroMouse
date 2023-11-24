@@ -27,7 +27,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "AML_MotorControl.h"
+// #include "AML_MotorControl.h"
+// #include "AML_DebugDevice.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
@@ -63,7 +64,6 @@ void DMA1_Stream1_IRQHandler(void);
 void EXTI9_5_IRQHandler(void);
 void TIM1_BRK_TIM9_IRQHandler(void);
 void USART3_IRQHandler(void);
-void TIM8_BRK_TIM12_IRQHandler(void);
 void USART6_IRQHandler(void);
 /* USER CODE BEGIN EFP */
 

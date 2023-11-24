@@ -6,8 +6,8 @@
 #include "pid.h"
 #include "AML_Remote.h"
 
-void AML_MPUSensor_Setup();
-void AML_MPUSensor_ResetAngle();
-double AML_MPUSensor_GetAngle();
+void AML_MPUSensor_Setup(void);
+void AML_MPUSensor_ResetAngle(void);
+double AML_MPUSensor_GetAngle(void);
 
 #endif /* test_h */

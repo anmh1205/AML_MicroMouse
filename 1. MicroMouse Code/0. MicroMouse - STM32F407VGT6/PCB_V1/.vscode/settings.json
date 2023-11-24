@@ -68,6 +68,7 @@
     "aml_remote.h": "c",
     "windows.h": "c",
     "aml_mpusensor.h": "c",
-    "stm32f4xx_hal.h": "c"
+    "stm32f4xx_hal.h": "c",
+    "aml_debugdevice.h": "c"
   }
 }

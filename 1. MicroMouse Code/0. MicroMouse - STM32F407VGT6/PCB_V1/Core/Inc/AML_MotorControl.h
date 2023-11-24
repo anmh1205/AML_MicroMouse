@@ -13,7 +13,7 @@
 #include <limits.h>
 // #include "math.h"
 
-void AML_MotorControl_Setup();
+void AML_MotorControl_Setup(void);
 
 void AML_MotorControl_PIDSetTunnings(double Kp, double Ki, double Kd);
 
@@ -25,23 +25,24 @@ void AML_MotorControl_SetMouseSpeed(int32_t speed);
 
 void AML_MotorControl_SetLeftSpeed(double speed, GPIO_PinState direction);
 void AML_MotorControl_SetRightSpeed(double speed, GPIO_PinState direction);
-void AML_MotorControl_Stop();
+void AML_MotorControl_Stop(void);
 
-void AML_MotorControl_SetLeftWallValue();
-void AML_MotorControl_SetRightWallValue();
+void AML_MotorControl_SetLeftWallValue(void);
+void AML_MotorControl_SetRightWallValue(void);
 
-void AML_MotorControl_LeftWallFollow();
-void AML_MotorControl_RightWallFollow();
-void AML_MotorControl_GoStraight();
-void AML_MotorControl_TurnOnWallFollow();
-void AML_MotorControl_TurnOffWallFollow();
+void AML_MotorControl_LeftWallFollow(void);
+void AML_MotorControl_RightWallFollow(void);
+void AML_MotorControl_GoStraight(void);
+void AML_MotorControl_TurnOnWallFollow(void);
+void AML_MotorControl_TurnOffWallFollow(void);
 
-void AML_MotorControl_TurnLeft90();
-void AML_MotorControl_TurnRight90();
-void AML_MotorControl_TurnLeft180();
-void AML_MotorControl_TurnRight180();
+void AML_MotorControl_TurnLeft90(void);
+void AML_MotorControl_TurnRight90(void);
+void AML_MotorControl_TurnLeft180(void);
+void AML_MotorControl_TurnRight180(void);
 
-void AML_MotorControl_LeftStillTurn();
-void AML_MotorControl_RightStillTurn();
+void AML_MotorControl_LeftStillTurn(void);
+void AML_MotorControl_RightStillTurn(void);
+void AML_MotorControl_BackStillTurn(void);
 
 #endif // AML_MOTORCONTROL_H

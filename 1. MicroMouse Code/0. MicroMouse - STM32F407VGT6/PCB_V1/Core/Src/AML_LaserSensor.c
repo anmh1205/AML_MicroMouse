@@ -1,6 +1,6 @@
 #include "AML_LaserSensor.h"
 
-uint8_t LaserSensorAddress[] = {0x31, 0x35, 0x40, 0x45, 0x52};
+uint8_t LaserSensorAddress[] = {0x29, 0x59, 0x60, 0x32, 0x57};
 
 SimpleKalmanFilter KalmanFilter[5];
 
@@ -23,21 +23,23 @@ void AML_LaserSensor_Init(uint8_t i)
     VL53L0X_PerformRefCalibration(Laser[i], &VhvSettings, &PhaseCal);
     VL53L0X_PerformRefSpadManagement(Laser[i], &refSpadCount, &isApertureSpads);
 
-    VL53L0X_SetDeviceMode(Laser[i], VL53L0X_DEVICEMODE_SINGLE_RANGING);
+    // VL53L0X_SetDeviceMode(Laser[i], VL53L0X_DEVICEMODE_SINGLE_RANGING);
+    VL53L0X_SetDeviceMode(Laser[i], VL53L0X_DEVICEMODE_CONTINUOUS_RANGING);
+    VL53L0X_StartMeasurement(Laser[i]);
 
     // Enable/Disable Sigma and Signal check
     VL53L0X_SetLimitCheckEnable(Laser[i], VL53L0X_CHECKENABLE_SIGMA_FINAL_RANGE, 1);
     VL53L0X_SetLimitCheckEnable(Laser[i], VL53L0X_CHECKENABLE_SIGNAL_RATE_FINAL_RANGE, 1);
-    VL53L0X_SetLimitCheckValue(Laser[i], VL53L0X_CHECKENABLE_SIGNAL_RATE_FINAL_RANGE, (FixPoint1616_t)(0.1 * 65536));
-    VL53L0X_SetLimitCheckValue(Laser[i], VL53L0X_CHECKENABLE_SIGMA_FINAL_RANGE, (FixPoint1616_t)(60 * 65536));
-    VL53L0X_SetMeasurementTimingBudgetMicroSeconds(Laser[i], 33000);
+    VL53L0X_SetLimitCheckValue(Laser[i], VL53L0X_CHECKENABLE_SIGNAL_RATE_FINAL_RANGE, (FixPoint1616_t)(0.25 * 65536));
+    VL53L0X_SetLimitCheckValue(Laser[i], VL53L0X_CHECKENABLE_SIGMA_FINAL_RANGE, (FixPoint1616_t)(32 * 65536));
+    VL53L0X_SetMeasurementTimingBudgetMicroSeconds(Laser[i], 20000);
     VL53L0X_SetVcselPulsePeriod(Laser[i], VL53L0X_VCSEL_PERIOD_PRE_RANGE, 18);
     VL53L0X_SetVcselPulsePeriod(Laser[i], VL53L0X_VCSEL_PERIOD_FINAL_RANGE, 14);
 }
 
-void AML_LaserSensor_Setup()
+void AML_LaserSensor_Setup(void)
 {
-    uint8_t DelayTime = 50;
+    uint8_t DelayTime = 70;
     // disable all laser
     HAL_GPIO_WritePin(XSHUT_FL_GPIO_Port, XSHUT_FL_Pin, GPIO_PIN_RESET);
     HAL_GPIO_WritePin(XSHUT_FF_GPIO_Port, XSHUT_FF_Pin, GPIO_PIN_RESET);
@@ -102,7 +104,7 @@ void AML_LaserSensor_Setup()
     }
 }
 
-void AML_LaserSensor_ReadAll()
+void AML_LaserSensor_ReadAll(void)
 {
     for (uint8_t i = 0; i < 5; i++)
     {
@@ -114,14 +116,15 @@ void AML_LaserSensor_ReadAll()
 
 int32_t AML_LaserSensor_ReadSingle(uint8_t name)
 {
-    VL53L0X_PerformSingleRangingMeasurement(Laser[name], &SensorValue[name]);
+    // VL53L0X_PerformSingleRangingMeasurement(Laser[name], &SensorValue[name]);
+    VL53L0X_GetRangingMeasurementData(Laser[name], &SensorValue[name]);
 
     SensorValue[name].RangeMilliMeter = (uint16_t)SimpleKalmanFilter_updateEstimate(&KalmanFilter[name], SensorValue[name].RangeMilliMeter);
-
+    VL53L0X_StartMeasurement(Laser[name]);
     return (int32_t)SensorValue[name].RangeMilliMeter;
 }
 
-uint8_t AML_LaserSensor_WallFavor()
+uint8_t AML_LaserSensor_WallFavor(void)
 {
     if (AML_LaserSensor_ReadSingle(FL < 100))  //North
         return 0; 

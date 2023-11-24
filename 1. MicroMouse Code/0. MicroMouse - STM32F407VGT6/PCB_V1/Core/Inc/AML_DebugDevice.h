@@ -19,7 +19,7 @@ typedef enum
     PINK
 } COLOR;
 
-void AML_DebugDevice_BuzzerBeep();
+void AML_DebugDevice_BuzzerBeep(uint16_t delay);
 
 void AML_DebugDevice_TurnOnLED(COLOR color);
 void AML_DebugDevice_TurnOffLED(COLOR color);

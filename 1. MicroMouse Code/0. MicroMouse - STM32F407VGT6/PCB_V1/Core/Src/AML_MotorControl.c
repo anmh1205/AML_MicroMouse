@@ -1,10 +1,10 @@
 #include "AML_MotorControl.h"
 
-#define Pi 3.14159265359 // Pi number
-#define WheelDiameter 50 // mm
-#define Ratio 90 / 14    // 90:14
-#define PulsePerRound 96 // 96 pulse per round encoder
-int32_t MouseSpeed = 20; // % PWM
+#define Pi 3.14159265359  // Pi number
+#define WheelDiameter 50  // mm
+#define Ratio 90 / 14     // 90:14
+#define PulsePerRound 190 // 190 pulse per round encoder
+int32_t MouseSpeed = 20;  // % PWM
 
 extern TIM_HandleTypeDef htim2;
 extern TIM_HandleTypeDef htim9;
@@ -42,13 +42,15 @@ double SetpointDistance;
 
 PID_TypeDef PID_LeftWallFollow;
 double LeftWallDistance;
+double LeftWallFollow_Kp = 0.1f;
+double LeftWallFollow_Ki = 0.0f;
+double LeftWallFollow_Kd = 0.3f;
 
 PID_TypeDef PID_RightWallFollow;
 double RightWallDistance;
-
-double WallFollow_Kp = 0.025f;
-double WallFollow_Ki = 0.0f;
-double WallFollow_Kd = 0.02f;
+double RightWallFollow_Kp = 0.1f;
+double RightWallFollow_Ki = 0.0f;
+double RightWallFollow_Kd = 0.3f;
 
 //////////////////////////////////
 
@@ -57,15 +59,15 @@ double MaxRotateSpeed = 25;
 
 PID_TypeDef PID_TurnLeft;
 double Input_TurnLeft, Output_TurnLeft, Setpoint_TurnLeft;
-double TurnLeft_Kp = 0.42f;
+double TurnLeft_Kp = 0.32f;
 double TurnLeft_Ki = 0.0f;
-double TurnLeft_Kd = 0.01f;
+double TurnLeft_Kd = 0.015f;
 
 PID_TypeDef PID_TurnRight;
 double Input_TurnRight, Output_TurnRight, Setpoint_TurnRight;
-double TurnRight_Kp = 0.42f;
+double TurnRight_Kp = 0.32f;
 double TurnRight_Ki = 0.0f;
-double TurnRight_Kd = 0.01f;
+double TurnRight_Kd = 0.015f;
 
 uint16_t MinLeftWallDistance, MaxLeftWallDistance;
 uint16_t MinRightWallDistance, MaxRightWallDistance;
@@ -184,14 +186,17 @@ void AML_MotorControl_PIDSetup()
     PID_Init(&PID_LeftWallFollow);
     PID_Init(&PID_RightWallFollow);
 
+    PID_Init(&PID_TurnLeft);
+    PID_Init(&PID_TurnRight);
+
     PID(&PID_SpeedLeft, &Input_Left, &Output_Left, &Setpoint_Left, Speed_Kp_Left, Speed_Ki_Left, Speed_Kd_Left, _PID_P_ON_E, PID_SpeedLeft.ControllerDirection);
     PID(&PID_SpeedRight, &Input_Right, &Output_Right, &Setpoint_Right, Speed_Kp_Right, Speed_Ki_Right, Speed_Kd_Right, _PID_P_ON_E, PID_SpeedRight.ControllerDirection);
 
     PID(&PID_PositionLeft, &Input_Left, &Output_Left, &Setpoint_Left, Position_Kp, Position_Ki, Position_Kd, _PID_P_ON_E, PID_PositionLeft.ControllerDirection);
     PID(&PID_PositionRight, &Input_Right, &Output_Right, &Setpoint_Right, Position_Kp, Position_Ki, Position_Kd, _PID_P_ON_E, PID_PositionRight.ControllerDirection);
 
-    PID(&PID_LeftWallFollow, &LeftWallDistance, &Output_Left, &SetpointDistance, WallFollow_Kp, WallFollow_Ki, WallFollow_Kd, _PID_P_ON_E, PID_LeftWallFollow.ControllerDirection);
-    PID(&PID_RightWallFollow, &RightWallDistance, &Output_Right, &SetpointDistance, WallFollow_Kp, WallFollow_Ki, WallFollow_Kd, _PID_P_ON_E, PID_RightWallFollow.ControllerDirection);
+    PID(&PID_LeftWallFollow, &LeftWallDistance, &Output_Left, &SetpointDistance, LeftWallFollow_Kp, LeftWallFollow_Ki, LeftWallFollow_Kd, _PID_P_ON_E, PID_LeftWallFollow.ControllerDirection);
+    PID(&PID_RightWallFollow, &RightWallDistance, &Output_Right, &SetpointDistance, RightWallFollow_Kp, RightWallFollow_Ki, RightWallFollow_Kd, _PID_P_ON_E, PID_RightWallFollow.ControllerDirection);
 
     PID(&PID_TurnLeft, &Input_TurnLeft, &Output_TurnLeft, &Setpoint_TurnLeft, TurnLeft_Kp, TurnLeft_Ki, TurnLeft_Kd, _PID_P_ON_E, PID_TurnLeft.ControllerDirection);
     PID(&PID_TurnRight, &Input_TurnRight, &Output_TurnRight, &Setpoint_TurnRight, TurnRight_Kp, TurnRight_Ki, TurnRight_Kd, _PID_P_ON_E, PID_TurnRight.ControllerDirection);
@@ -334,7 +339,7 @@ void AML_MotorControl_ShortBreak(char c)
 
     if (c == 'L')
     {
-        
+
         AML_MotorControl_LeftPWM(TurnSpeed);
         AML_MotorControl_RightPWM(-TurnSpeed);
     }
@@ -358,20 +363,36 @@ void AML_MotorControl_ShortBreak(char c)
     AML_MotorControl_Stop();
 }
 
+void AML_MotorControl_SetCenterPosition(void)
+{
+    MinLeftWallDistance = AML_LaserSensor_ReadSingleWithFillter(BL);
+    MaxLeftWallDistance = AML_LaserSensor_ReadSingleWithFillter(BR);
+
+    HAL_Delay(20);
+
+    MinRightWallDistance = AML_LaserSensor_ReadSingleWithFillter(BL);
+    MaxRightWallDistance = AML_LaserSensor_ReadSingleWithFillter(BR);
+
+    HAL_Delay(20);
+
+    MinFrontWallDistance = AML_LaserSensor_ReadSingleWithFillter(FF);
+    MaxFrontWallDistance = AML_LaserSensor_ReadSingleWithFillter(FF);
+}
+
 void AML_MotorControl_SetLeftWallValue(void)
 {
-    MinLeftWallDistance = AML_LaserSensor_ReadSingle(BL);
-    MaxRightWallDistance = AML_LaserSensor_ReadSingle(BR);
+    MinLeftWallDistance = AML_LaserSensor_ReadSingleWithFillter(BL);
+    MaxRightWallDistance = AML_LaserSensor_ReadSingleWithFillter(BR);
 
-    MinFrontWallDistance = AML_LaserSensor_ReadSingle(FF);
+    MinFrontWallDistance = AML_LaserSensor_ReadSingleWithFillter(FF);
 }
 
 void AML_MotorControl_SetRightWallValue(void)
 {
-    MaxLeftWallDistance = AML_LaserSensor_ReadSingle(BL);
-    MinRightWallDistance = AML_LaserSensor_ReadSingle(BR);
+    MaxLeftWallDistance = AML_LaserSensor_ReadSingleWithFillter(BL);
+    MinRightWallDistance = AML_LaserSensor_ReadSingleWithFillter(BR);
 
-    MinFrontWallDistance = AML_LaserSensor_ReadSingle(FF);
+    MinFrontWallDistance = AML_LaserSensor_ReadSingleWithFillter(FF);
 }
 
 void AML_MotorControl_LeftWallFollow(void)
@@ -382,10 +403,9 @@ void AML_MotorControl_LeftWallFollow(void)
     AML_DebugDevice_TurnOffLED(4);
     AML_DebugDevice_TurnOffLED(5);
 
-    LeftWallDistance = (double)AML_LaserSensor_ReadSingle(BL);
-    
+    LeftWallDistance = (double)AML_LaserSensor_ReadSingleWithFillter(BL);
 
-    SetpointDistance = (double)(MinLeftWallDistance + 35);
+    SetpointDistance = (double)(MinLeftWallDistance) + 35;
 
     PID_Compute(&PID_LeftWallFollow);
 
@@ -401,9 +421,9 @@ void AML_MotorControl_RightWallFollow(void)
     AML_DebugDevice_TurnOffLED(4);
     AML_DebugDevice_TurnOffLED(5);
 
-    RightWallDistance = (double)AML_LaserSensor_ReadSingle(BR);
+    RightWallDistance = (double)AML_LaserSensor_ReadSingleWithFillter(BR);
 
-    SetpointDistance = (double)(MinRightWallDistance + 35);
+    SetpointDistance = (double)(MinRightWallDistance) + 35;
 
     PID_Compute(&PID_RightWallFollow);
 
@@ -413,11 +433,12 @@ void AML_MotorControl_RightWallFollow(void)
 
 void AML_MotorControl_GoStraight(void)
 {
-    if (AML_LaserSensor_ReadSingle(BL) < LEFT_WALL)
+
+    if (AML_LaserSensor_ReadSingleWithFillter(BL) < LEFT_WALL)
     {
         AML_MotorControl_LeftWallFollow();
     }
-    else if (AML_LaserSensor_ReadSingle(BR) < RIGHT_WALL)
+    else if (AML_LaserSensor_ReadSingleWithFillter(BR) < RIGHT_WALL)
     {
         AML_MotorControl_RightWallFollow();
     }
@@ -428,35 +449,42 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     // UNUSED(htim);
     if (htim->Instance == htim9.Instance)
     {
-        // AML_MotorControl_GoStraight();
-        AML_MotorControl_LeftWallFollow();
-        // AML_DebugDevice_SetAllLED(GPIO_PIN_SET);
-        debug[11]++;
+        AML_MotorControl_GoStraight();
+        // debug[10]++;
     }
-
-    debug[12]++;
+    // debug[11]++;
 }
-
-// void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
-// {
-//     /* Prevent unused argument(s) compilation warning */
-//     UNUSED(htim);
-
-//     /* NOTE : This function should not be modified, when the callback is needed,
-//               the HAL_TIM_PeriodElapsedCallback could be implemented in the user file
-//      */
-// }
 
 void AML_MotorControl_TurnOnWallFollow(void)
 {
     HAL_TIM_Base_Start_IT(&htim9);
-    debug[10] = 1;
 }
 
 void AML_MotorControl_TurnOffWallFollow(void)
 {
     HAL_TIM_Base_Stop_IT(&htim9);
-    debug[10] = 0;
+}
+
+void AML_MotorControl_MoveForward_mm(uint16_t distance)
+{
+    AML_Encoder_ResetLeftValue();
+    AML_Encoder_ResetRightValue();
+    // AML_MotorControl_TurnOnWallFollow();
+
+    uint16_t ticks = (uint16_t)((double)distance / (Pi * WheelDiameter) * PulsePerRound * Ratio);
+
+    while (ReadButton != 2 && AML_Encoder_GetLeftValue() < ticks)
+    {
+        //  AML_MotorControl_GoStraight();
+        AML_MotorControl_LeftPWM(MouseSpeed);
+        AML_MotorControl_RightPWM(MouseSpeed);
+    }
+
+    // AML_MotorControl_TurnOffWallFollow();
+
+    // AML_MotorControl_ShortBreak('F');
+
+    AML_Encoder_ResetLeftValue();
 }
 
 void AML_MotorControl_TurnLeft90(void)
@@ -467,7 +495,14 @@ void AML_MotorControl_TurnLeft90(void)
     Setpoint_TurnLeft = Input_Left + 90.0f;
     // HAL_Delay(1000);
 
-    while ((ReadButton != 2) && (ABS(Input_TurnLeft - Setpoint_TurnLeft) > 10.0f))
+    AML_MotorControl_MoveForward_mm(60);
+    AML_MotorControl_TurnOffWallFollow();
+    AML_MotorControl_ShortBreak('F');
+
+    HAL_Delay(300);
+    uint32_t InitTime = HAL_GetTick();
+
+    while ((ReadButton != 2) && (ABS(Input_TurnLeft - Setpoint_TurnLeft) > 10.0f) && (HAL_GetTick() - InitTime < 1500))
     {
         Input_TurnLeft = AML_MPUSensor_GetAngle();
         PID_Compute(&PID_TurnLeft);
@@ -477,6 +512,10 @@ void AML_MotorControl_TurnLeft90(void)
     }
 
     AML_MotorControl_ShortBreak('L');
+
+    HAL_Delay(300);
+
+    AML_MotorControl_MoveForward_mm(60);
     // AML_MotorControl_Stop();
     // AML_MotorControl_PIDReset(&PID_TurnLeft);
     AML_MPUSensor_ResetAngle();
@@ -490,7 +529,14 @@ void AML_MotorControl_TurnRight90(void)
     Setpoint_TurnRight = Input_Right - 90.0f;
     // HAL_Delay(1000);
 
-    while ((ReadButton != 2) && (ABS(Input_TurnRight - Setpoint_TurnRight) > 10.0f))
+    AML_MotorControl_MoveForward_mm(60);
+    AML_MotorControl_TurnOffWallFollow();
+    AML_MotorControl_ShortBreak('F');
+
+    HAL_Delay(300);
+    uint32_t InitTime = HAL_GetTick();
+
+    while ((ReadButton != 2) && (ABS(Input_TurnRight - Setpoint_TurnRight) > 10.0f) && (HAL_GetTick() - InitTime < 1500))
     {
         Input_TurnRight = AML_MPUSensor_GetAngle();
         PID_Compute(&PID_TurnRight);
@@ -500,8 +546,11 @@ void AML_MotorControl_TurnRight90(void)
     }
 
     AML_MotorControl_ShortBreak('R');
-    // AML_MotorControl_Stop();
-    // AML_MotorControl_PIDReset(&PID_TurnRight);
+
+    HAL_Delay(300);
+
+    AML_MotorControl_MoveForward_mm(60);
+
     AML_MPUSensor_ResetAngle();
 }
 
@@ -513,7 +562,13 @@ void AML_MotorControl_TurnLeft180(void)
     Setpoint_TurnLeft = Input_Left + 180.0f;
     // HAL_Delay(1000);
 
-    while ((ReadButton != 2) && (ABS(Input_TurnLeft - Setpoint_TurnLeft) > 10.0f))
+    AML_MotorControl_TurnOffWallFollow();
+    AML_MotorControl_ShortBreak('L');
+
+    HAL_Delay(300);
+    uint32_t InitTime = HAL_GetTick();
+
+    while ((ReadButton != 2) && (ABS(Input_TurnLeft - Setpoint_TurnLeft) > 10.0f) && (HAL_GetTick() - InitTime < 1500))
     {
         Input_TurnLeft = AML_MPUSensor_GetAngle();
         PID_Compute(&PID_TurnLeft);
@@ -522,7 +577,11 @@ void AML_MotorControl_TurnLeft180(void)
         AML_MotorControl_RightPWM((int32_t)Output_TurnLeft);
     }
 
-    AML_MotorControl_ShortBreak('L');
+    AML_MotorControl_ShortBreak('F');
+
+    HAL_Delay(300);
+
+    AML_MotorControl_MoveForward_mm(60);
     // AML_MotorControl_Stop();
     // AML_MotorControl_PIDReset(&PID_TurnLeft);
     AML_MPUSensor_ResetAngle();
@@ -536,7 +595,13 @@ void AML_MotorControl_TurnRight180(void)
     Setpoint_TurnRight = Input_Right - 180.0f;
     // HAL_Delay(1000);
 
-    while ((ReadButton != 2) && (ABS(Input_TurnRight - Setpoint_TurnRight) > 10.0f))
+    AML_MotorControl_TurnOffWallFollow();
+    AML_MotorControl_ShortBreak('R');
+
+    HAL_Delay(300);
+    uint32_t InitTime = HAL_GetTick();
+
+    while ((ReadButton != 2) && (ABS(Input_TurnRight - Setpoint_TurnRight) > 10.0f) && (HAL_GetTick() - InitTime < 1500))
     {
         Input_TurnRight = AML_MPUSensor_GetAngle();
         PID_Compute(&PID_TurnRight);
@@ -545,7 +610,11 @@ void AML_MotorControl_TurnRight180(void)
         AML_MotorControl_RightPWM((int32_t)Output_TurnRight);
     }
 
-    AML_MotorControl_ShortBreak('R');
+    AML_MotorControl_ShortBreak('F');
+
+    HAL_Delay(300);
+
+    AML_MotorControl_MoveForward_mm(60);
     // AML_MotorControl_Stop();
     // AML_MotorControl_PIDReset(&PID_TurnRight);
     AML_MPUSensor_ResetAngle();
@@ -559,19 +628,19 @@ void AML_MotorControl_LeftStillTurn(void)
     AML_DebugDevice_TurnOffLED(3);
     AML_DebugDevice_TurnOffLED(5);
 
-    AML_MotorControl_TurnOnWallFollow();
+    // AML_MotorControl_TurnOnWallFollow();
     // AML_MotorControl_TurnOffWallFollow();
 
-    while (AML_LaserSensor_ReadSingle(FF) > FRONT_WALL)
-    {
-        // AML_MotorControl_GoStraight();
-    }
+    // while (AML_LaserSensor_ReadSingleWithFillter(FF) > FRONT_WALL && ReadButton != 2)
+    // {
+    //     // AML_MotorControl_GoStraight();
+    // }
 
     AML_MotorControl_TurnOffWallFollow();
 
-    AML_MotorControl_ShortBreak('F');
+    // AML_MotorControl_ShortBreak('F');
 
-    AML_MotorControl_Stop();
+    // AML_MotorControl_Stop();
 
     AML_MotorControl_TurnLeft90();
 
@@ -586,19 +655,19 @@ void AML_MotorControl_RightStillTurn(void)
     AML_DebugDevice_TurnOffLED(3);
     AML_DebugDevice_TurnOffLED(4);
 
-    AML_MotorControl_TurnOnWallFollow();
+    // AML_MotorControl_TurnOnWallFollow();
     // AML_MotorControl_TurnOffWallFollow();
 
-    while (AML_LaserSensor_ReadSingle(FF) > FRONT_WALL)
-    {
-        // AML_MotorControl_GoStraight();
-    }
+    // while (AML_LaserSensor_ReadSingleWithFillter(FF) > FRONT_WALL && ReadButton != 2)
+    // {
+    //     // AML_MotorControl_GoStraight();
+    // }
 
     AML_MotorControl_TurnOffWallFollow();
 
-    AML_MotorControl_ShortBreak('F');
+    // AML_MotorControl_ShortBreak('F');
 
-    AML_MotorControl_Stop();
+    // AML_MotorControl_Stop();
 
     AML_MotorControl_TurnRight90();
 
@@ -607,24 +676,22 @@ void AML_MotorControl_RightStillTurn(void)
 
 void AML_MotorControl_BackStillTurn(void)
 {
+    AML_DebugDevice_TurnOnLED(7);
 
-    AML_MotorControl_TurnOnWallFollow();
-    // AML_MotorControl_TurnOffWallFollow();
+    // AML_MotorControl_TurnOnWallFollow();
 
-    while (AML_LaserSensor_ReadSingle(FF) > FRONT_WALL)
-    {
-        // AML_MotorControl_GoStraight();
-    }
+    // while (AML_LaserSensor_ReadSingleWithFillter(FF) > FRONT_WALL && ReadButton != 2)
+    // {
+    //     // AML_MotorControl_GoStraight();
+    // }
 
     AML_MotorControl_TurnOffWallFollow();
 
-    AML_MotorControl_ShortBreak('F');
+    // AML_MotorControl_ShortBreak('F');
 
-    AML_MotorControl_Stop();
+    // AML_MotorControl_Stop();
 
     AML_MotorControl_TurnLeft180();
 
     AML_MotorControl_TurnOnWallFollow();
 }
-
-

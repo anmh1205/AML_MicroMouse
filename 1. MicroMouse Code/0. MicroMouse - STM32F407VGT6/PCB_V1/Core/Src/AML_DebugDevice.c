@@ -45,5 +45,3 @@ void AML_DebugDevice_SetAllLED(GPIO_PinState state)
     HAL_GPIO_WritePin(GPIOC, Led[6], state);
     HAL_GPIO_WritePin(GPIOC, Led[7], state);
 }
-
-

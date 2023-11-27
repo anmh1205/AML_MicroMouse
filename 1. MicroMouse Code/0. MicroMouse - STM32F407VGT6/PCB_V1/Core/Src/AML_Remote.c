@@ -26,7 +26,7 @@ void AML_Remote_Handle()
     {
 
         sscanf((char *)RemoteData, "%lf %lf %lf\0", &kp, &ki, &kd);
-        AML_MotorControl_PIDSetTunnings(kp, ki, kd);
+        // AML_MotorControl_PIDSetTunnings(kp, ki, kd);
 
         RemoteIndex = 0;
         memset(RemoteData, 0, sizeof(RemoteData));

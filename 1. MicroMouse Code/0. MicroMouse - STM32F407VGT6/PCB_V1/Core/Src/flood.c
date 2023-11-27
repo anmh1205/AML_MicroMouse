@@ -7,6 +7,9 @@
 
 #include "flood.h"
 
+extern int16_t debug[100];
+extern uint8_t ReadButton;
+
 void init_distance_maze(struct dist_maze *dm, struct coor *c, int center)
 {
 	// If we are trying to get to the center
@@ -94,11 +97,23 @@ void push_stack(struct stack *s, struct coor c)
 	s->array[s->index] = c;
 }
 
+void uncontrolledAdvanceTicks(uint32_t ticks)
+{
+	// uint32_t encoder_val = 0;
+	AML_Encoder_ResetLeftValue();
+	while (AML_Encoder_GetLeftValue() < ticks && ReadButton != 2)
+	{
+		debug[8] = AML_Encoder_GetLeftValue();
+		// encoder_val = AML_Encoder_GetLeftValue();
+	}
+}
+
 // move one cell forward and also poll adc for wall values
 void advanceTicksFlood(uint32_t ticks, int d, struct coor *c, struct wall_maze *wm)
 {
 	// uint32_t encoder_val = MAX_ENCODER_VALUE;
-	uint32_t encoder_val = 0;
+
+	// uint32_t encoder_val = 0;
 
 	// resetLeftEncoder();
 	AML_Encoder_ResetLeftValue();
@@ -145,12 +160,11 @@ void advanceTicksFlood(uint32_t ticks, int d, struct coor *c, struct wall_maze *
 	}
 	// while we have not finished moving one cell length
 	// while (encoder_val > (MAX_ENCODER_VALUE - ticks))
-	while (encoder_val < ticks)
-
+	while (AML_Encoder_GetLeftValue() < ticks)
 	{
 		// if we have moved half of a cell length
 		// if (encoder_val < (MAX_ENCODER_VALUE - (ticks / 2)))
-		if (encoder_val > (ticks / 2)) // can check
+		if (AML_Encoder_GetLeftValue() > (ticks / 2)) // can check
 		{
 			// check for walls to the east and the west
 			switch (d)
@@ -173,7 +187,7 @@ void advanceTicksFlood(uint32_t ticks, int d, struct coor *c, struct wall_maze *
 		}
 		// setLeftEncoderValue(TIM2->CNT);
 		// encoder_val = getLeftEncoderValue();
-		encoder_val = AML_Encoder_GetLeftValue();
+		// encoder_val = AML_Encoder_GetLeftValue();
 	}
 	// resetLeftEncoder();
 	AML_Encoder_ResetLeftValue();
@@ -231,7 +245,7 @@ int floodFill(struct dist_maze *dm, struct coor *c, struct wall_maze *wm, int a,
 			// check for wall straight ahead
 			// if (getLeftADCValue() >= FLOOD_WALL_IN_FRONT_LEFT &&
 			// 	getRightADCValue() >= FLOOD_WALL_IN_FRONT_RIGHT)
-			if (AML_LaserSensor_ReadSingle(1) < FRONT_WALL)
+			if (AML_LaserSensor_ReadSingleWithFillter(1) < FRONT_WALL)
 			{
 				// put wall ahead of us
 				wm->cells[c->x][c->y].walls[direction] = 1;
@@ -373,17 +387,24 @@ int floodFill(struct dist_maze *dm, struct coor *c, struct wall_maze *wm, int a,
 			if (wm->cells[c->x][c->y].walls[direction] == 1)
 			{
 				// lockInterruptDisable_TIM3();
+				AML_MotorControl_TurnOffWallFollow();
 
 				// leftMotorPWMChangeBackward(200);
 				// rightMotorPWMChangeBackward(200);
 
 				// custom_delay(2000);
+				AML_MotorControl_LeftPWM(-20);
+				AML_MotorControl_RightPWM(-20);
+				HAL_Delay(2000);
 
 				// motorStop();
+				AML_MotorControl_Stop();
 
 				// lockInterruptEnable_TIM3();
+				AML_MotorControl_TurnOnWallFollow();
 
 				// uncontrolledAdvanceTicks(3000);
+				uncontrolledAdvanceTicks(200);
 			}
 			break;
 		case 3:
@@ -412,7 +433,7 @@ void checkForWalls(struct wall_maze *wm, struct coor *c, int direction, int n, i
 		// check for wall to the west
 		// if at anytime the value drops below that means there is no wall
 		// if (getLeftFrontADCValue() < FLOOD_LEFT_WALL)
-		if (AML_LaserSensor_ReadSingle(BL) > LEFT_WALL)
+		if (AML_LaserSensor_ReadSingleWithFillter(BL) > LEFT_WALL)
 		{
 			wm->cells[c->x][c->y].walls[w] = 0;
 			switch (direction)
@@ -445,7 +466,7 @@ void checkForWalls(struct wall_maze *wm, struct coor *c, int direction, int n, i
 	{
 		// check for wall to the east
 		// if (getRightFrontADCValue() < FLOOD_RIGHT_WALL)
-		if (AML_LaserSensor_ReadSingle(BR) > RIGHT_WALL)
+		if (AML_LaserSensor_ReadSingleWithFillter(BR) > RIGHT_WALL)
 		{
 			wm->cells[c->x][c->y].walls[e] = 0;
 			switch (direction)
@@ -666,16 +687,6 @@ void advanceOneCell(int direction, struct coor *c, struct wall_maze *wm)
 	// AML_Encoder_ResetLeftValue();
 }
 
-void uncontrolledAdvanceTicks(uint32_t ticks)
-{
-	uint32_t encoder_val = 0;
-	AML_Encoder_ResetLeftValue();
-	while (encoder_val < ticks)
-	{
-		encoder_val = AML_Encoder_GetLeftValue();
-	}
-}
-
 void advanceOneCellVisited()
 {
 	// HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_SET);
@@ -684,16 +695,18 @@ void advanceOneCellVisited()
 	// lockInterruptEnable_TIM3();
 	AML_MotorControl_TurnOnWallFollow();
 
-	uncontrolledAdvanceTicks(ENCODER_TICKS_ONE_CELL);
+	uncontrolledAdvanceTicks(FLOOD_ENCODER_TICKS_ONE_CELL);
+	debug[15]++;
 
 	// lockInterruptDisable_TIM3();
 	AML_MotorControl_TurnOffWallFollow();
 
 	// motorStop();
-	AML_MotorControl_Stop();
+	// AML_MotorControl_Stop();
+	AML_MotorControl_ShortBreak('F');
 
 	// custom_delay(500);
-	HAL_Delay(500);
+	HAL_Delay(2000);
 
 	// showCoor(c.x, c.y);
 	// HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_RESET);

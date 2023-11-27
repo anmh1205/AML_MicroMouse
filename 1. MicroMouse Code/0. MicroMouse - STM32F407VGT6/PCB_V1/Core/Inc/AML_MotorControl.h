@@ -9,6 +9,8 @@
 #include "AML_MPUSensor.h"
 #include "AML_Parameter.h"
 #include "pid.h"
+#include "math.h"
+#include "flood.h"
 #include <stdint.h>
 #include <limits.h>
 // #include "math.h"
@@ -25,8 +27,11 @@ void AML_MotorControl_SetMouseSpeed(int32_t speed);
 
 void AML_MotorControl_SetLeftSpeed(double speed, GPIO_PinState direction);
 void AML_MotorControl_SetRightSpeed(double speed, GPIO_PinState direction);
+
+void AML_MotorControl_ShortBreak(char c);
 void AML_MotorControl_Stop(void);
 
+void AML_MotorControl_SetCenterPosition(void);
 void AML_MotorControl_SetLeftWallValue(void);
 void AML_MotorControl_SetRightWallValue(void);
 
@@ -44,5 +49,7 @@ void AML_MotorControl_TurnRight180(void);
 void AML_MotorControl_LeftStillTurn(void);
 void AML_MotorControl_RightStillTurn(void);
 void AML_MotorControl_BackStillTurn(void);
+
+void AML_MotorControl_MoveForward_mm(uint16_t distance);
 
 #endif // AML_MOTORCONTROL_H

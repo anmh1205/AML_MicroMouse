@@ -164,7 +164,7 @@ void advanceTicksFlood(uint32_t ticks, int d, struct coor *c, struct wall_maze *
 	{
 		// if we have moved half of a cell length
 		// if (encoder_val < (MAX_ENCODER_VALUE - (ticks / 2)))
-		if (AML_Encoder_GetLeftValue() > (ticks / 2)) // can check
+		if (AML_Encoder_GetLeftValue() > (int16_t)(ticks / 1.5)) // can check
 		{
 			// check for walls to the east and the west
 			switch (d)
@@ -245,7 +245,7 @@ int floodFill(struct dist_maze *dm, struct coor *c, struct wall_maze *wm, int a,
 			// check for wall straight ahead
 			// if (getLeftADCValue() >= FLOOD_WALL_IN_FRONT_LEFT &&
 			// 	getRightADCValue() >= FLOOD_WALL_IN_FRONT_RIGHT)
-			if (AML_LaserSensor_ReadSingleWithFillter(1) < FRONT_WALL)
+			if (AML_LaserSensor_ReadSingleWithFillter(FF) < FRONT_WALL)
 			{
 				// put wall ahead of us
 				wm->cells[c->x][c->y].walls[direction] = 1;
@@ -330,7 +330,8 @@ int floodFill(struct dist_maze *dm, struct coor *c, struct wall_maze *wm, int a,
 		{
 		case -3:
 			// leftStillTurn();
-			AML_MotorControl_LeftStillTurn();
+			// AML_MotorControl_LeftStillTurn();
+			AML_MotorControl_TurnLeft90();
 
 			// calibration because left turn backs up mouse a little bit
 			uncontrolledAdvanceTicks(200);
@@ -338,7 +339,8 @@ int floodFill(struct dist_maze *dm, struct coor *c, struct wall_maze *wm, int a,
 			break;
 		case -2:
 			// backward180StillTurn();
-			AML_MotorControl_BackStillTurn();
+			// AML_MotorControl_BackStillTurn();
+			AML_MotorControl_TurnLeft180();
 
 			// calibration by backing into wall behind us
 			if (wm->cells[c->x][c->y].walls[direction] == 1)
@@ -351,7 +353,7 @@ int floodFill(struct dist_maze *dm, struct coor *c, struct wall_maze *wm, int a,
 
 				AML_MotorControl_LeftPWM(-20);
 				AML_MotorControl_RightPWM(-20);
-				HAL_Delay(2000);
+				HAL_Delay(1500);
 
 				// custom_delay(2000);
 
@@ -367,7 +369,8 @@ int floodFill(struct dist_maze *dm, struct coor *c, struct wall_maze *wm, int a,
 			break;
 		case -1:
 			// rightStillTurn();
-			AML_MotorControl_RightStillTurn();
+			// AML_MotorControl_RightStillTurn();
+			AML_MotorControl_TurnRight90();
 
 			// uncontrolledAdvanceTicks(450);
 			uncontrolledAdvanceTicks(100);
@@ -376,7 +379,8 @@ int floodFill(struct dist_maze *dm, struct coor *c, struct wall_maze *wm, int a,
 			break;
 		case 1:
 			// leftStillTurn();
-			AML_MotorControl_LeftStillTurn();
+			// AML_MotorControl_LeftStillTurn();
+			AML_MotorControl_TurnLeft90();
 
 			// uncontrolledAdvanceTicks(450);
 			uncontrolledAdvanceTicks(100);
@@ -409,7 +413,8 @@ int floodFill(struct dist_maze *dm, struct coor *c, struct wall_maze *wm, int a,
 			break;
 		case 3:
 			// rightStillTurn();
-			AML_MotorControl_RightStillTurn();
+			// AML_MotorControl_RightStillTurn();
+			AML_MotorControl_TurnRight90();
 
 			// uncontrolledAdvanceTicks(450);
 			uncontrolledAdvanceTicks(100);
@@ -433,7 +438,7 @@ void checkForWalls(struct wall_maze *wm, struct coor *c, int direction, int n, i
 		// check for wall to the west
 		// if at anytime the value drops below that means there is no wall
 		// if (getLeftFrontADCValue() < FLOOD_LEFT_WALL)
-		if (AML_LaserSensor_ReadSingleWithFillter(BL) > LEFT_WALL)
+		if (AML_LaserSensor_ReadSingleWithFillter(BL) > FLOOD_NO_LEFT_WALL)
 		{
 			wm->cells[c->x][c->y].walls[w] = 0;
 			switch (direction)
@@ -466,7 +471,7 @@ void checkForWalls(struct wall_maze *wm, struct coor *c, int direction, int n, i
 	{
 		// check for wall to the east
 		// if (getRightFrontADCValue() < FLOOD_RIGHT_WALL)
-		if (AML_LaserSensor_ReadSingleWithFillter(BR) > RIGHT_WALL)
+		if (AML_LaserSensor_ReadSingleWithFillter(BR) > FLOOD_NO_RIGHT_WALL)
 		{
 			wm->cells[c->x][c->y].walls[e] = 0;
 			switch (direction)
@@ -668,9 +673,10 @@ void advanceOneCell(int direction, struct coor *c, struct wall_maze *wm)
 	AML_MotorControl_TurnOnWallFollow();
 
 	// HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_SET);
+	AML_DebugDevice_TurnOnLED(0);
 
 	// advanceTicksFlood(FLOOD_ONE_CELL, direction, c, wm);
-	advanceTicksFlood(ENCODER_TICKS_ONE_CELL, direction, c, wm);
+	advanceTicksFlood(FLOOD_ENCODER_TICKS_ONE_CELL, direction, c, wm);
 
 	// lockInterruptDisable_TIM3();
 	AML_MotorControl_TurnOffWallFollow();
@@ -679,24 +685,27 @@ void advanceOneCell(int direction, struct coor *c, struct wall_maze *wm)
 	AML_MotorControl_Stop();
 
 	// custom_delay(500);
-	HAL_Delay(500);
+	HAL_Delay(1000);
 
 	// HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_RESET);
+	AML_DebugDevice_TurnOffLED(0);
 
 	// resetLeftEncoder();
-	// AML_Encoder_ResetLeftValue();
+	AML_Encoder_ResetLeftValue();
 }
 
 void advanceOneCellVisited()
 {
 	// HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_SET);
 
+	AML_DebugDevice_TurnOnLED(1);
+
 	// Go forward one cell
 	// lockInterruptEnable_TIM3();
 	AML_MotorControl_TurnOnWallFollow();
 
 	uncontrolledAdvanceTicks(FLOOD_ENCODER_TICKS_ONE_CELL);
-	debug[15]++;
+	// debug[15]++;
 
 	// lockInterruptDisable_TIM3();
 	AML_MotorControl_TurnOffWallFollow();
@@ -706,9 +715,11 @@ void advanceOneCellVisited()
 	AML_MotorControl_ShortBreak('F');
 
 	// custom_delay(500);
-	HAL_Delay(2000);
+	HAL_Delay(1000);
 
 	// showCoor(c.x, c.y);
+
+	AML_DebugDevice_TurnOffLED(1);
 	// HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_RESET);
 
 	// resetLeftEncoder();
@@ -924,7 +935,7 @@ int centerMovement(struct wall_maze *wm, struct coor *c, int d)
 	// di lui de ap sat tuong
 	AML_MotorControl_LeftPWM(-20);
 	AML_MotorControl_RightPWM(-20);
-	HAL_Delay(2000);
+	HAL_Delay(1500);
 
 	// motorStop();
 	AML_MotorControl_Stop();
@@ -1147,7 +1158,8 @@ void shortestPath(struct dist_maze *dm, struct coor *c, struct wall_maze *wm, in
 		case -3:
 
 			// leftStillTurn();
-			AML_MotorControl_LeftStillTurn();
+			// AML_MotorControl_LeftStillTurn();
+			AML_MotorControl_TurnLeft90();
 
 			// calibration because left turn backs up mouse a little bit
 			// uncontrolledAdvanceTicks(350);
@@ -1156,7 +1168,8 @@ void shortestPath(struct dist_maze *dm, struct coor *c, struct wall_maze *wm, in
 			break;
 		case -2:
 			// backward180StillTurn();
-			AML_MotorControl_BackStillTurn();
+			// AML_MotorControl_BackStillTurn();
+			AML_MotorControl_TurnLeft180();
 
 			if (wm->cells[c->x][c->y].walls[d] == 1)
 			{
@@ -1184,7 +1197,8 @@ void shortestPath(struct dist_maze *dm, struct coor *c, struct wall_maze *wm, in
 			break;
 		case -1:
 			// rightStillTurn();
-			AML_MotorControl_RightStillTurn();
+			// AML_MotorControl_RightStillTurn();
+			AML_MotorControl_TurnRight90();
 
 			// uncontrolledAdvanceTicks(450);
 			uncontrolledAdvanceTicks(200);
@@ -1193,14 +1207,16 @@ void shortestPath(struct dist_maze *dm, struct coor *c, struct wall_maze *wm, in
 			break;
 		case 1:
 			// leftStillTurn();
-			AML_MotorControl_LeftStillTurn();
+			// AML_MotorControl_LeftStillTurn();
+			AML_MotorControl_TurnLeft90();
 
 			// uncontrolledAdvanceTicks(450);
 			uncontrolledAdvanceTicks(200);
 			break;
 		case 2:
 			// backward180StillTurn();
-			AML_MotorControl_BackStillTurn();
+			// AML_MotorControl_BackStillTurn();
+			AML_MotorControl_TurnLeft180();
 
 			if (wm->cells[c->x][c->y].walls[d] == 1)
 			{
@@ -1228,7 +1244,8 @@ void shortestPath(struct dist_maze *dm, struct coor *c, struct wall_maze *wm, in
 			break;
 		case 3:
 			// rightStillTurn();
-			AML_MotorControl_RightStillTurn();
+			// AML_MotorControl_RightStillTurn();
+			AML_MotorControl_TurnRight90();
 
 			// uncontrolledAdvanceTicks(450);
 			uncontrolledAdvanceTicks(200);

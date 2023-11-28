@@ -116,7 +116,8 @@ void Run()
 {
 
   // algorithm = wallFavor();                 // thay bang ham doc laser
-  algorithm = AML_LaserSensor_WallFavor(); // can sua lai
+  // algorithm = AML_LaserSensor_WallFavor(); // can sua lai
+  algorithm = 0;
 
   // HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_RESET);
   // HAL_Delay(1000);
@@ -161,30 +162,36 @@ void Run()
   {
   case -3:
     // leftStillTurn();
-    AML_MotorControl_LeftStillTurn();
+    // AML_MotorControl_LeftStillTurn();
+    AML_MotorControl_TurnLeft90();
 
     break;
   case -2:
     // backward180StillTurn();
-    AML_MotorControl_BackStillTurn();
+    // AML_MotorControl_BackStillTurn();
+    AML_MotorControl_TurnLeft180();
     break;
   case -1:
     // rightStillTurn();
-    AML_MotorControl_RightStillTurn();
+    // AML_MotorControl_RightStillTurn();
+    AML_MotorControl_TurnRight90();
     break;
   case 0:
     break;
   case 1:
     // leftStillTurn();
-    AML_MotorControl_LeftStillTurn();
+    // AML_MotorControl_LeftStillTurn();
+    AML_MotorControl_TurnLeft90();
     break;
   case 2:
     // backward180StillTurn();
-    AML_MotorControl_BackStillTurn();
+    // AML_MotorControl_BackStillTurn();
+    AML_MotorControl_TurnLeft180();
     break;
   case 3:
     // rightStillTurn();
-    AML_MotorControl_RightStillTurn();
+    // AML_MotorControl_RightStillTurn();
+    AML_MotorControl_TurnRight90();
     break;
   default:
     // turnOnLEDS();
@@ -226,19 +233,19 @@ void Move()
 {
   AML_MotorControl_TurnOnWallFollow();
 
-  if (AML_LaserSensor_ReadSingleWithFillter(BL) > 150)
+  if (AML_LaserSensor_ReadSingleWithoutFillter(BL) > NO_LEFT_WALL)
   {
     AML_MotorControl_LeftStillTurn();
   }
-  else if (AML_LaserSensor_ReadSingleWithFillter(BR) > 150)
+  else if (AML_LaserSensor_ReadSingleWithoutFillter(BR) > NO_RIGHT_WALL)
   {
     AML_MotorControl_RightStillTurn();
   }
-  else if (AML_LaserSensor_ReadSingleWithFillter(FF) < 60 && AML_LaserSensor_ReadSingleWithFillter(BL) < 150 && AML_LaserSensor_ReadSingleWithFillter(BR) < 150)
+  else if (AML_LaserSensor_ReadSingleWithoutFillter(FF) < FRONT_WALL && AML_LaserSensor_ReadSingleWithoutFillter(FL) < FRONT_LEFT_WALL && AML_LaserSensor_ReadSingleWithoutFillter(FR) < FRONT_RIGHT_WALL && AML_LaserSensor_ReadSingleWithoutFillter(BL) < LEFT_WALL && AML_LaserSensor_ReadSingleWithoutFillter(BR) < RIGHT_WALL)
   {
     AML_MotorControl_BackStillTurn();
   }
-  else if (AML_LaserSensor_ReadSingleWithFillter(BL) > 150 && AML_LaserSensor_ReadSingleWithFillter(BR) > 150)
+  else if (AML_LaserSensor_ReadSingleWithoutFillter(BL) > NO_LEFT_WALL && AML_LaserSensor_ReadSingleWithoutFillter(BR) > NO_RIGHT_WALL)
   {
     //   // AML_Encoder_ResetLeftValue();
 
@@ -268,6 +275,22 @@ void EncoderTest()
   AML_DebugDevice_BuzzerBeep(30);
 
   HAL_Delay(1500);
+}
+
+void TestSpeed()
+{
+    AML_MotorControl_LeftPWM(20);
+    AML_MotorControl_RightPWM(20);
+
+    debug[30] = AML_Encoder_GetLeftValue();
+    debug[31] = AML_Encoder_GetRightValue();
+
+    LeftSpeed = debug[30] / 190 ;
+    RightSpeed = debug[31] / 190;
+    AML_Encoder_ResetLeftValue();
+    AML_Encoder_ResetRightValue();
+
+    HAL_Delay(1000);
 }
 
 /* USER CODE END 0 */
@@ -317,6 +340,16 @@ int main(void)
 
   ReadButton = 8;
 
+  // for (int i = 0; i < 3; i++)
+  // {
+  //   AML_LaserSensor_ReadAll();
+  //   HAL_Delay(35);
+  // }
+
+  AML_LaserSensor_ReadAll();
+  AML_LaserSensor_ReadAll();
+  AML_LaserSensor_ReadAll();
+
   AML_DebugDevice_BuzzerBeep(20);
 
   /* USER CODE END 2 */
@@ -336,18 +369,21 @@ int main(void)
     //   debug[i] = AML_LaserSensor_ReadSingleWithFillter(i);
     // }
 
+    // AML_LaserSensor_ReadAll();
+
     if (ReadButton == 0) // set left wall value
     {
-      AML_MotorControl_SetLeftWallValue();
-      // AML_MotorControl_SetCenterPosition();
+      // AML_MotorControl_SetLeftWallValue();
+      AML_MotorControl_SetCenterPosition();
 
       ReadButton = 8;
     }
     else if (ReadButton == 1) // set right wall value
     {
-      AML_MotorControl_SetRightWallValue();
+      // AML_MotorControl_SetRightWallValue();
+      AML_MotorControl_TurnLeft90();
 
-      ReadButton = 8;
+      // ReadButton = 8;
     }
     else if (ReadButton == 2)
     {
@@ -360,74 +396,25 @@ int main(void)
     }
     else if (ReadButton == 3)
     {
-      // Move();
-      // AML_MotorControl_TurnOnWallFollow();
-      // if (AML_LaserSensor_ReadSingleWithFillter(BL) > 200)
-      // {
-      //   AML_MotorControl_LeftStillTurn();
-      // }
-
-      AML_DebugDevice_TurnOnLED(1);
-      // AML_MotorControl_TurnOnWallFollow();
-      // advanceOneCellVisited();
-
-      while (AML_LaserSensor_ReadSingleWithoutFillter(FF) > 190 && ReadButton != 2)
-      {
-        advanceOneCellVisited();
-        AML_DebugDevice_BuzzerBeep(20);
-      }
-
-      AML_MotorControl_ShortBreak('F');
-      AML_MotorControl_Stop();
-
-      HAL_Delay(2000);
-
-      for (int i = 0; i < debug[15]; i++)
-      {
-        AML_DebugDevice_BuzzerBeep(20);
-        HAL_Delay(1000);
-
-        if (ReadButton == 2)
-        {
-          break;
-        }
-      }
-
-      debug[15] = 0;
-
-      // AML_MotorControl_LeftWallFollow();
-      // AML_MotorControl_TurnLeft90();
-
-      ReadButton = 2;
+      // AML_MotorControl_MPUFollow();
+      Run();
     }
     else if (ReadButton == 4)
     {
-      //   while (AML_Encoder_GetLeftValue() < ENCODER_TICKS_ONE_CELL && ReadButton != 2)
-      //   {
-      //     AML_MotorControl_LeftPWM(20);
-      //     AML_MotorControl_RightPWM(20);
-      //   }
-      AML_Encoder_ResetLeftValue();
-      AML_Encoder_ResetRightValue();
-      //   ReadButton = 2;
-      // AML_MotorControl_TurnOnWallFollow();
-      // AML_MotorControl_GoStraight();
-
-      // AML_MotorControl_TurnLeft180();
-      ReadButton = 8;
-
-      // EncoderTest();
+      Move();
     }
 
     // testAngle = AML_MPUSensor_GetAngle();
-    debug[13] = AML_Encoder_GetLeftValue();
-    debug[14] = AML_Encoder_GetRightValue();
+
+    // debug[13] = AML_Encoder_GetLeftValue();
+    // debug[14] = AML_Encoder_GetRightValue();
 
     /* USER CODE END WHILE */
+
+    /* USER CODE BEGIN 3 */
   }
-  /* USER CODE BEGIN 3 */
+  /* USER CODE END 3 */
 }
-/* USER CODE END 3 */
 
 /**
  * @brief System Clock Configuration
@@ -685,7 +672,7 @@ static void MX_TIM9_Init(void)
   htim9.Instance = TIM9;
   htim9.Init.Prescaler = 8399;
   htim9.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim9.Init.Period = 220;
+  htim9.Init.Period = 230;
   htim9.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim9.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim9) != HAL_OK)

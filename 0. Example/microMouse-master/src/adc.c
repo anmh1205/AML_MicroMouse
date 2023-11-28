@@ -286,3 +286,4 @@ uint32_t startMouseSensor(void)
 {
 	return startupSensor;
 }
+

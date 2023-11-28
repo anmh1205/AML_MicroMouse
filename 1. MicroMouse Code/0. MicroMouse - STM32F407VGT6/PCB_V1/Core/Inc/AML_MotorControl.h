@@ -37,10 +37,12 @@ void AML_MotorControl_SetRightWallValue(void);
 
 void AML_MotorControl_LeftWallFollow(void);
 void AML_MotorControl_RightWallFollow(void);
+void AML_MotorControl_MPUFollow(void);
 void AML_MotorControl_GoStraight(void);
 void AML_MotorControl_TurnOnWallFollow(void);
 void AML_MotorControl_TurnOffWallFollow(void);
 
+void AML_MotorControl_AdvanceTicks(int16_t ticks);
 void AML_MotorControl_TurnLeft90(void);
 void AML_MotorControl_TurnRight90(void);
 void AML_MotorControl_TurnLeft180(void);

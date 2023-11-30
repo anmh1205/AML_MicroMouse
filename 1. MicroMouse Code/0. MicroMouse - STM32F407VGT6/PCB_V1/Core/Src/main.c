@@ -147,7 +147,14 @@ void Run()
   int direction = NORTH;
   update_stack.index = 0;
   direction = floodFill(&distances, &c, &cell_walls_info, algorithm, direction, &update_stack);
-  direction = centerMovement(&cell_walls_info, &c, direction);
+
+  for (int i = 0; i < 3; i++)
+  {
+    AML_DebugDevice_BuzzerBeep(50);
+    HAL_Delay(50);
+  }
+
+    direction = centerMovement(&cell_walls_info, &c, direction);
 
   // ONCE IT REACHES HERE, IT HAS REACHED THE CENTER OF THE MAZE
   // Mouse has made it to center, so flood back to start
@@ -233,19 +240,19 @@ void Move()
 {
   AML_MotorControl_TurnOnWallFollow();
 
-  if (AML_LaserSensor_ReadSingleWithoutFillter(BL) > NO_LEFT_WALL)
+  if (AML_LaserSensor_ReadSingleWithoutFillter(BL) > 170 )
   {
     AML_MotorControl_LeftStillTurn();
   }
-  else if (AML_LaserSensor_ReadSingleWithoutFillter(BR) > NO_RIGHT_WALL)
+  else if (AML_LaserSensor_ReadSingleWithoutFillter(BR) > 170)
   {
     AML_MotorControl_RightStillTurn();
   }
-  else if (AML_LaserSensor_ReadSingleWithoutFillter(FF) < FRONT_WALL && AML_LaserSensor_ReadSingleWithoutFillter(FL) < FRONT_LEFT_WALL && AML_LaserSensor_ReadSingleWithoutFillter(FR) < FRONT_RIGHT_WALL && AML_LaserSensor_ReadSingleWithoutFillter(BL) < LEFT_WALL && AML_LaserSensor_ReadSingleWithoutFillter(BR) < RIGHT_WALL)
+  else if (AML_LaserSensor_ReadSingleWithoutFillter(FF) < 60 && AML_LaserSensor_ReadSingleWithoutFillter(BL) < 170 && AML_LaserSensor_ReadSingleWithoutFillter(BR) < 170)
   {
     AML_MotorControl_BackStillTurn();
   }
-  else if (AML_LaserSensor_ReadSingleWithoutFillter(BL) > NO_LEFT_WALL && AML_LaserSensor_ReadSingleWithoutFillter(BR) > NO_RIGHT_WALL)
+  else if (AML_LaserSensor_ReadSingleWithoutFillter(BL) > 170 && AML_LaserSensor_ReadSingleWithoutFillter(BR) > 170)
   {
     //   // AML_Encoder_ResetLeftValue();
 
@@ -381,9 +388,10 @@ int main(void)
     else if (ReadButton == 1) // set right wall value
     {
       // AML_MotorControl_SetRightWallValue();
-      AML_MotorControl_TurnLeft90();
+      // AML_MotorControl_TurnRight90();
+      // ReadButton = 2;
 
-      // ReadButton = 8;
+      ReadButton = 8;
     }
     else if (ReadButton == 2)
     {
@@ -398,10 +406,18 @@ int main(void)
     {
       // AML_MotorControl_MPUFollow();
       Run();
+
+      // AML_MotorControl_TurnLeft180();
+      ReadButton = 2;
     }
     else if (ReadButton == 4)
     {
       Move();
+      // AML_MotorControl_MPUFollow();
+      // AML_MotorControl_TurnOnWallFollow();
+
+      // AML_MotorControl_TurnRight180();
+      // ReadButton = 2;
     }
 
     // testAngle = AML_MPUSensor_GetAngle();

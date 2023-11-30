@@ -37,7 +37,7 @@ void AML_MotorControl_SetRightWallValue(void);
 
 void AML_MotorControl_LeftWallFollow(void);
 void AML_MotorControl_RightWallFollow(void);
-void AML_MotorControl_MPUFollow(void);
+void AML_MotorControl_MPUFollow(double setpoint);
 void AML_MotorControl_GoStraight(void);
 void AML_MotorControl_TurnOnWallFollow(void);
 void AML_MotorControl_TurnOffWallFollow(void);

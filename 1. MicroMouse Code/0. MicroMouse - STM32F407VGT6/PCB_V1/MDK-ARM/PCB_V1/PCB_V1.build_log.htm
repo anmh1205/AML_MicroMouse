@@ -53,6 +53,198 @@ compiling main.c...
 ../Core/Inc/AML_Keyboard.h(18): warning:  #1-D: last line of file ends without a newline
   #endif // AML_KEYBOARD_H
 ../Core/Src/main.c: 12 warnings, 0 errors
+compiling AML_MPUSensor.c...
+../Core/Inc/main.h(58): warning:  #1295-D: Deprecated declaration Move - give arg types
+  void Move();
+../Core/Inc/KalmanFilter.h(25): warning:  #1-D: last line of file ends without a newline
+  #endif
+../Core/Inc/AML_Remote.h(17): warning:  #1-D: last line of file ends without a newline
+  #endif // AML_REMOTE_H
+../Core/Inc/AML_Parameter.h(59): warning:  #1-D: last line of file ends without a newline
+  #endif // AML_Parameter_H
+../Core/Inc/AML_LaserSensor.h(29): warning:  #1-D: last line of file ends without a newline
+  #endif
+../Core/Inc/AML_Encoder.h(13): warning:  #1-D: last line of file ends without a newline
+  #endif // AML_ENCODER_H
+../Core/Inc/AML_MotorControl.h(57): warning:  #1-D: last line of file ends without a newline
+  #endif // AML_MOTORCONTROL_H
+../Core/Inc/flood.h(32): warning:  #47-D: incompatible redefinition of macro "FLOOD_LEFT_WALL"  (declared at line 27 of "../Core/Inc/AML_Parameter.h")
+  #define FLOOD_LEFT_WALL 300
+../Core/Inc/flood.h(33): warning:  #47-D: incompatible redefinition of macro "FLOOD_RIGHT_WALL"  (declared at line 26 of "../Core/Inc/AML_Parameter.h")
+  #define FLOOD_RIGHT_WALL 300
+../Core/Inc/AML_MotorControl.h(57): warning:  #1-D: last line of file ends without a newline
+  #endif // AML_MOTORCONTROL_H
+../Core/Inc/AML_Remote.h(17): warning:  #1-D: last line of file ends without a newline
+  #endif // AML_REMOTE_H
+..\Core\Src\AML_MPUSensor.c(32): warning:  #167-D: argument of type "volatile uint8_t *" is incompatible with parameter of type "uint8_t *"
+      HAL_UART_Receive_DMA(&huart3, MPUData, 33);
+..\Core\Src\AML_MPUSensor.c(38): warning:  #167-D: argument of type "volatile uint8_t *" is incompatible with parameter of type "uint8_t *"
+      HAL_UART_Receive_DMA(&huart3, MPUData, 33);
+..\Core\Src\AML_MPUSensor.c(45): warning:  #167-D: argument of type "volatile uint8_t *" is incompatible with parameter of type "uint8_t *"
+          HAL_UART_Receive(&huart3, &buffer, 1, 1000);
+..\Core\Src\AML_MPUSensor.c(48): warning:  #167-D: argument of type "volatile uint8_t *" is incompatible with parameter of type "uint8_t *"
+      HAL_UART_Receive_DMA(&huart3, MPUData, 33);
+..\Core\Src\AML_MPUSensor.c(74): warning:  #167-D: argument of type "volatile uint8_t *" is incompatible with parameter of type "uint8_t *"
+          HAL_UART_Receive_DMA(&huart3, MPUData, 33);
+..\Core\Src\AML_MPUSensor.c: 16 warnings, 0 errors
+compiling AML_MotorControl.c...
+../Core/Inc/main.h(58): warning:  #1295-D: Deprecated declaration Move - give arg types
+  void Move();
+../Core/Inc/KalmanFilter.h(25): warning:  #1-D: last line of file ends without a newline
+  #endif
+../Core/Inc/AML_MotorControl.h(57): warning:  #1-D: last line of file ends without a newline
+  #endif // AML_MOTORCONTROL_H
+../Core/Inc/AML_Remote.h(17): warning:  #1-D: last line of file ends without a newline
+  #endif // AML_REMOTE_H
+../Core/Inc/AML_Parameter.h(59): warning:  #1-D: last line of file ends without a newline
+  #endif // AML_Parameter_H
+../Core/Inc/AML_LaserSensor.h(29): warning:  #1-D: last line of file ends without a newline
+  #endif
+../Core/Inc/AML_Encoder.h(13): warning:  #1-D: last line of file ends without a newline
+  #endif // AML_ENCODER_H
+../Core/Inc/flood.h(32): warning:  #47-D: incompatible redefinition of macro "FLOOD_LEFT_WALL"  (declared at line 27 of "../Core/Inc/AML_Parameter.h")
+  #define FLOOD_LEFT_WALL 300
+../Core/Inc/flood.h(33): warning:  #47-D: incompatible redefinition of macro "FLOOD_RIGHT_WALL"  (declared at line 26 of "../Core/Inc/AML_Parameter.h")
+  #define FLOOD_RIGHT_WALL 300
+../Core/Inc/AML_MotorControl.h(57): warning:  #1-D: last line of file ends without a newline
+  #endif // AML_MOTORCONTROL_H
+..\Core\Src\AML_MotorControl.c(268): warning:  #188-D: enumerated type mixed with another type
+          HAL_GPIO_WritePin(AIN2_GPIO_Port, AIN2_Pin, !direction);
+..\Core\Src\AML_MotorControl.c(273): warning:  #188-D: enumerated type mixed with another type
+          HAL_GPIO_WritePin(AIN1_GPIO_Port, AIN1_Pin, !direction);
+..\Core\Src\AML_MotorControl.c(300): warning:  #188-D: enumerated type mixed with another type
+          HAL_GPIO_WritePin(BIN1_GPIO_Port, BIN1_Pin, !direction);
+..\Core\Src\AML_MotorControl.c(307): warning:  #188-D: enumerated type mixed with another type
+          HAL_GPIO_WritePin(BIN2_GPIO_Port, BIN2_Pin, !direction);
+..\Core\Src\AML_MotorControl.c(325): warning:  #188-D: enumerated type mixed with another type
+      direction = ~direction;
+..\Core\Src\AML_MotorControl.c(457): warning:  #188-D: enumerated type mixed with another type
+      AML_DebugDevice_TurnOnLED(0);
+..\Core\Src\AML_MotorControl.c(459): warning:  #188-D: enumerated type mixed with another type
+      AML_DebugDevice_TurnOffLED(1);
+..\Core\Src\AML_MotorControl.c(460): warning:  #188-D: enumerated type mixed with another type
+      AML_DebugDevice_TurnOffLED(2);
+..\Core\Src\AML_MotorControl.c(461): warning:  #188-D: enumerated type mixed with another type
+      AML_DebugDevice_TurnOffLED(3);
+..\Core\Src\AML_MotorControl.c(462): warning:  #188-D: enumerated type mixed with another type
+      AML_DebugDevice_TurnOffLED(4);
+..\Core\Src\AML_MotorControl.c(463): warning:  #188-D: enumerated type mixed with another type
+      AML_DebugDevice_TurnOffLED(5);
+..\Core\Src\AML_MotorControl.c(464): warning:  #188-D: enumerated type mixed with another type
+      AML_DebugDevice_TurnOffLED(6);
+..\Core\Src\AML_MotorControl.c(465): warning:  #188-D: enumerated type mixed with another type
+      AML_DebugDevice_TurnOffLED(7);
+..\Core\Src\AML_MotorControl.c(481): warning:  #188-D: enumerated type mixed with another type
+      AML_DebugDevice_TurnOnLED(1);
+..\Core\Src\AML_MotorControl.c(483): warning:  #188-D: enumerated type mixed with another type
+      AML_DebugDevice_TurnOffLED(0);
+..\Core\Src\AML_MotorControl.c(484): warning:  #188-D: enumerated type mixed with another type
+      AML_DebugDevice_TurnOffLED(2);
+..\Core\Src\AML_MotorControl.c(485): warning:  #188-D: enumerated type mixed with another type
+      AML_DebugDevice_TurnOffLED(3);
+..\Core\Src\AML_MotorControl.c(486): warning:  #188-D: enumerated type mixed with another type
+      AML_DebugDevice_TurnOffLED(4);
+..\Core\Src\AML_MotorControl.c(487): warning:  #188-D: enumerated type mixed with another type
+      AML_DebugDevice_TurnOffLED(5);
+..\Core\Src\AML_MotorControl.c(488): warning:  #188-D: enumerated type mixed with another type
+      AML_DebugDevice_TurnOffLED(6);
+..\Core\Src\AML_MotorControl.c(489): warning:  #188-D: enumerated type mixed with another type
+      AML_DebugDevice_TurnOffLED(7);
+..\Core\Src\AML_MotorControl.c(505): warning:  #188-D: enumerated type mixed with another type
+      AML_DebugDevice_TurnOnLED(2);
+..\Core\Src\AML_MotorControl.c(507): warning:  #188-D: enumerated type mixed with another type
+      AML_DebugDevice_TurnOffLED(0);
+..\Core\Src\AML_MotorControl.c(508): warning:  #188-D: enumerated type mixed with another type
+      AML_DebugDevice_TurnOffLED(1);
+..\Core\Src\AML_MotorControl.c(509): warning:  #188-D: enumerated type mixed with another type
+      AML_DebugDevice_TurnOffLED(3);
+..\Core\Src\AML_MotorControl.c(510): warning:  #188-D: enumerated type mixed with another type
+      AML_DebugDevice_TurnOffLED(4);
+..\Core\Src\AML_MotorControl.c(511): warning:  #188-D: enumerated type mixed with another type
+      AML_DebugDevice_TurnOffLED(5);
+..\Core\Src\AML_MotorControl.c(512): warning:  #188-D: enumerated type mixed with another type
+      AML_DebugDevice_TurnOffLED(6);
+..\Core\Src\AML_MotorControl.c(513): warning:  #188-D: enumerated type mixed with another type
+      AML_DebugDevice_TurnOffLED(7);
+..\Core\Src\AML_MotorControl.c(629): warning:  #188-D: enumerated type mixed with another type
+      AML_DebugDevice_TurnOnLED(3);
+..\Core\Src\AML_MotorControl.c(631): warning:  #188-D: enumerated type mixed with another type
+      AML_DebugDevice_TurnOffLED(0);
+..\Core\Src\AML_MotorControl.c(632): warning:  #188-D: enumerated type mixed with another type
+      AML_DebugDevice_TurnOffLED(1);
+..\Core\Src\AML_MotorControl.c(633): warning:  #188-D: enumerated type mixed with another type
+      AML_DebugDevice_TurnOffLED(2);
+..\Core\Src\AML_MotorControl.c(634): warning:  #188-D: enumerated type mixed with another type
+      AML_DebugDevice_TurnOffLED(4);
+..\Core\Src\AML_MotorControl.c(635): warning:  #188-D: enumerated type mixed with another type
+      AML_DebugDevice_TurnOffLED(5);
+..\Core\Src\AML_MotorControl.c(636): warning:  #188-D: enumerated type mixed with another type
+      AML_DebugDevice_TurnOffLED(6);
+..\Core\Src\AML_MotorControl.c(637): warning:  #188-D: enumerated type mixed with another type
+      AML_DebugDevice_TurnOffLED(7);
+..\Core\Src\AML_MotorControl.c(665): warning:  #188-D: enumerated type mixed with another type
+      AML_DebugDevice_TurnOffLED(3);
+..\Core\Src\AML_MotorControl.c(672): warning:  #188-D: enumerated type mixed with another type
+      AML_DebugDevice_TurnOnLED(4);
+..\Core\Src\AML_MotorControl.c(674): warning:  #188-D: enumerated type mixed with another type
+      AML_DebugDevice_TurnOffLED(0);
+..\Core\Src\AML_MotorControl.c(675): warning:  #188-D: enumerated type mixed with another type
+      AML_DebugDevice_TurnOffLED(1);
+..\Core\Src\AML_MotorControl.c(676): warning:  #188-D: enumerated type mixed with another type
+      AML_DebugDevice_TurnOffLED(2);
+..\Core\Src\AML_MotorControl.c(677): warning:  #188-D: enumerated type mixed with another type
+      AML_DebugDevice_TurnOffLED(3);
+..\Core\Src\AML_MotorControl.c(678): warning:  #188-D: enumerated type mixed with another type
+      AML_DebugDevice_TurnOffLED(5);
+..\Core\Src\AML_MotorControl.c(679): warning:  #188-D: enumerated type mixed with another type
+      AML_DebugDevice_TurnOffLED(6);
+..\Core\Src\AML_MotorControl.c(680): warning:  #188-D: enumerated type mixed with another type
+      AML_DebugDevice_TurnOffLED(7);
+..\Core\Src\AML_MotorControl.c(707): warning:  #188-D: enumerated type mixed with another type
+      AML_DebugDevice_TurnOffLED(4);
+..\Core\Src\AML_MotorControl.c(714): warning:  #188-D: enumerated type mixed with another type
+      AML_DebugDevice_TurnOnLED(5);
+..\Core\Src\AML_MotorControl.c(716): warning:  #188-D: enumerated type mixed with another type
+      AML_DebugDevice_TurnOffLED(0);
+..\Core\Src\AML_MotorControl.c(717): warning:  #188-D: enumerated type mixed with another type
+      AML_DebugDevice_TurnOffLED(1);
+..\Core\Src\AML_MotorControl.c(718): warning:  #188-D: enumerated type mixed with another type
+      AML_DebugDevice_TurnOffLED(2);
+..\Core\Src\AML_MotorControl.c(719): warning:  #188-D: enumerated type mixed with another type
+      AML_DebugDevice_TurnOffLED(3);
+..\Core\Src\AML_MotorControl.c(720): warning:  #188-D: enumerated type mixed with another type
+      AML_DebugDevice_TurnOffLED(4);
+..\Core\Src\AML_MotorControl.c(721): warning:  #188-D: enumerated type mixed with another type
+      AML_DebugDevice_TurnOffLED(6);
+..\Core\Src\AML_MotorControl.c(722): warning:  #188-D: enumerated type mixed with another type
+      AML_DebugDevice_TurnOffLED(7);
+..\Core\Src\AML_MotorControl.c(751): warning:  #188-D: enumerated type mixed with another type
+      AML_DebugDevice_TurnOffLED(5);
+..\Core\Src\AML_MotorControl.c(759): warning:  #188-D: enumerated type mixed with another type
+      AML_DebugDevice_TurnOnLED(6);
+..\Core\Src\AML_MotorControl.c(761): warning:  #188-D: enumerated type mixed with another type
+      AML_DebugDevice_TurnOffLED(0);
+..\Core\Src\AML_MotorControl.c(762): warning:  #188-D: enumerated type mixed with another type
+      AML_DebugDevice_TurnOffLED(1);
+..\Core\Src\AML_MotorControl.c(763): warning:  #188-D: enumerated type mixed with another type
+      AML_DebugDevice_TurnOffLED(2);
+..\Core\Src\AML_MotorControl.c(764): warning:  #188-D: enumerated type mixed with another type
+      AML_DebugDevice_TurnOffLED(3);
+..\Core\Src\AML_MotorControl.c(765): warning:  #188-D: enumerated type mixed with another type
+      AML_DebugDevice_TurnOffLED(4);
+..\Core\Src\AML_MotorControl.c(766): warning:  #188-D: enumerated type mixed with another type
+      AML_DebugDevice_TurnOffLED(5);
+..\Core\Src\AML_MotorControl.c(767): warning:  #188-D: enumerated type mixed with another type
+      AML_DebugDevice_TurnOffLED(7);
+..\Core\Src\AML_MotorControl.c(798): warning:  #188-D: enumerated type mixed with another type
+      AML_DebugDevice_TurnOffLED(6);
+..\Core\Src\AML_MotorControl.c(840): warning:  #188-D: enumerated type mixed with another type
+      AML_DebugDevice_TurnOffLED(6);
+..\Core\Src\AML_MotorControl.c(862): warning:  #188-D: enumerated type mixed with another type
+      AML_DebugDevice_TurnOffLED(7);
+..\Core\Src\AML_MotorControl.c(885): warning:  #188-D: enumerated type mixed with another type
+      AML_DebugDevice_TurnOffLED(5);
+..\Core\Src\AML_MotorControl.c: 78 warnings, 0 errors
 compiling flood.c...
 ../Core/Inc/main.h(58): warning:  #1295-D: Deprecated declaration Move - give arg types
   void Move();
@@ -76,33 +268,115 @@ compiling flood.c...
   #define FLOOD_LEFT_WALL 300
 ../Core/Inc/flood.h(33): warning:  #47-D: incompatible redefinition of macro "FLOOD_RIGHT_WALL"  (declared at line 26 of "../Core/Inc/AML_Parameter.h")
   #define FLOOD_RIGHT_WALL 300
-..\Core\Src\flood.c(293): warning:  #111-D: statement is unreachable
+..\Core\Src\flood.c(301): warning:  #111-D: statement is unreachable
   			break;
-..\Core\Src\flood.c(431): warning:  #940-D: missing return statement at end of non-void function "floodFill" 
+..\Core\Src\flood.c(438): warning:  #940-D: missing return statement at end of non-void function "floodFill" 
   }
-..\Core\Src\flood.c(603): warning:  #550-D: variable "binaryx"  was set but never used
+..\Core\Src\flood.c(610): warning:  #550-D: variable "binaryx"  was set but never used
   	int binaryx[4];
-..\Core\Src\flood.c(604): warning:  #550-D: variable "binaryy"  was set but never used
+..\Core\Src\flood.c(611): warning:  #550-D: variable "binaryy"  was set but never used
   	int binaryy[4];
-..\Core\Src\flood.c(676): warning:  #188-D: enumerated type mixed with another type
+..\Core\Src\flood.c(683): warning:  #188-D: enumerated type mixed with another type
   	AML_DebugDevice_TurnOnLED(0);
-..\Core\Src\flood.c(691): warning:  #188-D: enumerated type mixed with another type
-  	AML_DebugDevice_TurnOffLED(0);
 ..\Core\Src\flood.c(701): warning:  #188-D: enumerated type mixed with another type
+  	AML_DebugDevice_TurnOffLED(0);
+..\Core\Src\flood.c(711): warning:  #188-D: enumerated type mixed with another type
   	AML_DebugDevice_TurnOnLED(1);
-..\Core\Src\flood.c(722): warning:  #188-D: enumerated type mixed with another type
+..\Core\Src\flood.c(735): warning:  #188-D: enumerated type mixed with another type
   	AML_DebugDevice_TurnOffLED(1);
-..\Core\Src\flood.c(732): warning:  #177-D: variable "turn"  was declared but never referenced
+..\Core\Src\flood.c(745): warning:  #177-D: variable "turn"  was declared but never referenced
   	int turn = 0;
-..\Core\Src\flood.c(998): warning:  #111-D: statement is unreachable
+..\Core\Src\flood.c(1011): warning:  #111-D: statement is unreachable
   			break;
-..\Core\Src\flood.c(1039): warning:  #940-D: missing return statement at end of non-void function "logicalFlood" 
+..\Core\Src\flood.c(1052): warning:  #940-D: missing return statement at end of non-void function "logicalFlood" 
   }
 ..\Core\Src\flood.c: 22 warnings, 0 errors
+compiling AML_Remote.c...
+../Core/Inc/main.h(58): warning:  #1295-D: Deprecated declaration Move - give arg types
+  void Move();
+../Core/Inc/KalmanFilter.h(25): warning:  #1-D: last line of file ends without a newline
+  #endif
+../Core/Inc/AML_Remote.h(17): warning:  #1-D: last line of file ends without a newline
+  #endif // AML_REMOTE_H
+../Core/Inc/AML_Parameter.h(59): warning:  #1-D: last line of file ends without a newline
+  #endif // AML_Parameter_H
+../Core/Inc/AML_LaserSensor.h(29): warning:  #1-D: last line of file ends without a newline
+  #endif
+../Core/Inc/AML_Encoder.h(13): warning:  #1-D: last line of file ends without a newline
+  #endif // AML_ENCODER_H
+../Core/Inc/AML_MotorControl.h(57): warning:  #1-D: last line of file ends without a newline
+  #endif // AML_MOTORCONTROL_H
+../Core/Inc/flood.h(32): warning:  #47-D: incompatible redefinition of macro "FLOOD_LEFT_WALL"  (declared at line 27 of "../Core/Inc/AML_Parameter.h")
+  #define FLOOD_LEFT_WALL 300
+../Core/Inc/flood.h(33): warning:  #47-D: incompatible redefinition of macro "FLOOD_RIGHT_WALL"  (declared at line 26 of "../Core/Inc/AML_Parameter.h")
+  #define FLOOD_RIGHT_WALL 300
+../Core/Inc/AML_MotorControl.h(57): warning:  #1-D: last line of file ends without a newline
+  #endif // AML_MOTORCONTROL_H
+../Core/Inc/AML_Remote.h(17): warning:  #1-D: last line of file ends without a newline
+  #endif // AML_REMOTE_H
+..\Core\Src\AML_Remote.c(16): warning:  #167-D: argument of type "volatile uint8_t *" is incompatible with parameter of type "uint8_t *"
+      HAL_UART_Receive_IT(&huart6, &RemoteBuffer, 1);
+..\Core\Src\AML_Remote.c(32): warning:  #167-D: argument of type "volatile uint8_t *" is incompatible with parameter of type "void *"
+          memset(RemoteData, 0, sizeof(RemoteData));
+..\Core\Src\AML_Remote.c(34): warning:  #167-D: argument of type "volatile uint8_t *" is incompatible with parameter of type "uint8_t *"
+      HAL_UART_Receive_IT(&huart6, &RemoteBuffer, 1);
+..\Core\Src\AML_Remote.c: 14 warnings, 0 errors
+compiling AML_Keyboard.c...
+../Core/Inc/main.h(58): warning:  #1295-D: Deprecated declaration Move - give arg types
+  void Move();
+../Core/Inc/KalmanFilter.h(25): warning:  #1-D: last line of file ends without a newline
+  #endif
+../Core/Inc/AML_MotorControl.h(57): warning:  #1-D: last line of file ends without a newline
+  #endif // AML_MOTORCONTROL_H
+../Core/Inc/AML_Remote.h(17): warning:  #1-D: last line of file ends without a newline
+  #endif // AML_REMOTE_H
+../Core/Inc/AML_Parameter.h(59): warning:  #1-D: last line of file ends without a newline
+  #endif // AML_Parameter_H
+../Core/Inc/AML_LaserSensor.h(29): warning:  #1-D: last line of file ends without a newline
+  #endif
+../Core/Inc/AML_Encoder.h(13): warning:  #1-D: last line of file ends without a newline
+  #endif // AML_ENCODER_H
+../Core/Inc/flood.h(32): warning:  #47-D: incompatible redefinition of macro "FLOOD_LEFT_WALL"  (declared at line 27 of "../Core/Inc/AML_Parameter.h")
+  #define FLOOD_LEFT_WALL 300
+../Core/Inc/flood.h(33): warning:  #47-D: incompatible redefinition of macro "FLOOD_RIGHT_WALL"  (declared at line 26 of "../Core/Inc/AML_Parameter.h")
+  #define FLOOD_RIGHT_WALL 300
+../Core/Inc/AML_MotorControl.h(57): warning:  #1-D: last line of file ends without a newline
+  #endif // AML_MOTORCONTROL_H
+../Core/Inc/AML_Keyboard.h(18): warning:  #1-D: last line of file ends without a newline
+  #endif // AML_KEYBOARD_H
+..\Core\Src\AML_Keyboard.c: 11 warnings, 0 errors
+compiling AML_LaserSensor.c...
+../Core/Inc/main.h(58): warning:  #1295-D: Deprecated declaration Move - give arg types
+  void Move();
+../Core/Inc/KalmanFilter.h(25): warning:  #1-D: last line of file ends without a newline
+  #endif
+../Core/Inc/AML_LaserSensor.h(29): warning:  #1-D: last line of file ends without a newline
+  #endif
+../Core/Inc/AML_Encoder.h(13): warning:  #1-D: last line of file ends without a newline
+  #endif // AML_ENCODER_H
+../Core/Inc/AML_Remote.h(17): warning:  #1-D: last line of file ends without a newline
+  #endif // AML_REMOTE_H
+../Core/Inc/AML_Parameter.h(59): warning:  #1-D: last line of file ends without a newline
+  #endif // AML_Parameter_H
+../Core/Inc/AML_MotorControl.h(57): warning:  #1-D: last line of file ends without a newline
+  #endif // AML_MOTORCONTROL_H
+../Core/Inc/flood.h(32): warning:  #47-D: incompatible redefinition of macro "FLOOD_LEFT_WALL"  (declared at line 27 of "../Core/Inc/AML_Parameter.h")
+  #define FLOOD_LEFT_WALL 300
+../Core/Inc/flood.h(33): warning:  #47-D: incompatible redefinition of macro "FLOOD_RIGHT_WALL"  (declared at line 26 of "../Core/Inc/AML_Parameter.h")
+  #define FLOOD_RIGHT_WALL 300
+../Core/Inc/AML_MotorControl.h(57): warning:  #1-D: last line of file ends without a newline
+  #endif // AML_MOTORCONTROL_H
+../Core/Inc/AML_Remote.h(17): warning:  #1-D: last line of file ends without a newline
+  #endif // AML_REMOTE_H
+../Core/Inc/AML_LaserSensor.h(29): warning:  #1-D: last line of file ends without a newline
+  #endif
+..\Core\Src\AML_LaserSensor.c(180): warning:  #940-D: missing return statement at end of non-void function "AML_LaserSensor_WallFavor" 
+  }
+..\Core\Src\AML_LaserSensor.c: 13 warnings, 0 errors
 linking...
-Program Size: Code=43530 RO-data=922 RW-data=1244 ZI-data=11076  
+Program Size: Code=43762 RO-data=922 RW-data=1252 ZI-data=11076  
 FromELF: creating hex file...
-"PCB_V1\PCB_V1.axf" - 0 Error(s), 34 Warning(s).
+"PCB_V1\PCB_V1.axf" - 0 Error(s), 166 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -125,7 +399,7 @@ Package Vendor: Keil
 <h2>Collection of Component Files used:</h2>
 
    * Component: ARM::CMSIS:CORE:5.4.0
-Build Time Elapsed:  00:00:04
+Build Time Elapsed:  00:00:08
 </pre>
 </body>
 </html>

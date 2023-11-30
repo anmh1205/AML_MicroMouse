@@ -16,6 +16,7 @@ uint8_t isApertureSpads;
 uint8_t VhvSettings;
 uint8_t PhaseCal;
 
+
 void AML_LaserSensor_Init(uint8_t i)
 {
     VL53L0X_WaitDeviceBooted(Laser[i]);

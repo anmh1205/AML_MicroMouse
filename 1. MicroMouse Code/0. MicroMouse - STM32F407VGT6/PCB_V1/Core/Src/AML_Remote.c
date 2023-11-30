@@ -34,3 +34,29 @@ void AML_Remote_Handle()
     HAL_UART_Receive_IT(&huart6, &RemoteBuffer, 1);
 }
 
+void AMl_Remote_NumberToString(uint8_t *string, int32_t number)
+{
+    uint8_t temp[10];
+    uint8_t i = 0;
+    uint8_t j = 0;
+    uint8_t k = 0;
+
+    if (number < 0)
+    {
+        string[0] = '-';
+        number = -number;
+        i++;
+    }
+
+    while (number > 0)
+    {
+        temp[i++] = number % 10 + '0';
+        number /= 10;
+    }
+
+    for (j = i; j > 0; j--)
+    {
+        string[k++] = temp[j - 1];
+    }
+}
+

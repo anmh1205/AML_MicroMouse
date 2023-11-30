@@ -24,11 +24,11 @@ void HAL_UART_TxHalfCpltCallback(UART_HandleTypeDef *huart)
 void AML_MPUSensor_ResetAngle(void)
 {
     HAL_UART_DMAStop(&huart3);
-    HAL_UART_Transmit(&huart3, ResetCommand, 3, 1000);
+    HAL_UART_Transmit(&huart3, ResetCommand, 3, 100);
     SaveAngle = 0;
     PreviousAngle = 0;
     Angle = 0;
-    HAL_Delay(10);
+    // HAL_Delay(10);
     HAL_UART_Receive_DMA(&huart3, MPUData, 33);
 }
 

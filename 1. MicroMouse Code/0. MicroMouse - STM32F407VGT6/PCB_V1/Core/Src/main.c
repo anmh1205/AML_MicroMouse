@@ -112,8 +112,17 @@ static void MX_TIM9_Init(void);
 //   return (ch);
 // }
 
-void Run()
+void Run(int InitDirection)
 {
+
+  for (int i = 0; i < 3; i++)
+  {
+    AML_DebugDevice_BuzzerBeep(100);
+    HAL_Delay(100);
+  }
+
+    AML_MPUSensor_ResetAngle();
+  HAL_Delay(1500);
 
   // algorithm = wallFavor();                 // thay bang ham doc laser
   // algorithm = AML_LaserSensor_WallFavor(); // can sua lai
@@ -134,8 +143,34 @@ void Run()
   // initialize the walls
   init_wall_maze(&cell_walls_info);
 
+  update_stack.index = 0;
+
+  int direction = InitDirection;
+
+  if (direction == NORTH)
+  {
+    if (AML_LaserSensor_ReadSingleWithoutFillter(BR) < WALL_IN_RIGHT)
+    {
+      cell_walls_info.cells[0][0].walls[EAST] = 1;
+    }
+    else
+    {
+      cell_walls_info.cells[0][0].walls[EAST] = 0;
+    }
+  }
+
+  if (direction == EAST)
+  {
+    if (AML_LaserSensor_ReadSingleWithoutFillter(BL) < WALL_IN_LEFT)
+    {
+      cell_walls_info.cells[0][0].walls[NORTH] = 1;
+    }
+    else
+    {
+      cell_walls_info.cells[0][0].walls[NORTH] = 0;
+    }
+  }
   // set east, south, west wall of start cell to true
-  cell_walls_info.cells[0][0].walls[EAST] = 1;
   cell_walls_info.cells[0][0].walls[SOUTH] = 1;
   cell_walls_info.cells[0][0].walls[WEST] = 1;
 
@@ -144,17 +179,18 @@ void Run()
 
   // MX_TIM3_Init(); // Software timer for tracking REMOVE THIS LATER
 
-  int direction = NORTH;
-  update_stack.index = 0;
   direction = floodFill(&distances, &c, &cell_walls_info, algorithm, direction, &update_stack);
 
-  for (int i = 0; i < 3; i++)
+  for (int i = 0; i < 10; i++)
   {
+    AML_DebugDevice_SetAllLED(GPIO_PIN_SET);
     AML_DebugDevice_BuzzerBeep(50);
-    HAL_Delay(50);
+    HAL_Delay(100);
   }
 
-    direction = centerMovement(&cell_walls_info, &c, direction);
+  return;
+
+  direction = centerMovement(&cell_walls_info, &c, direction);
 
   // ONCE IT REACHES HERE, IT HAS REACHED THE CENTER OF THE MAZE
   // Mouse has made it to center, so flood back to start
@@ -240,7 +276,7 @@ void Move()
 {
   AML_MotorControl_TurnOnWallFollow();
 
-  if (AML_LaserSensor_ReadSingleWithoutFillter(BL) > 170 )
+  if (AML_LaserSensor_ReadSingleWithoutFillter(BL) > 170)
   {
     AML_MotorControl_LeftStillTurn();
   }
@@ -286,18 +322,18 @@ void EncoderTest()
 
 void TestSpeed()
 {
-    AML_MotorControl_LeftPWM(20);
-    AML_MotorControl_RightPWM(20);
+  AML_MotorControl_LeftPWM(20);
+  AML_MotorControl_RightPWM(20);
 
-    debug[30] = AML_Encoder_GetLeftValue();
-    debug[31] = AML_Encoder_GetRightValue();
+  debug[30] = AML_Encoder_GetLeftValue();
+  debug[31] = AML_Encoder_GetRightValue();
 
-    LeftSpeed = debug[30] / 190 ;
-    RightSpeed = debug[31] / 190;
-    AML_Encoder_ResetLeftValue();
-    AML_Encoder_ResetRightValue();
+  LeftSpeed = debug[30] / 190;
+  RightSpeed = debug[31] / 190;
+  AML_Encoder_ResetLeftValue();
+  AML_Encoder_ResetRightValue();
 
-    HAL_Delay(1000);
+  HAL_Delay(1000);
 }
 
 /* USER CODE END 0 */
@@ -371,12 +407,14 @@ int main(void)
       ButtonPressed = 0;
     }
 
-    // for (int i = 0; i < 5; i++)
-    // {
-    //   debug[i] = AML_LaserSensor_ReadSingleWithFillter(i);
-    // }
+    for (int i = 0; i < 5; i++)
+    {
+      debug[i] = AML_LaserSensor_ReadSingleWithFillter(i);
+    }
 
     // AML_LaserSensor_ReadAll();
+
+    // AML_LaserSensor_ReadSingleWithFillter(FF);
 
     if (ReadButton == 0) // set left wall value
     {
@@ -388,6 +426,7 @@ int main(void)
     else if (ReadButton == 1) // set right wall value
     {
       // AML_MotorControl_SetRightWallValue();
+      AML_MotorControl_TurnOnWallFollow();
       // AML_MotorControl_TurnRight90();
       // ReadButton = 2;
 
@@ -405,14 +444,14 @@ int main(void)
     else if (ReadButton == 3)
     {
       // AML_MotorControl_MPUFollow();
-      Run();
+      Run(NORTH);
 
       // AML_MotorControl_TurnLeft180();
       ReadButton = 2;
     }
     else if (ReadButton == 4)
     {
-      Move();
+      Run(EAST);
       // AML_MotorControl_MPUFollow();
       // AML_MotorControl_TurnOnWallFollow();
 
@@ -420,7 +459,7 @@ int main(void)
       // ReadButton = 2;
     }
 
-    // testAngle = AML_MPUSensor_GetAngle();
+    testAngle = AML_MPUSensor_GetAngle();
 
     // debug[13] = AML_Encoder_GetLeftValue();
     // debug[14] = AML_Encoder_GetRightValue();
@@ -688,7 +727,7 @@ static void MX_TIM9_Init(void)
   htim9.Instance = TIM9;
   htim9.Init.Prescaler = 8399;
   htim9.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim9.Init.Period = 230;
+  htim9.Init.Period = 250;
   htim9.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim9.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim9) != HAL_OK)

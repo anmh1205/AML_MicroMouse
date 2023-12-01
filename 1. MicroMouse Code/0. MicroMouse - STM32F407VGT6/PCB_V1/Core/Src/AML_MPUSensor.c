@@ -5,7 +5,7 @@ uint8_t ResetCommand[] = {0xFF, 0xAA, 0x52};
 extern UART_HandleTypeDef huart3;
 // extern DMA_HandleTypeDef hdma_usart3_rx;
 
-volatile uint8_t MPUData[70];
+volatile uint8_t MPUData[36];
 volatile uint8_t buffer = 119;
 // volatile uint8_t index = 0;
 // extern int16_t debug[100];
@@ -24,11 +24,18 @@ void HAL_UART_TxHalfCpltCallback(UART_HandleTypeDef *huart)
 void AML_MPUSensor_ResetAngle(void)
 {
     HAL_UART_DMAStop(&huart3);
-    HAL_UART_Transmit(&huart3, ResetCommand, 3, 100);
+    HAL_UART_Transmit(&huart3, ResetCommand, 3, 1000);
     SaveAngle = 0;
     PreviousAngle = 0;
     Angle = 0;
-    // HAL_Delay(10);
+    HAL_Delay(5);
+
+    HAL_UART_Transmit(&huart3, ResetCommand, 3, 1000);
+    SaveAngle = 0;
+    PreviousAngle = 0;
+    Angle = 0;
+    HAL_Delay(5);
+    
     HAL_UART_Receive_DMA(&huart3, MPUData, 33);
 }
 
@@ -62,13 +69,13 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
         PreviousAngle = Angle;
         Angle = (((MPUData[6] << 8) | MPUData[5]) / 32768.0) * 180;
 
-        if (Angle - PreviousAngle > 250) // 0 -> 360 degree
+        if (Angle - PreviousAngle > 250.0f) // 0 -> 360 degree
         {
-            SaveAngle = 360;
+            SaveAngle += 360.0f;
         }
-        else if (Angle - PreviousAngle < -250) // 360 -> 0 degree
+        else if (Angle - PreviousAngle < -250.0f) // 360 -> 0 degree
         {
-            SaveAngle = 0;
+            SaveAngle -= 360.0f;
         }
 
         HAL_UART_Receive_DMA(&huart3, MPUData, 33);

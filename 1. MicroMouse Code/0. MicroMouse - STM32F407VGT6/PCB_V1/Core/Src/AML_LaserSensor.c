@@ -16,7 +16,6 @@ uint8_t isApertureSpads;
 uint8_t VhvSettings;
 uint8_t PhaseCal;
 
-
 void AML_LaserSensor_Init(uint8_t i)
 {
     VL53L0X_WaitDeviceBooted(Laser[i]);
@@ -33,22 +32,21 @@ void AML_LaserSensor_Init(uint8_t i)
     VL53L0X_SetLimitCheckEnable(Laser[i], VL53L0X_CHECKENABLE_SIGMA_FINAL_RANGE, 1);
     VL53L0X_SetLimitCheckEnable(Laser[i], VL53L0X_CHECKENABLE_SIGNAL_RATE_FINAL_RANGE, 1);
 
-
     // VL53L0X_SetLimitCheckValue(Laser[i], VL53L0X_CHECKENABLE_SIGNAL_RATE_FINAL_RANGE, (FixPoint1616_t)(0.25 * 65536));
     // VL53L0X_SetLimitCheckValue(Laser[i], VL53L0X_CHECKENABLE_SIGMA_FINAL_RANGE, (FixPoint1616_t)(32 * 65536));
     // VL53L0X_SetMeasurementTimingBudgetMicroSeconds(Laser[i], 20000);
 
     // if (i == BL || i == BR)
     // {
-        VL53L0X_SetLimitCheckValue(Laser[i], VL53L0X_CHECKENABLE_SIGNAL_RATE_FINAL_RANGE, (FixPoint1616_t)(0.25 * 65536));
-        VL53L0X_SetLimitCheckValue(Laser[i], VL53L0X_CHECKENABLE_SIGMA_FINAL_RANGE, (FixPoint1616_t)(32 * 65536));
-        VL53L0X_SetMeasurementTimingBudgetMicroSeconds(Laser[i], 20000);
+    VL53L0X_SetLimitCheckValue(Laser[i], VL53L0X_CHECKENABLE_SIGNAL_RATE_FINAL_RANGE, (FixPoint1616_t)(0.25 * 65536));
+    VL53L0X_SetLimitCheckValue(Laser[i], VL53L0X_CHECKENABLE_SIGMA_FINAL_RANGE, (FixPoint1616_t)(32 * 65536));
+    VL53L0X_SetMeasurementTimingBudgetMicroSeconds(Laser[i], 20000);
     // }
     // else
     // {
-        // VL53L0X_SetLimitCheckValue(Laser[i], VL53L0X_CHECKENABLE_SIGNAL_RATE_FINAL_RANGE, (FixPoint1616_t)(0.1 * 65536));
-        // VL53L0X_SetLimitCheckValue(Laser[i], VL53L0X_CHECKENABLE_SIGMA_FINAL_RANGE, (FixPoint1616_t)(60 * 65536));
-        // VL53L0X_SetMeasurementTimingBudgetMicroSeconds(Laser[i], 33000);
+    // VL53L0X_SetLimitCheckValue(Laser[i], VL53L0X_CHECKENABLE_SIGNAL_RATE_FINAL_RANGE, (FixPoint1616_t)(0.1 * 65536));
+    // VL53L0X_SetLimitCheckValue(Laser[i], VL53L0X_CHECKENABLE_SIGMA_FINAL_RANGE, (FixPoint1616_t)(60 * 65536));
+    // VL53L0X_SetMeasurementTimingBudgetMicroSeconds(Laser[i], 33000);
     // }
 
     VL53L0X_SetVcselPulsePeriod(Laser[i], VL53L0X_VCSEL_PERIOD_PRE_RANGE, 18);
@@ -137,32 +135,77 @@ void AML_LaserSensor_Setup(void)
 
 void AML_LaserSensor_ReadAll(void)
 {
-    for (uint8_t i = 0; i < 5; i++)
-    {
-        VL53L0X_GetRangingMeasurementData(Laser[i], &SensorValue[i]);
+    uint8_t i = 0;
 
-        // if (SensorValue[i].RangeMilliMeter < 2000) // 2000 is the maximum range of the sensor
-        // {
-        //     SensorValue[i].RangeMilliMeter = (uint16_t)SimpleKalmanFilter_updateEstimate(&KalmanFilter[i], SensorValue[i].RangeMilliMeter);
-        // }
+    VL53L0X_GetRangingMeasurementData(Laser[i], &SensorValue[i]);
+
+    if (SensorValue[i].RangeMilliMeter < 2000) // 2000 is the maximum range of the sensor
+    {
+        SensorValue[i].RangeMilliMeter = (uint16_t)SimpleKalmanFilter_updateEstimate(&KalmanFilter[i], SensorValue[i].RangeMilliMeter);
+    }
+
+    i++;
+
+    VL53L0X_GetRangingMeasurementData(Laser[i], &SensorValue[i]);
+
+    if (SensorValue[i].RangeMilliMeter < 2000) // 2000 is the maximum range of the sensor
+    {
+        SensorValue[i].RangeMilliMeter = (uint16_t)SimpleKalmanFilter_updateEstimate(&KalmanFilter[i], SensorValue[i].RangeMilliMeter);
+    }
+
+    i++;
+
+    VL53L0X_GetRangingMeasurementData(Laser[i], &SensorValue[i]);
+
+    if (SensorValue[i].RangeMilliMeter < 2000) // 2000 is the maximum range of the sensor
+    {
+        SensorValue[i].RangeMilliMeter = (uint16_t)SimpleKalmanFilter_updateEstimate(&KalmanFilter[i], SensorValue[i].RangeMilliMeter);
+    }
+
+    i++;
+
+    VL53L0X_GetRangingMeasurementData(Laser[i], &SensorValue[i]);
+
+    if (SensorValue[i].RangeMilliMeter < 2000) // 2000 is the maximum range of the sensor
+    {
+        SensorValue[i].RangeMilliMeter = (uint16_t)SimpleKalmanFilter_updateEstimate(&KalmanFilter[i], SensorValue[i].RangeMilliMeter);
+    }
+
+    i++;
+
+    VL53L0X_GetRangingMeasurementData(Laser[i], &SensorValue[i]);
+
+    if (SensorValue[i].RangeMilliMeter < 2000) // 2000 is the maximum range of the sensor
+    {
+        SensorValue[i].RangeMilliMeter = (uint16_t)SimpleKalmanFilter_updateEstimate(&KalmanFilter[i], SensorValue[i].RangeMilliMeter);
     }
 }
 
 int32_t AML_LaserSensor_ReadSingleWithFillter(uint8_t name)
 {
-    VL53L0X_GetRangingMeasurementData(Laser[name], &SensorValue[name]);
+    // VL53L0X_GetRangingMeasurementData(Laser[name], &SensorValue[name]);
 
-    if (SensorValue[name].RangeMilliMeter < 2000) // 2000 is the maximum range of the sensor
-    {
-        SensorValue[name].RangeMilliMeter = (uint16_t)SimpleKalmanFilter_updateEstimate(&KalmanFilter[name], SensorValue[name].RangeMilliMeter);
-    }
+    // if (SensorValue[name].RangeMilliMeter < 2000) // 2000 is the maximum range of the sensor
+    // {
+    //     SensorValue[name].RangeMilliMeter = (uint16_t)SimpleKalmanFilter_updateEstimate(&KalmanFilter[name], SensorValue[name].RangeMilliMeter);
+    // }
 
+    // return (int32_t)SensorValue[name].RangeMilliMeter;
     return (int32_t)SensorValue[name].RangeMilliMeter;
 }
 
 int32_t AML_LaserSensor_ReadSingleWithoutFillter(uint8_t name)
 {
-    VL53L0X_GetRangingMeasurementData(Laser[name], &SensorValue[name]);
+    // VL53L0X_GetRangingMeasurementData(Laser[name], &SensorValue[name]);
+
+    // if (SensorValue[name].RangeMilliMeter > 20)
+    // {
+    //     return (int32_t)SensorValue[name].RangeMilliMeter;
+    // }
+    // else
+    // {
+    //     return 2000;
+    // }
 
     return (int32_t)SensorValue[name].RangeMilliMeter;
 }

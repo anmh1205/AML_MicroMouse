@@ -63,7 +63,7 @@ struct coor
 struct stack
 {
 	struct coor array[256];
-	int index;
+	int16_t index;
 };
 
 // Used to initialize distance array

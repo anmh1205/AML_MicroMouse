@@ -50,19 +50,19 @@ double SetpointDistance;
 
 PID_TypeDef PID_LeftWallFollow;
 double LeftWallDistance;
-double LeftWallFollow_Kp = 0.25f;
+double LeftWallFollow_Kp = 0.3f;
 double LeftWallFollow_Ki = 0.0f;
 double LeftWallFollow_Kd = 0.4f;
 
 PID_TypeDef PID_RightWallFollow;
 double RightWallDistance;
-double RightWallFollow_Kp = 0.25f;
+double RightWallFollow_Kp = 0.3f;
 double RightWallFollow_Ki = 0.0f;
 double RightWallFollow_Kd = 0.4f;
 
 PID_TypeDef PID_MPUFollow;
 double Input_MPUFollow, Output_MPUFollow, Setpoint_MPUFollow;
-double MPUFollow_Kp = 0.4f;
+double MPUFollow_Kp = 0.35f;
 double MPUFollow_Ki = 0.0f;
 double MPUFollow_Kd = 0.07f;
 
@@ -73,13 +73,13 @@ double MaxRotateSpeed = 25;
 
 PID_TypeDef PID_TurnLeft;
 double Input_TurnLeft, Output_TurnLeft, Setpoint_TurnLeft;
-double TurnLeft_Kp = 0.35f;
+double TurnLeft_Kp = 0.5f;
 double TurnLeft_Ki = 0.0f;
 double TurnLeft_Kd = 0.015f;
 
 PID_TypeDef PID_TurnRight;
 double Input_TurnRight, Output_TurnRight, Setpoint_TurnRight;
-double TurnRight_Kp = 0.38f;
+double TurnRight_Kp = 0.45f;
 double TurnRight_Ki = 0.0f;
 double TurnRight_Kd = 0.015f;
 
@@ -237,13 +237,13 @@ void AML_MotorControl_PIDSetup()
 
 void AML_MotorControl_PIDReset(PID_TypeDef *uPID)
 {
-    uPID->MyInput = 0;
-    uPID->MyOutput = 0;
-    uPID->MySetpoint = 0;
+    // uPID->MyInput = 0;
+    // uPID->MyOutput = 0;
+    // uPID->MySetpoint = 0;
 
-    uPID->OutputSum = 0;
-    uPID->LastInput = 0;
-    uPID->LastTime = 0;
+    // uPID->OutputSum = 0;
+    // uPID->LastInput = 0;
+    // uPID->LastTime = 0;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -375,7 +375,7 @@ void AML_MotorControl_Stop(void)
 void AML_MotorControl_ShortBreak(char c)
 {
     uint8_t TurnSpeed = 30;
-    uint8_t GoStraightSpeed = 50;
+    uint8_t GoStraightSpeed = 30;
 
     if (c == 'L')
     {
@@ -572,7 +572,11 @@ void AML_MotorControl_GoStraight3(void)
 
 void AML_MotoControl_GoStraight4(void)
 {
-    if (AML_LaserSensor_ReadSingleWithoutFillter(BL) < WALL_IN_LEFT)
+    if (AML_LaserSensor_ReadSingleWithFillter(BL) > WALL_IN_LEFT && AML_LaserSensor_ReadSingleWithFillter(BR) > WALL_IN_RIGHT)
+    {
+        AML_MotorControl_MPUFollow(0);
+    }
+    else if (AML_LaserSensor_ReadSingleWithoutFillter(BL) < WALL_IN_LEFT)
     {
         AML_MotorControl_LeftWallFollow();
 
@@ -586,10 +590,6 @@ void AML_MotoControl_GoStraight4(void)
 
         TempSetpoint = *PID_RightWallFollow.MyOutput;
 
-        AML_MotorControl_MPUFollow(TempSetpoint);
-    }
-    else 
-    {
         AML_MotorControl_MPUFollow(TempSetpoint);
     }
 }
@@ -670,6 +670,7 @@ void AML_MotorControl_TurnLeft90(void)
     AML_DebugDevice_TurnOffLED(7);
 
     // AML_MotorControl_ShortBreak('F');
+
     uint8_t CalibFlag = AML_LaserSensor_ReadSingleWithoutFillter(BR) < WALL_IN_RIGHT;
     AML_MPUSensor_ResetAngle();
     AML_DebugDevice_BuzzerBeep(20);
@@ -694,8 +695,8 @@ void AML_MotorControl_TurnLeft90(void)
 
     if (CalibFlag == 1)
     {
-        AML_MotorControl_LeftPWM(-15);
-        AML_MotorControl_RightPWM(-15);
+        AML_MotorControl_LeftPWM(-20);
+        AML_MotorControl_RightPWM(-20);
         HAL_Delay(700);
         AML_MotorControl_Stop();
     }
@@ -749,8 +750,8 @@ void AML_MotorControl_TurnRight90(void)
 
     if (CalibFlag == 1)
     {
-        AML_MotorControl_LeftPWM(-15);
-        AML_MotorControl_RightPWM(-15);
+        AML_MotorControl_LeftPWM(-20);
+        AML_MotorControl_RightPWM(-20);
         HAL_Delay(1000);
         AML_MotorControl_Stop();
     }
@@ -761,7 +762,7 @@ void AML_MotorControl_TurnRight90(void)
     // *PID_TurnRight.MyOutput = 0;
 
     // AML_MotorControl_PIDReset(&PID_MPUFollow);
-    // TempSetpoint = 0;
+    TempSetpoint = 0;
 
     AML_DebugDevice_TurnOffLED(4);
 }
@@ -809,7 +810,7 @@ void AML_MotorControl_TurnLeft180(void)
     // *PID_TurnRight.MyOutput = 0;
 
     // AML_MotorControl_PIDReset(&PID_MPUFollow);
-    // TempSetpoint = 0;
+    TempSetpoint = 0;
 
     AML_DebugDevice_TurnOffLED(5);
 }
@@ -859,7 +860,7 @@ void AML_MotorControl_TurnRight180(void)
     // *PID_TurnRight.MyOutput = 0;
 
     // AML_MotorControl_PIDReset(&PID_MPUFollow);
-    // TempSetpoint = 0;
+    TempSetpoint = 0;
 
     AML_DebugDevice_TurnOffLED(6);
 

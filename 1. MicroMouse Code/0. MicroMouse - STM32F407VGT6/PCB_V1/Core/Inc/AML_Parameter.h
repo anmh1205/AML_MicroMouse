@@ -36,8 +36,8 @@
 
 // competition maze parameters
 
-#define WALL_IN_FRONT 150 // 47
-#define WALL_IN_LEFT 140 // 121
+#define WALL_IN_FRONT 115 // 47
+#define WALL_IN_LEFT 115 // 121
 #define WALL_IN_RIGHT 130 // 100
 #define WALL_IN_FRONT_LEFT 90 // 60
 #define WALL_IN_FRONT_RIGHT 90 // 50
@@ -48,7 +48,7 @@
 #define WALL_NOT_IN_FRONT_LEFT 95 
 #define WALL_NOT_IN_FRONT_RIGHT 85
 
-#define MAZE_ENCODER_TICKS_ONE_CELL 1385  // main maze
+#define MAZE_ENCODER_TICKS_ONE_CELL 1350  // main maze
 #define MAZE_FLOOD_ENCODER_TICKS_ONE_CELL 1361
 #define MAZE_ENCODER_TICKS_FLAG 1000
 

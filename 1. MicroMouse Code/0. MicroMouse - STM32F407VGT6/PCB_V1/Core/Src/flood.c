@@ -114,7 +114,7 @@ void uncontrolledAdvanceTicks(uint32_t ticks)
 	else
 	{
 		delay = 700;
-		AML_MotorControl_SetMouseSpeed(12);
+		AML_MotorControl_SetMouseSpeed(10);
 	}
 
 	// uint32_t encoder_val = 0;
@@ -391,7 +391,8 @@ int floodFill(struct dist_maze *dm, struct coor *c, struct wall_maze *wm, int a,
 
 			if (AML_LaserSensor_ReadSingleWithFillter(FF) > WALL_NOT_IN_FRONT)
 			{
-				uncontrolledAdvanceTicks(250);
+				uncontrolledAdvanceTicks(120);
+				AML_MotorControl_ShortBreak('F');
 			}
 			else
 			{
@@ -419,11 +420,11 @@ int floodFill(struct dist_maze *dm, struct coor *c, struct wall_maze *wm, int a,
 				// leftMotorPWMChangeBackward(200);
 				// rightMotorPWMChangeBackward(200);
 
-				AML_MotorControl_LeftPWM(-15);
-				AML_MotorControl_RightPWM(-15);
+				AML_MotorControl_LeftPWM(-20);
+				AML_MotorControl_RightPWM(-20);
 				HAL_Delay(1000);
 
-				uncontrolledAdvanceTicks(250);
+				uncontrolledAdvanceTicks(200);
 
 				// custom_delay(2000);
 
@@ -442,7 +443,8 @@ int floodFill(struct dist_maze *dm, struct coor *c, struct wall_maze *wm, int a,
 
 			if (AML_LaserSensor_ReadSingleWithFillter(FF) > WALL_NOT_IN_FRONT)
 			{
-				uncontrolledAdvanceTicks(250);
+				uncontrolledAdvanceTicks(120);
+				AML_MotorControl_ShortBreak('F');
 			}
 			else
 			{
@@ -462,7 +464,8 @@ int floodFill(struct dist_maze *dm, struct coor *c, struct wall_maze *wm, int a,
 
 			if (AML_LaserSensor_ReadSingleWithFillter(FF) > WALL_NOT_IN_FRONT)
 			{
-				uncontrolledAdvanceTicks(250);
+				uncontrolledAdvanceTicks(120);
+				AML_MotorControl_ShortBreak('F');
 			}
 			else
 			{
@@ -477,6 +480,8 @@ int floodFill(struct dist_maze *dm, struct coor *c, struct wall_maze *wm, int a,
 		case 2:
 			// backward180StillTurn();
 
+			AML_MotorControl_TurnLeft180();
+
 			if (wm->cells[c->x][c->y].walls[direction] == 1)
 			{
 				// lockInterruptDisable_TIM3();
@@ -487,8 +492,8 @@ int floodFill(struct dist_maze *dm, struct coor *c, struct wall_maze *wm, int a,
 				// rightMotorPWMChangeBackward(200);
 
 				// custom_delay(2000);
-				AML_MotorControl_LeftPWM(-15);
-				AML_MotorControl_RightPWM(-15);
+				AML_MotorControl_LeftPWM(-20);
+				AML_MotorControl_RightPWM(-20);
 				HAL_Delay(2000);
 
 				uncontrolledAdvanceTicks(250);
@@ -508,7 +513,8 @@ int floodFill(struct dist_maze *dm, struct coor *c, struct wall_maze *wm, int a,
 
 			if (AML_LaserSensor_ReadSingleWithFillter(FF) > WALL_NOT_IN_FRONT)
 			{
-				uncontrolledAdvanceTicks(250);
+				uncontrolledAdvanceTicks(120);
+				AML_MotorControl_ShortBreak('F');
 			}
 			else
 			{

@@ -407,10 +407,11 @@ int main(void)
       ButtonPressed = 0;
     }
 
-    for (int i = 0; i < 5; i++)
-    {
-      debug[i] = AML_LaserSensor_ReadSingleWithFillter(i);
-    }
+    // AML_LaserSensor_ReadAll();
+    // for (int i = 0; i < 5; i++)
+    // {
+    //   debug[i] = AML_LaserSensor_ReadSingleWithFillter(i);
+    // }
 
     // AML_LaserSensor_ReadAll();
 
@@ -421,16 +422,18 @@ int main(void)
       // AML_MotorControl_SetLeftWallValue();
       AML_MotorControl_SetCenterPosition();
 
-      ReadButton = 8;
+      // ReadButton = 8;
+
+      // AML_MotorControl_TurnLeft90();
+      ReadButton = 2;
     }
     else if (ReadButton == 1) // set right wall value
     {
       // AML_MotorControl_SetRightWallValue();
-      AML_MotorControl_TurnOnWallFollow();
-      // AML_MotorControl_TurnRight90();
-      // ReadButton = 2;
+      // AML_MotorControl_TurnOnWallFollow();
+      AML_MotorControl_TurnRight90();
+      ReadButton = 2;
 
-      ReadButton = 8;
     }
     else if (ReadButton == 2)
     {

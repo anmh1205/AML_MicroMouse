@@ -12,6 +12,8 @@ uint16_t PreviousBL, PreviousBR;
 
 extern TIM_HandleTypeDef htim2;
 extern TIM_HandleTypeDef htim9;
+extern TIM_HandleTypeDef htim10;
+
 extern int16_t debug[100];
 extern uint8_t ReadButton;
 extern VL53L0X_RangingMeasurementData_t SensorValue[7];
@@ -597,13 +599,17 @@ void AML_MotoControl_GoStraight4(void)
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
     // UNUSED(htim);
-    if (htim->Instance == htim9.Instance)
+    if (htim->Instance == htim9.Instance) // timer for wall follow
     {
         // AML_MotorControl_GoStraight();
         // AML_MotorControl_GoStraight2();
         // AML_MotorControl_GoStraight3();
         AML_LaserSensor_ReadAll();
         AML_MotoControl_GoStraight4();
+    }
+    else if (htim->Instance == htim10.Instance)  // timer for led control
+    {
+        AML_DebugDevice_Handle();
     }
     // debug[11]++;
 }
@@ -696,9 +702,9 @@ void AML_MotorControl_TurnLeft90(void)
     if (CalibFlag == 1)
     {
         AML_MotorControl_LeftPWM(-20);
-        AML_MotorControl_RightPWM(-20);
-        HAL_Delay(700);
-        AML_MotorControl_Stop();
+    AML_MotorControl_RightPWM(-20);
+    HAL_Delay(700);
+    AML_MotorControl_Stop();
     }
     HAL_Delay(200);
 
@@ -751,9 +757,9 @@ void AML_MotorControl_TurnRight90(void)
     if (CalibFlag == 1)
     {
         AML_MotorControl_LeftPWM(-20);
-        AML_MotorControl_RightPWM(-20);
-        HAL_Delay(1000);
-        AML_MotorControl_Stop();
+    AML_MotorControl_RightPWM(-20);
+    HAL_Delay(1000);
+    AML_MotorControl_Stop();
     }
     HAL_Delay(200);
 
@@ -780,7 +786,7 @@ void AML_MotorControl_TurnLeft180(void)
     AML_DebugDevice_TurnOffLED(6);
     AML_DebugDevice_TurnOffLED(7);
 
-    // AML_MotorControl_ShortBreak('F');
+    AML_MotorControl_ShortBreak('F');
 
     AML_MPUSensor_ResetAngle();
     AML_DebugDevice_BuzzerBeep(20);
@@ -828,7 +834,7 @@ void AML_MotorControl_TurnRight180(void)
     AML_DebugDevice_TurnOffLED(5);
     AML_DebugDevice_TurnOffLED(7);
 
-    // AML_MotorControl_ShortBreak('F');
+    AML_MotorControl_ShortBreak('F');
 
     AML_MPUSensor_ResetAngle();
     AML_DebugDevice_BuzzerBeep(20);

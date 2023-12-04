@@ -26,5 +26,8 @@ void AML_DebugDevice_TurnOffLED(COLOR color);
 void AML_DebugDevice_ToggleLED(COLOR color);
 void AML_DebugDevice_SetLED(COLOR color, GPIO_PinState state);
 void AML_DebugDevice_SetAllLED(GPIO_PinState state);
+void AML_DebugDevice_Handle();
+void AML_DebugDevice_TurnOnIT();
+void AML_DebugDevice_TurnOffIT();
 
 #endif // AML_DEBUGDEVICE_H

@@ -345,6 +345,8 @@ int floodFill(struct dist_maze *dm, struct coor *c, struct wall_maze *wm, int a,
 		{
 			// lockInterruptDisable_TIM3();
 			AML_MotorControl_TurnOffWallFollow();
+			// AML_MotorControl_Stop();
+			AML_MotorControl_ShortBreak('F');
 
 			return direction;
 			break;
@@ -1090,7 +1092,7 @@ int logicalFlood(struct dist_maze *dm, struct coor *c, struct wall_maze *wm, int
 	// while we are not at target destination
 	while (1)
 	{
-		AML_MotorControl_GoStraight();
+		// AML_MotorControl_GoStraight();
 
 		// update coordinates for next cell we are going to visit
 		switch (direction)

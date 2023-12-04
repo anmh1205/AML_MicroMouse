@@ -58,6 +58,7 @@ TIM_HandleTypeDef htim1;
 TIM_HandleTypeDef htim2;
 TIM_HandleTypeDef htim4;
 TIM_HandleTypeDef htim9;
+TIM_HandleTypeDef htim10;
 
 UART_HandleTypeDef huart3;
 UART_HandleTypeDef huart6;
@@ -70,7 +71,7 @@ int16_t debug[100];
 uint8_t checkWorking[] = {0xFF, 0xAA, 0x52};
 
 // uint8_t ReadButton[5];
-uint8_t ReadButton;
+volatile uint8_t ReadButton;
 
 double testAngle;
 // int16_t LeftValue, RightValue;
@@ -100,6 +101,7 @@ static void MX_TIM1_Init(void);
 static void MX_TIM4_Init(void);
 static void MX_USART6_UART_Init(void);
 static void MX_TIM9_Init(void);
+static void MX_TIM10_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -115,18 +117,34 @@ static void MX_TIM9_Init(void);
 void Run(int InitDirection)
 {
 
-  for (int i = 0; i < 3; i++)
+  AML_DebugDevice_SetAllLED(GPIO_PIN_SET);
+  AML_DebugDevice_BuzzerBeep(100);
+  HAL_Delay(100);
+  AML_DebugDevice_BuzzerBeep(100);
+
+
+  ReadButton = 8;
+
+  while (ReadButton == 8)
   {
-    AML_DebugDevice_BuzzerBeep(100);
-    HAL_Delay(100);
   }
 
-    AML_MPUSensor_ResetAngle();
+  algorithm = ReadButton;  // huong di uu tien
+
+
+  for (int i = 0; i < 3; i++)
+  {
+    AML_DebugDevice_SetAllLED(GPIO_PIN_SET);
+    AML_DebugDevice_BuzzerBeep(150);
+    AML_DebugDevice_SetAllLED(GPIO_PIN_RESET);
+    HAL_Delay(150);
+  }
+
+  AML_MPUSensor_ResetAngle();
   HAL_Delay(1500);
 
   // algorithm = wallFavor();                 // thay bang ham doc laser
   // algorithm = AML_LaserSensor_WallFavor(); // can sua lai
-  algorithm = 0;
 
   // HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_RESET);
   // HAL_Delay(1000);
@@ -177,8 +195,6 @@ void Run(int InitDirection)
   struct coor c;
   init_coor(&c, 0, 0);
 
-  // MX_TIM3_Init(); // Software timer for tracking REMOVE THIS LATER
-
   direction = floodFill(&distances, &c, &cell_walls_info, algorithm, direction, &update_stack);
 
   for (int i = 0; i < 10; i++)
@@ -186,9 +202,11 @@ void Run(int InitDirection)
     AML_DebugDevice_SetAllLED(GPIO_PIN_SET);
     AML_DebugDevice_BuzzerBeep(50);
     HAL_Delay(100);
+    AML_DebugDevice_SetAllLED(GPIO_PIN_RESET);
+    HAL_Delay(100);
   }
 
-  return;
+  // return;
 
   direction = centerMovement(&cell_walls_info, &c, direction);
 
@@ -196,6 +214,15 @@ void Run(int InitDirection)
   // Mouse has made it to center, so flood back to start
   init_coor(&target, 0, 0);
   init_distance_maze(&distances, &target, 0);
+
+  // for (int i = 0; i < 10; i++)
+  // {
+  //   AML_DebugDevice_SetAllLED(GPIO_PIN_SET);
+  //   AML_DebugDevice_BuzzerBeep(50);
+  //   HAL_Delay(100);
+  //   AML_DebugDevice_SetAllLED(GPIO_PIN_RESET);
+  //   HAL_Delay(100);
+  // }
 
   // center to start
   logicalFlood(&distances, &c, &cell_walls_info, direction, direction, &update_stack);
@@ -339,9 +366,9 @@ void TestSpeed()
 /* USER CODE END 0 */
 
 /**
- * @brief  The application entry point.
- * @retval int
- */
+  * @brief  The application entry point.
+  * @retval int
+  */
 int main(void)
 {
   /* USER CODE BEGIN 1 */
@@ -373,6 +400,7 @@ int main(void)
   MX_TIM4_Init();
   MX_USART6_UART_Init();
   MX_TIM9_Init();
+  MX_TIM10_Init();
   /* USER CODE BEGIN 2 */
   AML_MPUSensor_Setup();
   // AML_Keyboard_Setup();
@@ -394,6 +422,12 @@ int main(void)
   AML_LaserSensor_ReadAll();
 
   AML_DebugDevice_BuzzerBeep(20);
+
+  // AML_DebugDevice_TurnOnIT();
+
+  // HAL_Delay(5000);
+
+  // AML_DebugDevice_TurnOffIT();
 
   /* USER CODE END 2 */
 
@@ -431,9 +465,8 @@ int main(void)
     {
       // AML_MotorControl_SetRightWallValue();
       // AML_MotorControl_TurnOnWallFollow();
-      AML_MotorControl_TurnRight90();
+      AML_MotorControl_TurnLeft90();
       ReadButton = 2;
-
     }
     else if (ReadButton == 2)
     {
@@ -459,7 +492,7 @@ int main(void)
       // AML_MotorControl_TurnOnWallFollow();
 
       // AML_MotorControl_TurnRight180();
-      // ReadButton = 2;
+      ReadButton = 2;
     }
 
     testAngle = AML_MPUSensor_GetAngle();
@@ -475,22 +508,22 @@ int main(void)
 }
 
 /**
- * @brief System Clock Configuration
- * @retval None
- */
+  * @brief System Clock Configuration
+  * @retval None
+  */
 void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
 
   /** Configure the main internal regulator output voltage
-   */
+  */
   __HAL_RCC_PWR_CLK_ENABLE();
   __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
 
   /** Initializes the RCC Oscillators according to the specified parameters
-   * in the RCC_OscInitTypeDef structure.
-   */
+  * in the RCC_OscInitTypeDef structure.
+  */
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
@@ -505,8 +538,9 @@ void SystemClock_Config(void)
   }
 
   /** Initializes the CPU, AHB and APB buses clocks
-   */
-  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
+  */
+  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
+                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
@@ -519,10 +553,10 @@ void SystemClock_Config(void)
 }
 
 /**
- * @brief I2C1 Initialization Function
- * @param None
- * @retval None
- */
+  * @brief I2C1 Initialization Function
+  * @param None
+  * @retval None
+  */
 static void MX_I2C1_Init(void)
 {
 
@@ -549,13 +583,14 @@ static void MX_I2C1_Init(void)
   /* USER CODE BEGIN I2C1_Init 2 */
 
   /* USER CODE END I2C1_Init 2 */
+
 }
 
 /**
- * @brief TIM1 Initialization Function
- * @param None
- * @retval None
- */
+  * @brief TIM1 Initialization Function
+  * @param None
+  * @retval None
+  */
 static void MX_TIM1_Init(void)
 {
 
@@ -598,13 +633,14 @@ static void MX_TIM1_Init(void)
   /* USER CODE BEGIN TIM1_Init 2 */
 
   /* USER CODE END TIM1_Init 2 */
+
 }
 
 /**
- * @brief TIM2 Initialization Function
- * @param None
- * @retval None
- */
+  * @brief TIM2 Initialization Function
+  * @param None
+  * @retval None
+  */
 static void MX_TIM2_Init(void)
 {
 
@@ -660,13 +696,14 @@ static void MX_TIM2_Init(void)
 
   /* USER CODE END TIM2_Init 2 */
   HAL_TIM_MspPostInit(&htim2);
+
 }
 
 /**
- * @brief TIM4 Initialization Function
- * @param None
- * @retval None
- */
+  * @brief TIM4 Initialization Function
+  * @param None
+  * @retval None
+  */
 static void MX_TIM4_Init(void)
 {
 
@@ -708,13 +745,14 @@ static void MX_TIM4_Init(void)
   /* USER CODE BEGIN TIM4_Init 2 */
 
   /* USER CODE END TIM4_Init 2 */
+
 }
 
 /**
- * @brief TIM9 Initialization Function
- * @param None
- * @retval None
- */
+  * @brief TIM9 Initialization Function
+  * @param None
+  * @retval None
+  */
 static void MX_TIM9_Init(void)
 {
 
@@ -745,13 +783,45 @@ static void MX_TIM9_Init(void)
   /* USER CODE BEGIN TIM9_Init 2 */
 
   /* USER CODE END TIM9_Init 2 */
+
 }
 
 /**
- * @brief USART3 Initialization Function
- * @param None
- * @retval None
- */
+  * @brief TIM10 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM10_Init(void)
+{
+
+  /* USER CODE BEGIN TIM10_Init 0 */
+
+  /* USER CODE END TIM10_Init 0 */
+
+  /* USER CODE BEGIN TIM10_Init 1 */
+
+  /* USER CODE END TIM10_Init 1 */
+  htim10.Instance = TIM10;
+  htim10.Init.Prescaler = 8399;
+  htim10.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim10.Init.Period = 1499;
+  htim10.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim10.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim10) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM10_Init 2 */
+
+  /* USER CODE END TIM10_Init 2 */
+
+}
+
+/**
+  * @brief USART3 Initialization Function
+  * @param None
+  * @retval None
+  */
 static void MX_USART3_UART_Init(void)
 {
 
@@ -777,13 +847,14 @@ static void MX_USART3_UART_Init(void)
   /* USER CODE BEGIN USART3_Init 2 */
 
   /* USER CODE END USART3_Init 2 */
+
 }
 
 /**
- * @brief USART6 Initialization Function
- * @param None
- * @retval None
- */
+  * @brief USART6 Initialization Function
+  * @param None
+  * @retval None
+  */
 static void MX_USART6_UART_Init(void)
 {
 
@@ -809,11 +880,12 @@ static void MX_USART6_UART_Init(void)
   /* USER CODE BEGIN USART6_Init 2 */
 
   /* USER CODE END USART6_Init 2 */
+
 }
 
 /**
- * Enable DMA controller clock
- */
+  * Enable DMA controller clock
+  */
 static void MX_DMA_Init(void)
 {
 
@@ -824,18 +896,19 @@ static void MX_DMA_Init(void)
   /* DMA1_Stream1_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(DMA1_Stream1_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(DMA1_Stream1_IRQn);
+
 }
 
 /**
- * @brief GPIO Initialization Function
- * @param None
- * @retval None
- */
+  * @brief GPIO Initialization Function
+  * @param None
+  * @retval None
+  */
 static void MX_GPIO_Init(void)
 {
   GPIO_InitTypeDef GPIO_InitStruct = {0};
-  /* USER CODE BEGIN MX_GPIO_Init_1 */
-  /* USER CODE END MX_GPIO_Init_1 */
+/* USER CODE BEGIN MX_GPIO_Init_1 */
+/* USER CODE END MX_GPIO_Init_1 */
 
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOE_CLK_ENABLE();
@@ -846,20 +919,25 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOD_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 | GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_8 | GPIO_PIN_10 | STBY_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_3
+                          |GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_8|GPIO_PIN_10
+                          |STBY_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_13 | XSHUT_FF_Pin | BIN2_Pin | XSHUT_BR_Pin | BIN1_Pin | XSHUT_BL_Pin | AIN2_Pin | XSHUT_FR_Pin | AIN1_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_13|XSHUT_FF_Pin|BIN2_Pin|XSHUT_BR_Pin
+                          |BIN1_Pin|XSHUT_BL_Pin|AIN2_Pin|XSHUT_FR_Pin
+                          |AIN1_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(XSHUT_FL_GPIO_Port, XSHUT_FL_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pins : PE2 PE3 PE4 PE5
                            PE1 */
-  GPIO_InitStruct.Pin = GPIO_PIN_2 | GPIO_PIN_3 | GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_1;
+  GPIO_InitStruct.Pin = GPIO_PIN_2|GPIO_PIN_3|GPIO_PIN_4|GPIO_PIN_5
+                          |GPIO_PIN_1;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
@@ -867,7 +945,9 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pins : PC0 PC1 PC2 PC3
                            PC4 PC5 PC8 PC10
                            STBY_Pin */
-  GPIO_InitStruct.Pin = GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 | GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_8 | GPIO_PIN_10 | STBY_Pin;
+  GPIO_InitStruct.Pin = GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_3
+                          |GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_8|GPIO_PIN_10
+                          |STBY_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -883,7 +963,9 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pins : PD13 XSHUT_FF_Pin BIN2_Pin XSHUT_BR_Pin
                            BIN1_Pin XSHUT_BL_Pin AIN2_Pin XSHUT_FR_Pin
                            AIN1_Pin */
-  GPIO_InitStruct.Pin = GPIO_PIN_13 | XSHUT_FF_Pin | BIN2_Pin | XSHUT_BR_Pin | BIN1_Pin | XSHUT_BL_Pin | AIN2_Pin | XSHUT_FR_Pin | AIN1_Pin;
+  GPIO_InitStruct.Pin = GPIO_PIN_13|XSHUT_FF_Pin|BIN2_Pin|XSHUT_BR_Pin
+                          |BIN1_Pin|XSHUT_BL_Pin|AIN2_Pin|XSHUT_FR_Pin
+                          |AIN1_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -912,8 +994,8 @@ static void MX_GPIO_Init(void)
   HAL_NVIC_SetPriority(EXTI9_5_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
 
-  /* USER CODE BEGIN MX_GPIO_Init_2 */
-  /* USER CODE END MX_GPIO_Init_2 */
+/* USER CODE BEGIN MX_GPIO_Init_2 */
+/* USER CODE END MX_GPIO_Init_2 */
 }
 
 /* USER CODE BEGIN 4 */
@@ -921,9 +1003,9 @@ static void MX_GPIO_Init(void)
 /* USER CODE END 4 */
 
 /**
- * @brief  This function is executed in case of error occurrence.
- * @retval None
- */
+  * @brief  This function is executed in case of error occurrence.
+  * @retval None
+  */
 void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
@@ -935,14 +1017,14 @@ void Error_Handler(void)
   /* USER CODE END Error_Handler_Debug */
 }
 
-#ifdef USE_FULL_ASSERT
+#ifdef  USE_FULL_ASSERT
 /**
- * @brief  Reports the name of the source file and the source line number
- *         where the assert_param error has occurred.
- * @param  file: pointer to the source file name
- * @param  line: assert_param error line source number
- * @retval None
- */
+  * @brief  Reports the name of the source file and the source line number
+  *         where the assert_param error has occurred.
+  * @param  file: pointer to the source file name
+  * @param  line: assert_param error line source number
+  * @retval None
+  */
 void assert_failed(uint8_t *file, uint32_t line)
 {
   /* USER CODE BEGIN 6 */

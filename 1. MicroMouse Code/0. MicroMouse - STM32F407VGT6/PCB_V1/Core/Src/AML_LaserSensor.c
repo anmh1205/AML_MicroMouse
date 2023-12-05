@@ -206,6 +206,7 @@ int32_t AML_LaserSensor_ReadSingleWithoutFillter(uint8_t name)
     // {
     //     return 2000;
     // }
+    AML_LaserSensor_ReadAll();
 
     return (int32_t)SensorValue[name].RangeMilliMeter;
 }

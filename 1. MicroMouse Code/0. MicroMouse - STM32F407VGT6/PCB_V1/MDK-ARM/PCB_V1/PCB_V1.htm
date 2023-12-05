@@ -3,7 +3,7 @@
 <title>Static Call Graph - [PCB_V1\PCB_V1.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image PCB_V1\PCB_V1.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Mon Dec 04 10:09:39 2023
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Tue Dec 05 22:15:42 2023
 <BR><P>
 <H3>Maximum Stack Usage =        760 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -929,7 +929,7 @@ Global Symbols
 <LI><a href="#[b0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;VL53L0X_PerformRefCalibration
 <LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;VL53L0X_DataInit
 </UL>
-<BR>[Called By]<UL><LI><a href="#[bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_LaserSensor_Setup
+<BR>[Called By]<UL><LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_LaserSensor_Setup
 </UL>
 
 <P><STRONG><a name="[b8]"></a>AML_LaserSensor_ReadAll</STRONG> (Thumb, 230 bytes, Stack size 16 bytes, aml_lasersensor.o(i.AML_LaserSensor_ReadAll))
@@ -939,42 +939,50 @@ Global Symbols
 <LI><a href="#[ba]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SimpleKalmanFilter_updateEstimate
 </UL>
 <BR>[Called By]<UL><LI><a href="#[d9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_SetCenterPosition
+<LI><a href="#[bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_LaserSensor_ReadSingleWithoutFillter
 <LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 <LI><a href="#[11c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_PeriodElapsedCallback
 </UL>
 
-<P><STRONG><a name="[c7]"></a>AML_LaserSensor_ReadSingleWithFillter</STRONG> (Thumb, 14 bytes, Stack size 0 bytes, aml_lasersensor.o(i.AML_LaserSensor_ReadSingleWithFillter))
-<BR><BR>[Called By]<UL><LI><a href="#[148]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;floodFill
-<LI><a href="#[ca]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_RightWallFollow
+<P><STRONG><a name="[c8]"></a>AML_LaserSensor_ReadSingleWithFillter</STRONG> (Thumb, 14 bytes, Stack size 0 bytes, aml_lasersensor.o(i.AML_LaserSensor_ReadSingleWithFillter))
+<BR><BR>[Called By]<UL><LI><a href="#[ca]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_RightWallFollow
 <LI><a href="#[c9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_LeftWallFollow
-<LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotoControl_GoStraight4
+<LI><a href="#[c7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotoControl_GoStraight4
+<LI><a href="#[1a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uncontrolledAdvanceTicks
 <LI><a href="#[1a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;checkForWalls
+<LI><a href="#[1a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;advanceTicksFlood
 </UL>
 
-<P><STRONG><a name="[c8]"></a>AML_LaserSensor_ReadSingleWithoutFillter</STRONG> (Thumb, 14 bytes, Stack size 0 bytes, aml_lasersensor.o(i.AML_LaserSensor_ReadSingleWithoutFillter))
-<BR><BR>[Called By]<UL><LI><a href="#[e6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_TurnRight90
+<P><STRONG><a name="[bb]"></a>AML_LaserSensor_ReadSingleWithoutFillter</STRONG> (Thumb, 22 bytes, Stack size 8 bytes, aml_lasersensor.o(i.AML_LaserSensor_ReadSingleWithoutFillter))
+<BR><BR>[Stack]<UL><LI>Max Depth = 408<LI>Call Chain = AML_LaserSensor_ReadSingleWithoutFillter &rArr; AML_LaserSensor_ReadAll &rArr; VL53L0X_GetRangingMeasurementData &rArr; VL53L0X_get_pal_range_status &rArr; VL53L0X_GetLimitCheckValue &rArr; VL53L0X_RdWord &rArr; _I2CRead &rArr; HAL_I2C_Master_Receive &rArr; I2C_MasterRequestRead &rArr; I2C_WaitOnMasterAddressFlagUntilTimeout
+</UL>
+<BR>[Calls]<UL><LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_LaserSensor_ReadAll
+</UL>
+<BR>[Called By]<UL><LI><a href="#[14b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;shortestPath
+<LI><a href="#[148]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;floodFill
+<LI><a href="#[e6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_TurnRight90
 <LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_TurnLeft90
 <LI><a href="#[d9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_SetCenterPosition
 <LI><a href="#[144]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Run
-<LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotoControl_GoStraight4
+<LI><a href="#[c7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotoControl_GoStraight4
 </UL>
 
-<P><STRONG><a name="[bb]"></a>AML_LaserSensor_Setup</STRONG> (Thumb, 392 bytes, Stack size 48 bytes, aml_lasersensor.o(i.AML_LaserSensor_Setup))
+<P><STRONG><a name="[bc]"></a>AML_LaserSensor_Setup</STRONG> (Thumb, 392 bytes, Stack size 48 bytes, aml_lasersensor.o(i.AML_LaserSensor_Setup))
 <BR><BR>[Stack]<UL><LI>Max Depth = 752<LI>Call Chain = AML_LaserSensor_Setup &rArr; AML_LaserSensor_Init &rArr; VL53L0X_StaticInit &rArr; VL53L0X_perform_ref_spad_management &rArr; perform_ref_signal_measurement &rArr; VL53L0X_PerformSingleRangingMeasurement &rArr; VL53L0X_GetRangingMeasurementData &rArr; VL53L0X_get_pal_range_status &rArr; VL53L0X_GetLimitCheckValue &rArr; VL53L0X_RdWord &rArr; _I2CRead &rArr; HAL_I2C_Master_Receive &rArr; I2C_MasterRequestRead &rArr; I2C_WaitOnMasterAddressFlagUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[a6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
-<LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
-<LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;VL53L0X_SetDeviceAddress
-<LI><a href="#[be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SimpleKalmanFilter_Init
+<LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
+<LI><a href="#[be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;VL53L0X_SetDeviceAddress
+<LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SimpleKalmanFilter_Init
 <LI><a href="#[ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_LaserSensor_Init
 </UL>
 <BR>[Called By]<UL><LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[bf]"></a>AML_MPUSensor_GetAngle</STRONG> (Thumb, 30 bytes, Stack size 8 bytes, aml_mpusensor.o(i.AML_MPUSensor_GetAngle))
+<P><STRONG><a name="[c0]"></a>AML_MPUSensor_GetAngle</STRONG> (Thumb, 30 bytes, Stack size 8 bytes, aml_mpusensor.o(i.AML_MPUSensor_GetAngle))
 <BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = AML_MPUSensor_GetAngle &rArr; __aeabi_dsub
 </UL>
-<BR>[Calls]<UL><LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dsub
+<BR>[Calls]<UL><LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dsub
 </UL>
 <BR>[Called By]<UL><LI><a href="#[e6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_TurnRight90
 <LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_TurnLeft90
@@ -983,38 +991,41 @@ Global Symbols
 <LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_MPUFollow
 </UL>
 
-<P><STRONG><a name="[c1]"></a>AML_MPUSensor_ResetAngle</STRONG> (Thumb, 102 bytes, Stack size 24 bytes, aml_mpusensor.o(i.AML_MPUSensor_ResetAngle))
+<P><STRONG><a name="[c2]"></a>AML_MPUSensor_ResetAngle</STRONG> (Thumb, 102 bytes, Stack size 24 bytes, aml_mpusensor.o(i.AML_MPUSensor_ResetAngle))
 <BR><BR>[Stack]<UL><LI>Max Depth = 80<LI>Call Chain = AML_MPUSensor_ResetAngle &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
 </UL>
-<BR>[Calls]<UL><LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
-<LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Transmit
-<LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Receive_DMA
-<LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_DMAStop
+<BR>[Calls]<UL><LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
+<LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Transmit
+<LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Receive_DMA
+<LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_DMAStop
 </UL>
-<BR>[Called By]<UL><LI><a href="#[e6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_TurnRight90
+<BR>[Called By]<UL><LI><a href="#[14b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;shortestPath
+<LI><a href="#[148]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;floodFill
+<LI><a href="#[149]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;centerMovement
+<LI><a href="#[e6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_TurnRight90
 <LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_TurnLeft90
 <LI><a href="#[df]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_TurnLeft180
-<LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MPUSensor_Setup
+<LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MPUSensor_Setup
 <LI><a href="#[144]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Run
 </UL>
 
-<P><STRONG><a name="[c5]"></a>AML_MPUSensor_Setup</STRONG> (Thumb, 20 bytes, Stack size 8 bytes, aml_mpusensor.o(i.AML_MPUSensor_Setup))
+<P><STRONG><a name="[c6]"></a>AML_MPUSensor_Setup</STRONG> (Thumb, 20 bytes, Stack size 8 bytes, aml_mpusensor.o(i.AML_MPUSensor_Setup))
 <BR><BR>[Stack]<UL><LI>Max Depth = 88<LI>Call Chain = AML_MPUSensor_Setup &rArr; AML_MPUSensor_ResetAngle &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
 </UL>
-<BR>[Calls]<UL><LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MPUSensor_ResetAngle
-<LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Receive_DMA
+<BR>[Calls]<UL><LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MPUSensor_ResetAngle
+<LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Receive_DMA
 </UL>
 <BR>[Called By]<UL><LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[c6]"></a>AML_MotoControl_GoStraight4</STRONG> (Thumb, 104 bytes, Stack size 8 bytes, aml_motorcontrol.o(i.AML_MotoControl_GoStraight4))
-<BR><BR>[Stack]<UL><LI>Max Depth = 112<LI>Call Chain = AML_MotoControl_GoStraight4 &rArr; AML_MotorControl_MPUFollow &rArr; PID_Compute &rArr; __aeabi_dsub
+<P><STRONG><a name="[c7]"></a>AML_MotoControl_GoStraight4</STRONG> (Thumb, 104 bytes, Stack size 8 bytes, aml_motorcontrol.o(i.AML_MotoControl_GoStraight4))
+<BR><BR>[Stack]<UL><LI>Max Depth = 416<LI>Call Chain = AML_MotoControl_GoStraight4 &rArr; AML_LaserSensor_ReadSingleWithoutFillter &rArr; AML_LaserSensor_ReadAll &rArr; VL53L0X_GetRangingMeasurementData &rArr; VL53L0X_get_pal_range_status &rArr; VL53L0X_GetLimitCheckValue &rArr; VL53L0X_RdWord &rArr; _I2CRead &rArr; HAL_I2C_Master_Receive &rArr; I2C_MasterRequestRead &rArr; I2C_WaitOnMasterAddressFlagUntilTimeout
 </UL>
-<BR>[Calls]<UL><LI><a href="#[c8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_LaserSensor_ReadSingleWithoutFillter
+<BR>[Calls]<UL><LI><a href="#[bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_LaserSensor_ReadSingleWithoutFillter
 <LI><a href="#[ca]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_RightWallFollow
 <LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_MPUFollow
 <LI><a href="#[c9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_LeftWallFollow
-<LI><a href="#[c7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_LaserSensor_ReadSingleWithFillter
+<LI><a href="#[c8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_LaserSensor_ReadSingleWithFillter
 <LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dneg
 </UL>
 <BR>[Called By]<UL><LI><a href="#[11c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_PeriodElapsedCallback
@@ -1043,11 +1054,11 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[a9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_DebugDevice_TurnOnLED
 <LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_DebugDevice_TurnOffLED
 <LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PID_Compute
-<LI><a href="#[c7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_LaserSensor_ReadSingleWithFillter
+<LI><a href="#[c8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_LaserSensor_ReadSingleWithFillter
 <LI><a href="#[ce]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_ui2d
 <LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_i2d
 </UL>
-<BR>[Called By]<UL><LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotoControl_GoStraight4
+<BR>[Called By]<UL><LI><a href="#[c7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotoControl_GoStraight4
 </UL>
 
 <P><STRONG><a name="[cb]"></a>AML_MotorControl_MPUFollow</STRONG> (Thumb, 134 bytes, Stack size 24 bytes, aml_motorcontrol.o(i.AML_MotorControl_MPUFollow))
@@ -1057,11 +1068,11 @@ Global Symbols
 <LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_DebugDevice_TurnOffLED
 <LI><a href="#[d1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_RightPWM
 <LI><a href="#[cc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_LeftPWM
-<LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MPUSensor_GetAngle
+<LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MPUSensor_GetAngle
 <LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PID_Compute
 <LI><a href="#[d0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_d2iz
 </UL>
-<BR>[Called By]<UL><LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotoControl_GoStraight4
+<BR>[Called By]<UL><LI><a href="#[c7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotoControl_GoStraight4
 </UL>
 
 <P><STRONG><a name="[d2]"></a>AML_MotorControl_PIDSetMode</STRONG> (Thumb, 92 bytes, Stack size 8 bytes, aml_motorcontrol.o(i.AML_MotorControl_PIDSetMode))
@@ -1115,18 +1126,18 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[a9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_DebugDevice_TurnOnLED
 <LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_DebugDevice_TurnOffLED
 <LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PID_Compute
-<LI><a href="#[c7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_LaserSensor_ReadSingleWithFillter
+<LI><a href="#[c8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_LaserSensor_ReadSingleWithFillter
 <LI><a href="#[ce]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_ui2d
 <LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_i2d
 </UL>
-<BR>[Called By]<UL><LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotoControl_GoStraight4
+<BR>[Called By]<UL><LI><a href="#[c7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotoControl_GoStraight4
 </UL>
 
 <P><STRONG><a name="[d9]"></a>AML_MotorControl_SetCenterPosition</STRONG> (Thumb, 78 bytes, Stack size 8 bytes, aml_motorcontrol.o(i.AML_MotorControl_SetCenterPosition))
-<BR><BR>[Stack]<UL><LI>Max Depth = 408<LI>Call Chain = AML_MotorControl_SetCenterPosition &rArr; AML_LaserSensor_ReadAll &rArr; VL53L0X_GetRangingMeasurementData &rArr; VL53L0X_get_pal_range_status &rArr; VL53L0X_GetLimitCheckValue &rArr; VL53L0X_RdWord &rArr; _I2CRead &rArr; HAL_I2C_Master_Receive &rArr; I2C_MasterRequestRead &rArr; I2C_WaitOnMasterAddressFlagUntilTimeout
+<BR><BR>[Stack]<UL><LI>Max Depth = 416<LI>Call Chain = AML_MotorControl_SetCenterPosition &rArr; AML_LaserSensor_ReadSingleWithoutFillter &rArr; AML_LaserSensor_ReadAll &rArr; VL53L0X_GetRangingMeasurementData &rArr; VL53L0X_get_pal_range_status &rArr; VL53L0X_GetLimitCheckValue &rArr; VL53L0X_RdWord &rArr; _I2CRead &rArr; HAL_I2C_Master_Receive &rArr; I2C_MasterRequestRead &rArr; I2C_WaitOnMasterAddressFlagUntilTimeout
 </UL>
-<BR>[Calls]<UL><LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
-<LI><a href="#[c8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_LaserSensor_ReadSingleWithoutFillter
+<BR>[Calls]<UL><LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
+<LI><a href="#[bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_LaserSensor_ReadSingleWithoutFillter
 <LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_LaserSensor_ReadAll
 </UL>
 <BR>[Called By]<UL><LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
@@ -1150,11 +1161,13 @@ Global Symbols
 <P><STRONG><a name="[dd]"></a>AML_MotorControl_ShortBreak</STRONG> (Thumb, 76 bytes, Stack size 16 bytes, aml_motorcontrol.o(i.AML_MotorControl_ShortBreak))
 <BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = AML_MotorControl_ShortBreak &rArr; AML_MotorControl_RightPWM
 </UL>
-<BR>[Calls]<UL><LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
+<BR>[Calls]<UL><LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
 <LI><a href="#[d1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_RightPWM
 <LI><a href="#[cc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_LeftPWM
 </UL>
-<BR>[Called By]<UL><LI><a href="#[148]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;floodFill
+<BR>[Called By]<UL><LI><a href="#[14b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;shortestPath
+<LI><a href="#[14a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;logicalFlood
+<LI><a href="#[148]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;floodFill
 <LI><a href="#[e6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_TurnRight90
 <LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_TurnLeft90
 <LI><a href="#[df]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_TurnLeft180
@@ -1184,19 +1197,19 @@ Global Symbols
 <LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
 <LI><a href="#[a9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_DebugDevice_TurnOnLED
 <LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_DebugDevice_TurnOffLED
-<LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
+<LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
 <LI><a href="#[dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_ShortBreak
 <LI><a href="#[d1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_RightPWM
 <LI><a href="#[cc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_LeftPWM
-<LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MPUSensor_ResetAngle
-<LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MPUSensor_GetAngle
+<LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MPUSensor_ResetAngle
+<LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MPUSensor_GetAngle
 <LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_DebugDevice_BuzzerBeep
 <LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PID_Compute
 <LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ABS
-<LI><a href="#[d0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_d2iz
-<LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dsub
+<LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dsub
 <LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dadd
 <LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_cdrcmple
+<LI><a href="#[d0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_d2iz
 </UL>
 <BR>[Called By]<UL><LI><a href="#[14b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;shortestPath
 <LI><a href="#[148]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;floodFill
@@ -1204,27 +1217,27 @@ Global Symbols
 <LI><a href="#[144]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Run
 </UL>
 
-<P><STRONG><a name="[e2]"></a>AML_MotorControl_TurnLeft90</STRONG> (Thumb, 310 bytes, Stack size 24 bytes, aml_motorcontrol.o(i.AML_MotorControl_TurnLeft90))
-<BR><BR>[Stack]<UL><LI>Max Depth = 104<LI>Call Chain = AML_MotorControl_TurnLeft90 &rArr; AML_MPUSensor_ResetAngle &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
+<P><STRONG><a name="[e2]"></a>AML_MotorControl_TurnLeft90</STRONG> (Thumb, 308 bytes, Stack size 32 bytes, aml_motorcontrol.o(i.AML_MotorControl_TurnLeft90))
+<BR><BR>[Stack]<UL><LI>Max Depth = 440<LI>Call Chain = AML_MotorControl_TurnLeft90 &rArr; AML_LaserSensor_ReadSingleWithoutFillter &rArr; AML_LaserSensor_ReadAll &rArr; VL53L0X_GetRangingMeasurementData &rArr; VL53L0X_get_pal_range_status &rArr; VL53L0X_GetLimitCheckValue &rArr; VL53L0X_RdWord &rArr; _I2CRead &rArr; HAL_I2C_Master_Receive &rArr; I2C_MasterRequestRead &rArr; I2C_WaitOnMasterAddressFlagUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
 <LI><a href="#[a9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_DebugDevice_TurnOnLED
 <LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_DebugDevice_TurnOffLED
-<LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
+<LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
 <LI><a href="#[de]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_Stop
 <LI><a href="#[dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_ShortBreak
 <LI><a href="#[d1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_RightPWM
 <LI><a href="#[cc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_LeftPWM
-<LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MPUSensor_ResetAngle
-<LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MPUSensor_GetAngle
-<LI><a href="#[c8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_LaserSensor_ReadSingleWithoutFillter
+<LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MPUSensor_ResetAngle
+<LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MPUSensor_GetAngle
+<LI><a href="#[bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_LaserSensor_ReadSingleWithoutFillter
 <LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_DebugDevice_BuzzerBeep
 <LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PID_Compute
 <LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ABS
-<LI><a href="#[d0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_d2iz
-<LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dsub
+<LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dsub
 <LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dadd
 <LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_cdrcmple
+<LI><a href="#[d0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_d2iz
 </UL>
 <BR>[Called By]<UL><LI><a href="#[14b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;shortestPath
 <LI><a href="#[148]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;floodFill
@@ -1257,26 +1270,26 @@ Global Symbols
 <LI><a href="#[1a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;advanceOneCell
 </UL>
 
-<P><STRONG><a name="[e6]"></a>AML_MotorControl_TurnRight90</STRONG> (Thumb, 304 bytes, Stack size 24 bytes, aml_motorcontrol.o(i.AML_MotorControl_TurnRight90))
-<BR><BR>[Stack]<UL><LI>Max Depth = 104<LI>Call Chain = AML_MotorControl_TurnRight90 &rArr; AML_MPUSensor_ResetAngle &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
+<P><STRONG><a name="[e6]"></a>AML_MotorControl_TurnRight90</STRONG> (Thumb, 312 bytes, Stack size 24 bytes, aml_motorcontrol.o(i.AML_MotorControl_TurnRight90))
+<BR><BR>[Stack]<UL><LI>Max Depth = 432<LI>Call Chain = AML_MotorControl_TurnRight90 &rArr; AML_LaserSensor_ReadSingleWithoutFillter &rArr; AML_LaserSensor_ReadAll &rArr; VL53L0X_GetRangingMeasurementData &rArr; VL53L0X_get_pal_range_status &rArr; VL53L0X_GetLimitCheckValue &rArr; VL53L0X_RdWord &rArr; _I2CRead &rArr; HAL_I2C_Master_Receive &rArr; I2C_MasterRequestRead &rArr; I2C_WaitOnMasterAddressFlagUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
 <LI><a href="#[a9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_DebugDevice_TurnOnLED
 <LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_DebugDevice_TurnOffLED
-<LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
+<LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
 <LI><a href="#[de]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_Stop
 <LI><a href="#[dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_ShortBreak
 <LI><a href="#[d1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_RightPWM
 <LI><a href="#[cc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_LeftPWM
-<LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MPUSensor_ResetAngle
-<LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MPUSensor_GetAngle
-<LI><a href="#[c8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_LaserSensor_ReadSingleWithoutFillter
+<LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MPUSensor_ResetAngle
+<LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MPUSensor_GetAngle
+<LI><a href="#[bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_LaserSensor_ReadSingleWithoutFillter
 <LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_DebugDevice_BuzzerBeep
 <LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PID_Compute
 <LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ABS
-<LI><a href="#[d0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_d2iz
-<LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dsub
+<LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dsub
 <LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_cdrcmple
+<LI><a href="#[d0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_d2iz
 </UL>
 <BR>[Called By]<UL><LI><a href="#[14b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;shortestPath
 <LI><a href="#[148]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;floodFill
@@ -1360,7 +1373,7 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
 </UL>
-<BR>[Called By]<UL><LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_DMAStop
+<BR>[Called By]<UL><LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_DMAStop
 </UL>
 
 <P><STRONG><a name="[eb]"></a>HAL_DMA_IRQHandler</STRONG> (Thumb, 412 bytes, Stack size 32 bytes, stm32f4xx_hal_dma.o(i.HAL_DMA_IRQHandler))
@@ -1387,7 +1400,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[131]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_Start_Receive_DMA
 </UL>
 
-<P><STRONG><a name="[bc]"></a>HAL_Delay</STRONG> (Thumb, 32 bytes, Stack size 16 bytes, stm32f4xx_hal.o(i.HAL_Delay))
+<P><STRONG><a name="[bd]"></a>HAL_Delay</STRONG> (Thumb, 32 bytes, Stack size 16 bytes, stm32f4xx_hal.o(i.HAL_Delay))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = HAL_Delay
 </UL>
 <BR>[Calls]<UL><LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
@@ -1400,9 +1413,11 @@ Global Symbols
 <LI><a href="#[df]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_TurnLeft180
 <LI><a href="#[dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_ShortBreak
 <LI><a href="#[d9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_SetCenterPosition
-<LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MPUSensor_ResetAngle
-<LI><a href="#[bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_LaserSensor_Setup
+<LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MPUSensor_ResetAngle
+<LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_LaserSensor_Setup
 <LI><a href="#[144]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Run
+<LI><a href="#[1a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uncontrolledAdvanceTicks
+<LI><a href="#[1a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;advanceTicksFlood
 <LI><a href="#[1a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;advanceOneCellVisited
 <LI><a href="#[1a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;advanceOneCell
 <LI><a href="#[174]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;VL53L0X_PollingDelay
@@ -1442,7 +1457,7 @@ Global Symbols
 <LI><a href="#[da]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_Setup
 <LI><a href="#[d1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_RightPWM
 <LI><a href="#[cc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_LeftPWM
-<LI><a href="#[bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_LaserSensor_Setup
+<LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_LaserSensor_Setup
 <LI><a href="#[a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_DebugDevice_SetAllLED
 <LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_DebugDevice_BuzzerBeep
 <LI><a href="#[139]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_GPIO_Init
@@ -1452,12 +1467,12 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[ee]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_DMA_Init
 <LI><a href="#[10b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RCC_OscConfig
 <LI><a href="#[108]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RCC_ClockConfig
-<LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
+<LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
 <LI><a href="#[e6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_TurnRight90
 <LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_TurnLeft90
 <LI><a href="#[df]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_TurnLeft180
 <LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_DebugDevice_BuzzerBeep
-<LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Transmit
+<LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Transmit
 <LI><a href="#[12f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Receive
 <LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PID_Compute
 <LI><a href="#[d6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PID
@@ -1706,7 +1721,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[118]"></a>HAL_TIM_IRQHandler</STRONG> (Thumb, 358 bytes, Stack size 16 bytes, stm32f4xx_hal_tim.o(i.HAL_TIM_IRQHandler))
-<BR><BR>[Stack]<UL><LI>Max Depth = 424<LI>Call Chain = HAL_TIM_IRQHandler &rArr; HAL_TIM_PeriodElapsedCallback &rArr; AML_LaserSensor_ReadAll &rArr; VL53L0X_GetRangingMeasurementData &rArr; VL53L0X_get_pal_range_status &rArr; VL53L0X_GetLimitCheckValue &rArr; VL53L0X_RdWord &rArr; _I2CRead &rArr; HAL_I2C_Master_Receive &rArr; I2C_MasterRequestRead &rArr; I2C_WaitOnMasterAddressFlagUntilTimeout
+<BR><BR>[Stack]<UL><LI>Max Depth = 440<LI>Call Chain = HAL_TIM_IRQHandler &rArr; HAL_TIM_PeriodElapsedCallback &rArr; AML_MotoControl_GoStraight4 &rArr; AML_LaserSensor_ReadSingleWithoutFillter &rArr; AML_LaserSensor_ReadAll &rArr; VL53L0X_GetRangingMeasurementData &rArr; VL53L0X_get_pal_range_status &rArr; VL53L0X_GetLimitCheckValue &rArr; VL53L0X_RdWord &rArr; _I2CRead &rArr; HAL_I2C_Master_Receive &rArr; I2C_MasterRequestRead &rArr; I2C_WaitOnMasterAddressFlagUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[11c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_PeriodElapsedCallback
 <LI><a href="#[11e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_TriggerCallback
@@ -1770,11 +1785,11 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[11c]"></a>HAL_TIM_PeriodElapsedCallback</STRONG> (Thumb, 42 bytes, Stack size 8 bytes, aml_motorcontrol.o(i.HAL_TIM_PeriodElapsedCallback))
-<BR><BR>[Stack]<UL><LI>Max Depth = 408<LI>Call Chain = HAL_TIM_PeriodElapsedCallback &rArr; AML_LaserSensor_ReadAll &rArr; VL53L0X_GetRangingMeasurementData &rArr; VL53L0X_get_pal_range_status &rArr; VL53L0X_GetLimitCheckValue &rArr; VL53L0X_RdWord &rArr; _I2CRead &rArr; HAL_I2C_Master_Receive &rArr; I2C_MasterRequestRead &rArr; I2C_WaitOnMasterAddressFlagUntilTimeout
+<BR><BR>[Stack]<UL><LI>Max Depth = 424<LI>Call Chain = HAL_TIM_PeriodElapsedCallback &rArr; AML_MotoControl_GoStraight4 &rArr; AML_LaserSensor_ReadSingleWithoutFillter &rArr; AML_LaserSensor_ReadAll &rArr; VL53L0X_GetRangingMeasurementData &rArr; VL53L0X_get_pal_range_status &rArr; VL53L0X_GetLimitCheckValue &rArr; VL53L0X_RdWord &rArr; _I2CRead &rArr; HAL_I2C_Master_Receive &rArr; I2C_MasterRequestRead &rArr; I2C_WaitOnMasterAddressFlagUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[128]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_DebugDevice_Handle
 <LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_LaserSensor_ReadAll
-<LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotoControl_GoStraight4
+<LI><a href="#[c7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotoControl_GoStraight4
 </UL>
 <BR>[Called By]<UL><LI><a href="#[118]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_IRQHandler
 </UL>
@@ -1788,14 +1803,14 @@ Global Symbols
 <LI><a href="#[66]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_DMAReceiveCplt
 </UL>
 
-<P><STRONG><a name="[c2]"></a>HAL_UART_DMAStop</STRONG> (Thumb, 112 bytes, Stack size 8 bytes, stm32f4xx_hal_uart.o(i.HAL_UART_DMAStop))
+<P><STRONG><a name="[c3]"></a>HAL_UART_DMAStop</STRONG> (Thumb, 112 bytes, Stack size 8 bytes, stm32f4xx_hal_uart.o(i.HAL_UART_DMAStop))
 <BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = HAL_UART_DMAStop &rArr; HAL_DMA_Abort
 </UL>
 <BR>[Calls]<UL><LI><a href="#[ed]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_DMA_Abort
 <LI><a href="#[129]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_EndTxTransfer
 <LI><a href="#[12a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_EndRxTransfer
 </UL>
-<BR>[Called By]<UL><LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MPUSensor_ResetAngle
+<BR>[Called By]<UL><LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MPUSensor_ResetAngle
 </UL>
 
 <P><STRONG><a name="[14e]"></a>HAL_UART_ErrorCallback</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, stm32f4xx_hal_uart.o(i.HAL_UART_ErrorCallback))
@@ -1831,13 +1846,13 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[134]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;handle
 </UL>
 
-<P><STRONG><a name="[c4]"></a>HAL_UART_Receive_DMA</STRONG> (Thumb, 42 bytes, Stack size 0 bytes, stm32f4xx_hal_uart.o(i.HAL_UART_Receive_DMA))
+<P><STRONG><a name="[c5]"></a>HAL_UART_Receive_DMA</STRONG> (Thumb, 42 bytes, Stack size 0 bytes, stm32f4xx_hal_uart.o(i.HAL_UART_Receive_DMA))
 <BR><BR>[Stack]<UL><LI>Max Depth = 52<LI>Call Chain = HAL_UART_Receive_DMA &rArr; UART_Start_Receive_DMA &rArr; HAL_DMA_Start_IT &rArr; DMA_SetConfig
 </UL>
 <BR>[Calls]<UL><LI><a href="#[131]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_Start_Receive_DMA
 </UL>
-<BR>[Called By]<UL><LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MPUSensor_Setup
-<LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MPUSensor_ResetAngle
+<BR>[Called By]<UL><LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MPUSensor_Setup
+<LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MPUSensor_ResetAngle
 <LI><a href="#[134]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;handle
 <LI><a href="#[133]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_RxCpltCallback
 </UL>
@@ -1852,10 +1867,10 @@ Global Symbols
 <P><STRONG><a name="[133]"></a>HAL_UART_RxCpltCallback</STRONG> (Thumb, 244 bytes, Stack size 16 bytes, aml_mpusensor.o(i.HAL_UART_RxCpltCallback))
 <BR><BR>[Stack]<UL><LI>Max Depth = 540<LI>Call Chain = HAL_UART_RxCpltCallback &rArr; AML_Remote_Handle &rArr; __0sscanf &rArr; __vfscanf_char &rArr; __vfscanf &rArr; _scanf_real &rArr; _scanf_really_real &rArr; _fp_value &rArr; _btod_etento &rArr; _btod_emul &rArr; _e2e
 </UL>
-<BR>[Calls]<UL><LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Receive_DMA
+<BR>[Calls]<UL><LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Receive_DMA
 <LI><a href="#[e7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_Remote_Handle
 <LI><a href="#[134]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;handle
-<LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dsub
+<LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dsub
 <LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dadd
 <LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_cdrcmple
 <LI><a href="#[135]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dmul
@@ -1869,13 +1884,13 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[67]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_DMARxHalfCplt
 </UL>
 
-<P><STRONG><a name="[c3]"></a>HAL_UART_Transmit</STRONG> (Thumb, 178 bytes, Stack size 32 bytes, stm32f4xx_hal_uart.o(i.HAL_UART_Transmit))
+<P><STRONG><a name="[c4]"></a>HAL_UART_Transmit</STRONG> (Thumb, 178 bytes, Stack size 32 bytes, stm32f4xx_hal_uart.o(i.HAL_UART_Transmit))
 <BR><BR>[Stack]<UL><LI>Max Depth = 56<LI>Call Chain = HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
 <LI><a href="#[130]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_WaitOnFlagUntilTimeout
 </UL>
-<BR>[Called By]<UL><LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MPUSensor_ResetAngle
+<BR>[Called By]<UL><LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MPUSensor_ResetAngle
 </UL>
 
 <P><STRONG><a name="[6]"></a>HardFault_Handler</STRONG> (Thumb, 12 bytes, Stack size 0 bytes, stm32f4xx_it.o(i.HardFault_Handler))
@@ -1910,7 +1925,7 @@ Global Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 80<LI>Call Chain = PID_Compute &rArr; __aeabi_dsub
 </UL>
 <BR>[Calls]<UL><LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
-<LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dsub
+<LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dsub
 <LI><a href="#[142]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_drsub
 <LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dadd
 <LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_cdrcmple
@@ -1975,8 +1990,8 @@ Global Symbols
 <P><STRONG><a name="[c]"></a>PendSV_Handler</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, stm32f4xx_it.o(i.PendSV_Handler))
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f407xx.o(RESET)
 </UL>
-<P><STRONG><a name="[144]"></a>Run</STRONG> (Thumb, 434 bytes, Stack size 56 bytes, main.o(i.Run))
-<BR><BR>[Stack]<UL><LI>Max Depth = 216<LI>Call Chain = Run &rArr; shortestPath &rArr; AML_MotorControl_TurnRight90 &rArr; AML_MPUSensor_ResetAngle &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
+<P><STRONG><a name="[144]"></a>Run</STRONG> (Thumb, 472 bytes, Stack size 56 bytes, main.o(i.Run))
+<BR><BR>[Stack]<UL><LI>Max Depth = 552<LI>Call Chain = Run &rArr; shortestPath &rArr; AML_MotorControl_TurnLeft90 &rArr; AML_LaserSensor_ReadSingleWithoutFillter &rArr; AML_LaserSensor_ReadAll &rArr; VL53L0X_GetRangingMeasurementData &rArr; VL53L0X_get_pal_range_status &rArr; VL53L0X_GetLimitCheckValue &rArr; VL53L0X_RdWord &rArr; _I2CRead &rArr; HAL_I2C_Master_Receive &rArr; I2C_MasterRequestRead &rArr; I2C_WaitOnMasterAddressFlagUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[14b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;shortestPath
 <LI><a href="#[14a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;logicalFlood
@@ -1985,7 +2000,7 @@ Global Symbols
 <LI><a href="#[145]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;init_coor
 <LI><a href="#[148]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;floodFill
 <LI><a href="#[149]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;centerMovement
-<LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
+<LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
 <LI><a href="#[e6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_TurnRight90
 <LI><a href="#[e3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_TurnOffWallFollow
 <LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_TurnLeft90
@@ -1993,8 +2008,8 @@ Global Symbols
 <LI><a href="#[de]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_Stop
 <LI><a href="#[d1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_RightPWM
 <LI><a href="#[cc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_LeftPWM
-<LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MPUSensor_ResetAngle
-<LI><a href="#[c8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_LaserSensor_ReadSingleWithoutFillter
+<LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MPUSensor_ResetAngle
+<LI><a href="#[bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_LaserSensor_ReadSingleWithoutFillter
 <LI><a href="#[a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_DebugDevice_SetAllLED
 <LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_DebugDevice_BuzzerBeep
 </UL>
@@ -2004,8 +2019,8 @@ Global Symbols
 <P><STRONG><a name="[a]"></a>SVC_Handler</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, stm32f4xx_it.o(i.SVC_Handler))
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f407xx.o(RESET)
 </UL>
-<P><STRONG><a name="[be]"></a>SimpleKalmanFilter_Init</STRONG> (Thumb, 22 bytes, Stack size 0 bytes, kalmanfilter.o(i.SimpleKalmanFilter_Init))
-<BR><BR>[Called By]<UL><LI><a href="#[bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_LaserSensor_Setup
+<P><STRONG><a name="[bf]"></a>SimpleKalmanFilter_Init</STRONG> (Thumb, 22 bytes, Stack size 0 bytes, kalmanfilter.o(i.SimpleKalmanFilter_Init))
+<BR><BR>[Called By]<UL><LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_LaserSensor_Setup
 </UL>
 
 <P><STRONG><a name="[ba]"></a>SimpleKalmanFilter_updateEstimate</STRONG> (Thumb, 74 bytes, Stack size 0 bytes, kalmanfilter.o(i.SimpleKalmanFilter_updateEstimate))
@@ -2031,14 +2046,14 @@ Global Symbols
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f407xx.o(.text)
 </UL>
 <P><STRONG><a name="[26]"></a>TIM1_BRK_TIM9_IRQHandler</STRONG> (Thumb, 18 bytes, Stack size 8 bytes, stm32f4xx_it.o(i.TIM1_BRK_TIM9_IRQHandler))
-<BR><BR>[Stack]<UL><LI>Max Depth = 432<LI>Call Chain = TIM1_BRK_TIM9_IRQHandler &rArr; HAL_TIM_IRQHandler &rArr; HAL_TIM_PeriodElapsedCallback &rArr; AML_LaserSensor_ReadAll &rArr; VL53L0X_GetRangingMeasurementData &rArr; VL53L0X_get_pal_range_status &rArr; VL53L0X_GetLimitCheckValue &rArr; VL53L0X_RdWord &rArr; _I2CRead &rArr; HAL_I2C_Master_Receive &rArr; I2C_MasterRequestRead &rArr; I2C_WaitOnMasterAddressFlagUntilTimeout
+<BR><BR>[Stack]<UL><LI>Max Depth = 448<LI>Call Chain = TIM1_BRK_TIM9_IRQHandler &rArr; HAL_TIM_IRQHandler &rArr; HAL_TIM_PeriodElapsedCallback &rArr; AML_MotoControl_GoStraight4 &rArr; AML_LaserSensor_ReadSingleWithoutFillter &rArr; AML_LaserSensor_ReadAll &rArr; VL53L0X_GetRangingMeasurementData &rArr; VL53L0X_get_pal_range_status &rArr; VL53L0X_GetLimitCheckValue &rArr; VL53L0X_RdWord &rArr; _I2CRead &rArr; HAL_I2C_Master_Receive &rArr; I2C_MasterRequestRead &rArr; I2C_WaitOnMasterAddressFlagUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[118]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_IRQHandler
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f407xx.o(RESET)
 </UL>
 <P><STRONG><a name="[27]"></a>TIM1_UP_TIM10_IRQHandler</STRONG> (Thumb, 18 bytes, Stack size 8 bytes, stm32f4xx_it.o(i.TIM1_UP_TIM10_IRQHandler))
-<BR><BR>[Stack]<UL><LI>Max Depth = 432<LI>Call Chain = TIM1_UP_TIM10_IRQHandler &rArr; HAL_TIM_IRQHandler &rArr; HAL_TIM_PeriodElapsedCallback &rArr; AML_LaserSensor_ReadAll &rArr; VL53L0X_GetRangingMeasurementData &rArr; VL53L0X_get_pal_range_status &rArr; VL53L0X_GetLimitCheckValue &rArr; VL53L0X_RdWord &rArr; _I2CRead &rArr; HAL_I2C_Master_Receive &rArr; I2C_MasterRequestRead &rArr; I2C_WaitOnMasterAddressFlagUntilTimeout
+<BR><BR>[Stack]<UL><LI>Max Depth = 448<LI>Call Chain = TIM1_UP_TIM10_IRQHandler &rArr; HAL_TIM_IRQHandler &rArr; HAL_TIM_PeriodElapsedCallback &rArr; AML_MotoControl_GoStraight4 &rArr; AML_LaserSensor_ReadSingleWithoutFillter &rArr; AML_LaserSensor_ReadAll &rArr; VL53L0X_GetRangingMeasurementData &rArr; VL53L0X_get_pal_range_status &rArr; VL53L0X_GetLimitCheckValue &rArr; VL53L0X_RdWord &rArr; _I2CRead &rArr; HAL_I2C_Master_Receive &rArr; I2C_MasterRequestRead &rArr; I2C_WaitOnMasterAddressFlagUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[118]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_IRQHandler
 </UL>
@@ -2076,7 +2091,7 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[f1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_DMA_Start_IT
 </UL>
-<BR>[Called By]<UL><LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Receive_DMA
+<BR>[Called By]<UL><LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Receive_DMA
 </UL>
 
 <P><STRONG><a name="[132]"></a>UART_Start_Receive_IT</STRONG> (Thumb, 58 bytes, Stack size 0 bytes, stm32f4xx_hal_uart.o(i.UART_Start_Receive_IT))
@@ -2310,7 +2325,7 @@ Global Symbols
 <P><STRONG><a name="[174]"></a>VL53L0X_PollingDelay</STRONG> (Thumb, 14 bytes, Stack size 8 bytes, vl53l0x_platform.o(i.VL53L0X_PollingDelay))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = VL53L0X_PollingDelay &rArr; HAL_Delay
 </UL>
-<BR>[Calls]<UL><LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
+<BR>[Calls]<UL><LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
 </UL>
 <BR>[Called By]<UL><LI><a href="#[172]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;VL53L0X_measurement_poll_for_completion
 <LI><a href="#[17d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;VL53L0X_get_info_from_device
@@ -2377,12 +2392,12 @@ Global Symbols
 <LI><a href="#[1a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_ref_spad_map
 </UL>
 
-<P><STRONG><a name="[bd]"></a>VL53L0X_SetDeviceAddress</STRONG> (Thumb, 8 bytes, Stack size 0 bytes, vl53l0x_api.o(i.VL53L0X_SetDeviceAddress))
+<P><STRONG><a name="[be]"></a>VL53L0X_SetDeviceAddress</STRONG> (Thumb, 8 bytes, Stack size 0 bytes, vl53l0x_api.o(i.VL53L0X_SetDeviceAddress))
 <BR><BR>[Stack]<UL><LI>Max Depth = 120<LI>Call Chain = VL53L0X_SetDeviceAddress &rArr; VL53L0X_WrByte &rArr; _I2CWrite &rArr; HAL_I2C_Master_Transmit &rArr; I2C_MasterRequestWrite &rArr; I2C_WaitOnMasterAddressFlagUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[155]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;VL53L0X_WrByte
 </UL>
-<BR>[Called By]<UL><LI><a href="#[bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_LaserSensor_Setup
+<BR>[Called By]<UL><LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_LaserSensor_Setup
 </UL>
 
 <P><STRONG><a name="[b2]"></a>VL53L0X_SetDeviceMode</STRONG> (Thumb, 36 bytes, Stack size 0 bytes, vl53l0x_api.o(i.VL53L0X_SetDeviceMode))
@@ -2502,7 +2517,7 @@ Global Symbols
 </UL>
 <BR>[Called By]<UL><LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;VL53L0X_StaticInit
 <LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;VL53L0X_StartMeasurement
-<LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;VL53L0X_SetDeviceAddress
+<LI><a href="#[be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;VL53L0X_SetDeviceAddress
 <LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;VL53L0X_DataInit
 <LI><a href="#[189]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;VL53L0X_device_read_strobe
 <LI><a href="#[192]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;perform_ref_signal_measurement
@@ -2895,11 +2910,11 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[1a1]"></a>advanceOneCell</STRONG> (Thumb, 76 bytes, Stack size 16 bytes, flood.o(i.advanceOneCell))
-<BR><BR>[Stack]<UL><LI>Max Depth = 96<LI>Call Chain = advanceOneCell &rArr; advanceTicksFlood &rArr; checkForWalls
+<BR><BR>[Stack]<UL><LI>Max Depth = 104<LI>Call Chain = advanceOneCell &rArr; advanceTicksFlood &rArr; checkForWalls
 </UL>
 <BR>[Calls]<UL><LI><a href="#[a9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_DebugDevice_TurnOnLED
 <LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_DebugDevice_TurnOffLED
-<LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
+<LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
 <LI><a href="#[e4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_TurnOnWallFollow
 <LI><a href="#[e3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_TurnOffWallFollow
 <LI><a href="#[dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_ShortBreak
@@ -2915,7 +2930,7 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[a9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_DebugDevice_TurnOnLED
 <LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_DebugDevice_TurnOffLED
-<LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
+<LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
 <LI><a href="#[e4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_TurnOnWallFollow
 <LI><a href="#[e3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_TurnOffWallFollow
 <LI><a href="#[dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_ShortBreak
@@ -2928,28 +2943,30 @@ Global Symbols
 <LI><a href="#[149]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;centerMovement
 </UL>
 
-<P><STRONG><a name="[1a2]"></a>advanceTicksFlood</STRONG> (Thumb, 518 bytes, Stack size 48 bytes, flood.o(i.advanceTicksFlood))
-<BR><BR>[Stack]<UL><LI>Max Depth = 80<LI>Call Chain = advanceTicksFlood &rArr; checkForWalls
+<P><STRONG><a name="[1a2]"></a>advanceTicksFlood</STRONG> (Thumb, 598 bytes, Stack size 56 bytes, flood.o(i.advanceTicksFlood))
+<BR><BR>[Stack]<UL><LI>Max Depth = 88<LI>Call Chain = advanceTicksFlood &rArr; checkForWalls
 </UL>
 <BR>[Calls]<UL><LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
+<LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
 <LI><a href="#[1a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_Encoder_ResetLeftValue
 <LI><a href="#[1a6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_Encoder_GetLeftValue
+<LI><a href="#[c8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_LaserSensor_ReadSingleWithFillter
 <LI><a href="#[1a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;checkForWalls
 </UL>
 <BR>[Called By]<UL><LI><a href="#[1a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;advanceOneCell
 </UL>
 
-<P><STRONG><a name="[149]"></a>centerMovement</STRONG> (Thumb, 1394 bytes, Stack size 16 bytes, flood.o(i.centerMovement))
+<P><STRONG><a name="[149]"></a>centerMovement</STRONG> (Thumb, 1392 bytes, Stack size 16 bytes, flood.o(i.centerMovement))
 <BR><BR>[Stack]<UL><LI>Max Depth = 120<LI>Call Chain = centerMovement &rArr; AML_MotorControl_TurnLeft180 &rArr; AML_MPUSensor_ResetAngle &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
 </UL>
-<BR>[Calls]<UL><LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
+<BR>[Calls]<UL><LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
 <LI><a href="#[e4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_TurnOnWallFollow
 <LI><a href="#[e3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_TurnOffWallFollow
 <LI><a href="#[df]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_TurnLeft180
 <LI><a href="#[de]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_Stop
 <LI><a href="#[d1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_RightPWM
 <LI><a href="#[cc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_LeftPWM
-<LI><a href="#[1a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uncontrolledAdvanceTicks
+<LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MPUSensor_ResetAngle
 <LI><a href="#[1a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;advanceOneCellVisited
 </UL>
 <BR>[Called By]<UL><LI><a href="#[144]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Run
@@ -2958,7 +2975,7 @@ Global Symbols
 <P><STRONG><a name="[1a7]"></a>checkForWalls</STRONG> (Thumb, 396 bytes, Stack size 32 bytes, flood.o(i.checkForWalls))
 <BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = checkForWalls
 </UL>
-<BR>[Calls]<UL><LI><a href="#[c7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_LaserSensor_ReadSingleWithFillter
+<BR>[Calls]<UL><LI><a href="#[c8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_LaserSensor_ReadSingleWithFillter
 </UL>
 <BR>[Called By]<UL><LI><a href="#[1a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;advanceTicksFlood
 </UL>
@@ -2983,10 +3000,10 @@ Global Symbols
 <LI><a href="#[170]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;VL53L0X_perform_ref_spad_management
 </UL>
 
-<P><STRONG><a name="[148]"></a>floodFill</STRONG> (Thumb, 666 bytes, Stack size 56 bytes, flood.o(i.floodFill))
-<BR><BR>[Stack]<UL><LI>Max Depth = 160<LI>Call Chain = floodFill &rArr; AML_MotorControl_TurnRight90 &rArr; AML_MPUSensor_ResetAngle &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
+<P><STRONG><a name="[148]"></a>floodFill</STRONG> (Thumb, 648 bytes, Stack size 56 bytes, flood.o(i.floodFill))
+<BR><BR>[Stack]<UL><LI>Max Depth = 496<LI>Call Chain = floodFill &rArr; AML_MotorControl_TurnLeft90 &rArr; AML_LaserSensor_ReadSingleWithoutFillter &rArr; AML_LaserSensor_ReadAll &rArr; VL53L0X_GetRangingMeasurementData &rArr; VL53L0X_get_pal_range_status &rArr; VL53L0X_GetLimitCheckValue &rArr; VL53L0X_RdWord &rArr; _I2CRead &rArr; HAL_I2C_Master_Receive &rArr; I2C_MasterRequestRead &rArr; I2C_WaitOnMasterAddressFlagUntilTimeout
 </UL>
-<BR>[Calls]<UL><LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
+<BR>[Calls]<UL><LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
 <LI><a href="#[e6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_TurnRight90
 <LI><a href="#[e4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_TurnOnWallFollow
 <LI><a href="#[e3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_TurnOffWallFollow
@@ -2996,7 +3013,8 @@ Global Symbols
 <LI><a href="#[dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_ShortBreak
 <LI><a href="#[d1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_RightPWM
 <LI><a href="#[cc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_LeftPWM
-<LI><a href="#[c7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_LaserSensor_ReadSingleWithFillter
+<LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MPUSensor_ResetAngle
+<LI><a href="#[bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_LaserSensor_ReadSingleWithoutFillter
 <LI><a href="#[1a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uncontrolledAdvanceTicks
 <LI><a href="#[1aa]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pop_stack
 <LI><a href="#[1a9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;minusOneNeighbor
@@ -3048,7 +3066,7 @@ Global Symbols
 <P><STRONG><a name="[134]"></a>handle</STRONG> (Thumb, 46 bytes, Stack size 16 bytes, aml_mpusensor.o(i.handle))
 <BR><BR>[Stack]<UL><LI>Max Depth = 80<LI>Call Chain = handle &rArr; HAL_UART_Receive &rArr; UART_WaitOnFlagUntilTimeout
 </UL>
-<BR>[Calls]<UL><LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Receive_DMA
+<BR>[Calls]<UL><LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Receive_DMA
 <LI><a href="#[12f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Receive
 </UL>
 <BR>[Called By]<UL><LI><a href="#[133]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_RxCpltCallback
@@ -3076,10 +3094,11 @@ Global Symbols
 <LI><a href="#[170]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;VL53L0X_perform_ref_spad_management
 </UL>
 
-<P><STRONG><a name="[14a]"></a>logicalFlood</STRONG> (Thumb, 174 bytes, Stack size 56 bytes, flood.o(i.logicalFlood))
-<BR><BR>[Stack]<UL><LI>Max Depth = 88<LI>Call Chain = logicalFlood &rArr; minusOneNeighbor
+<P><STRONG><a name="[14a]"></a>logicalFlood</STRONG> (Thumb, 180 bytes, Stack size 56 bytes, flood.o(i.logicalFlood))
+<BR><BR>[Stack]<UL><LI>Max Depth = 96<LI>Call Chain = logicalFlood &rArr; AML_MotorControl_ShortBreak &rArr; AML_MotorControl_RightPWM
 </UL>
 <BR>[Calls]<UL><LI><a href="#[e3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_TurnOffWallFollow
+<LI><a href="#[dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_ShortBreak
 <LI><a href="#[1aa]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pop_stack
 <LI><a href="#[1a9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;minusOneNeighbor
 </UL>
@@ -3101,9 +3120,9 @@ Global Symbols
 <LI><a href="#[de]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_Stop
 <LI><a href="#[da]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_Setup
 <LI><a href="#[d9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_SetCenterPosition
-<LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MPUSensor_Setup
-<LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MPUSensor_GetAngle
-<LI><a href="#[bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_LaserSensor_Setup
+<LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MPUSensor_Setup
+<LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MPUSensor_GetAngle
+<LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_LaserSensor_Setup
 <LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_LaserSensor_ReadAll
 <LI><a href="#[aa]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_Encoder_Setup
 <LI><a href="#[a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_DebugDevice_SetAllLED
@@ -3178,37 +3197,41 @@ Global Symbols
 <LI><a href="#[17a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;VL53L0X_set_measurement_timing_budget_micro_seconds
 </UL>
 
-<P><STRONG><a name="[14b]"></a>shortestPath</STRONG> (Thumb, 318 bytes, Stack size 56 bytes, flood.o(i.shortestPath))
-<BR><BR>[Stack]<UL><LI>Max Depth = 160<LI>Call Chain = shortestPath &rArr; AML_MotorControl_TurnRight90 &rArr; AML_MPUSensor_ResetAngle &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
+<P><STRONG><a name="[14b]"></a>shortestPath</STRONG> (Thumb, 400 bytes, Stack size 56 bytes, flood.o(i.shortestPath))
+<BR><BR>[Stack]<UL><LI>Max Depth = 496<LI>Call Chain = shortestPath &rArr; AML_MotorControl_TurnLeft90 &rArr; AML_LaserSensor_ReadSingleWithoutFillter &rArr; AML_LaserSensor_ReadAll &rArr; VL53L0X_GetRangingMeasurementData &rArr; VL53L0X_get_pal_range_status &rArr; VL53L0X_GetLimitCheckValue &rArr; VL53L0X_RdWord &rArr; _I2CRead &rArr; HAL_I2C_Master_Receive &rArr; I2C_MasterRequestRead &rArr; I2C_WaitOnMasterAddressFlagUntilTimeout
 </UL>
-<BR>[Calls]<UL><LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
+<BR>[Calls]<UL><LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
 <LI><a href="#[e6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_TurnRight90
 <LI><a href="#[e4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_TurnOnWallFollow
 <LI><a href="#[e3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_TurnOffWallFollow
 <LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_TurnLeft90
 <LI><a href="#[df]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_TurnLeft180
 <LI><a href="#[de]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_Stop
+<LI><a href="#[dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_ShortBreak
 <LI><a href="#[d1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_RightPWM
 <LI><a href="#[cc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_LeftPWM
+<LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MPUSensor_ResetAngle
+<LI><a href="#[bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_LaserSensor_ReadSingleWithoutFillter
 <LI><a href="#[1a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uncontrolledAdvanceTicks
 <LI><a href="#[1a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;advanceOneCellVisited
 </UL>
 <BR>[Called By]<UL><LI><a href="#[144]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Run
 </UL>
 
-<P><STRONG><a name="[1a5]"></a>uncontrolledAdvanceTicks</STRONG> (Thumb, 76 bytes, Stack size 16 bytes, flood.o(i.uncontrolledAdvanceTicks))
-<BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = uncontrolledAdvanceTicks
+<P><STRONG><a name="[1a5]"></a>uncontrolledAdvanceTicks</STRONG> (Thumb, 94 bytes, Stack size 16 bytes, flood.o(i.uncontrolledAdvanceTicks))
+<BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = uncontrolledAdvanceTicks &rArr; HAL_Delay
 </UL>
 <BR>[Calls]<UL><LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
+<LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
 <LI><a href="#[e4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_TurnOnWallFollow
 <LI><a href="#[e3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_TurnOffWallFollow
 <LI><a href="#[1a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_Encoder_ResetLeftValue
 <LI><a href="#[1a6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_Encoder_GetLeftValue
 <LI><a href="#[1ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_SetMouseSpeed
+<LI><a href="#[c8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_LaserSensor_ReadSingleWithFillter
 </UL>
 <BR>[Called By]<UL><LI><a href="#[14b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;shortestPath
 <LI><a href="#[148]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;floodFill
-<LI><a href="#[149]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;centerMovement
 <LI><a href="#[1a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;advanceOneCellVisited
 </UL>
 
@@ -3232,7 +3255,7 @@ Global Symbols
 <P><STRONG><a name="[a3]"></a>__aeabi_dneg</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, basic.o(x$fpl$basic))
 <BR><BR>[Called By]<UL><LI><a href="#[141]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PID_SetTunings2
 <LI><a href="#[140]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PID_SetControllerDirection
-<LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotoControl_GoStraight4
+<LI><a href="#[c7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotoControl_GoStraight4
 <LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ABS
 </UL>
 
@@ -3371,14 +3394,14 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[1b2]"></a>__fpl_dnaninf</STRONG> (Thumb, 156 bytes, Stack size 16 bytes, dnaninf.o(x$fpl$dnaninf), UNUSED)
-<BR><BR>[Called By]<UL><LI><a href="#[1bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_dfix
-<LI><a href="#[1b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_ddiv
+<BR><BR>[Called By]<UL><LI><a href="#[1b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_ddiv
 <LI><a href="#[1c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_dsub
 <LI><a href="#[1b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_dadd
 <LI><a href="#[1b9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_dcmpeq
 <LI><a href="#[1b0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_d2f
 <LI><a href="#[1bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_dmul
 <LI><a href="#[1bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_dcmple
+<LI><a href="#[1bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_dfix
 </UL>
 
 <P><STRONG><a name="[1b5]"></a>__fpl_dretinf</STRONG> (Thumb, 12 bytes, Stack size 0 bytes, dretinf.o(x$fpl$dretinf), UNUSED)
@@ -3416,13 +3439,13 @@ Global Symbols
 <LI><a href="#[1c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_dadd1
 </UL>
 
-<P><STRONG><a name="[c0]"></a>__aeabi_dsub</STRONG> (Thumb, 0 bytes, Stack size 32 bytes, daddsub_clz.o(x$fpl$dsub))
+<P><STRONG><a name="[c1]"></a>__aeabi_dsub</STRONG> (Thumb, 0 bytes, Stack size 32 bytes, daddsub_clz.o(x$fpl$dsub))
 <BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = __aeabi_dsub
 </UL>
 <BR>[Called By]<UL><LI><a href="#[e6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_TurnRight90
 <LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_TurnLeft90
 <LI><a href="#[df]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MotorControl_TurnLeft180
-<LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MPUSensor_GetAngle
+<LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AML_MPUSensor_GetAngle
 <LI><a href="#[133]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_RxCpltCallback
 <LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PID_Compute
 </UL>
@@ -3698,7 +3721,7 @@ Local Symbols
 <P><STRONG><a name="[12a]"></a>UART_EndRxTransfer</STRONG> (Thumb, 78 bytes, Stack size 0 bytes, stm32f4xx_hal_uart.o(i.UART_EndRxTransfer))
 <BR><BR>[Calls]<UL><LI><a href="#[12a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_EndRxTransfer
 </UL>
-<BR>[Called By]<UL><LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_DMAStop
+<BR>[Called By]<UL><LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_DMAStop
 <LI><a href="#[12a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_EndRxTransfer
 <LI><a href="#[68]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_DMAError
 </UL>
@@ -3706,7 +3729,7 @@ Local Symbols
 <P><STRONG><a name="[129]"></a>UART_EndTxTransfer</STRONG> (Thumb, 28 bytes, Stack size 0 bytes, stm32f4xx_hal_uart.o(i.UART_EndTxTransfer))
 <BR><BR>[Calls]<UL><LI><a href="#[129]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_EndTxTransfer
 </UL>
-<BR>[Called By]<UL><LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_DMAStop
+<BR>[Called By]<UL><LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_DMAStop
 <LI><a href="#[129]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_EndTxTransfer
 <LI><a href="#[68]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_DMAError
 </UL>
@@ -3726,7 +3749,7 @@ Local Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
 </UL>
-<BR>[Called By]<UL><LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Transmit
+<BR>[Called By]<UL><LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Transmit
 <LI><a href="#[12f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Receive
 </UL>
 

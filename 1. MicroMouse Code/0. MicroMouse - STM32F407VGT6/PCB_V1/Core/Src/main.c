@@ -58,7 +58,6 @@ TIM_HandleTypeDef htim1;
 TIM_HandleTypeDef htim2;
 TIM_HandleTypeDef htim4;
 TIM_HandleTypeDef htim9;
-TIM_HandleTypeDef htim10;
 
 UART_HandleTypeDef huart3;
 UART_HandleTypeDef huart6;
@@ -71,7 +70,7 @@ int16_t debug[100];
 uint8_t checkWorking[] = {0xFF, 0xAA, 0x52};
 
 // uint8_t ReadButton[5];
-volatile uint8_t ReadButton;
+uint8_t ReadButton;
 
 double testAngle;
 // int16_t LeftValue, RightValue;
@@ -101,7 +100,6 @@ static void MX_TIM1_Init(void);
 static void MX_TIM4_Init(void);
 static void MX_USART6_UART_Init(void);
 static void MX_TIM9_Init(void);
-static void MX_TIM10_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -117,32 +115,18 @@ static void MX_TIM10_Init(void);
 void Run(int InitDirection)
 {
 
-  AML_DebugDevice_SetAllLED(GPIO_PIN_SET);
-  AML_DebugDevice_BuzzerBeep(100);
-  HAL_Delay(100);
-  AML_DebugDevice_BuzzerBeep(100);
-
-  ReadButton = 8;
-
-  while (ReadButton == 8)
-  {
-  }
-
-  algorithm = ReadButton; // huong di uu tien
-
   for (int i = 0; i < 3; i++)
   {
-    AML_DebugDevice_SetAllLED(GPIO_PIN_SET);
-    AML_DebugDevice_BuzzerBeep(150);
-    AML_DebugDevice_SetAllLED(GPIO_PIN_RESET);
-    HAL_Delay(150);
+    AML_DebugDevice_BuzzerBeep(100);
+    HAL_Delay(100);
   }
 
-  AML_MPUSensor_ResetAngle();
+    AML_MPUSensor_ResetAngle();
   HAL_Delay(1500);
 
   // algorithm = wallFavor();                 // thay bang ham doc laser
   // algorithm = AML_LaserSensor_WallFavor(); // can sua lai
+  algorithm = 0;
 
   // HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_RESET);
   // HAL_Delay(1000);
@@ -190,9 +174,10 @@ void Run(int InitDirection)
   cell_walls_info.cells[0][0].walls[SOUTH] = 1;
   cell_walls_info.cells[0][0].walls[WEST] = 1;
 
-
   struct coor c;
   init_coor(&c, 0, 0);
+
+  // MX_TIM3_Init(); // Software timer for tracking REMOVE THIS LATER
 
   direction = floodFill(&distances, &c, &cell_walls_info, algorithm, direction, &update_stack);
 
@@ -201,11 +186,9 @@ void Run(int InitDirection)
     AML_DebugDevice_SetAllLED(GPIO_PIN_SET);
     AML_DebugDevice_BuzzerBeep(50);
     HAL_Delay(100);
-    AML_DebugDevice_SetAllLED(GPIO_PIN_RESET);
-    HAL_Delay(100);
   }
 
-  // return;
+  return;
 
   direction = centerMovement(&cell_walls_info, &c, direction);
 
@@ -213,15 +196,6 @@ void Run(int InitDirection)
   // Mouse has made it to center, so flood back to start
   init_coor(&target, 0, 0);
   init_distance_maze(&distances, &target, 0);
-
-  // for (int i = 0; i < 10; i++)
-  // {
-  //   AML_DebugDevice_SetAllLED(GPIO_PIN_SET);
-  //   AML_DebugDevice_BuzzerBeep(50);
-  //   HAL_Delay(100);
-  //   AML_DebugDevice_SetAllLED(GPIO_PIN_RESET);
-  //   HAL_Delay(100);
-  // }
 
   // center to start
   logicalFlood(&distances, &c, &cell_walls_info, direction, direction, &update_stack);
@@ -266,8 +240,6 @@ void Run(int InitDirection)
     // turnOnLEDS();
     break;
   }
-
-
   direction = NORTH;
   // start to center in "shortest path"
   init_distance_maze(&distances, &c, 1);
@@ -288,15 +260,6 @@ void Run(int InitDirection)
   AML_MotorControl_Stop();
 
   // wallFavor();
-
-  for (int i = 0; i < 5; i++)
-  {
-    AML_DebugDevice_SetAllLED(GPIO_PIN_SET);
-    AML_DebugDevice_BuzzerBeep(50);
-    HAL_Delay(100);
-    AML_DebugDevice_SetAllLED(GPIO_PIN_RESET);
-    HAL_Delay(100);
-  }
 
   // custom_delay(1000);
 
@@ -373,10 +336,6 @@ void TestSpeed()
   HAL_Delay(1000);
 }
 
-uint8_t TestSystem()
-{
-}
-
 /* USER CODE END 0 */
 
 /**
@@ -414,7 +373,6 @@ int main(void)
   MX_TIM4_Init();
   MX_USART6_UART_Init();
   MX_TIM9_Init();
-  MX_TIM10_Init();
   /* USER CODE BEGIN 2 */
   AML_MPUSensor_Setup();
   // AML_Keyboard_Setup();
@@ -436,12 +394,6 @@ int main(void)
   AML_LaserSensor_ReadAll();
 
   AML_DebugDevice_BuzzerBeep(20);
-
-  // AML_DebugDevice_TurnOnIT();
-
-  // HAL_Delay(5000);
-
-  // AML_DebugDevice_TurnOffIT();
 
   /* USER CODE END 2 */
 
@@ -479,8 +431,9 @@ int main(void)
     {
       // AML_MotorControl_SetRightWallValue();
       // AML_MotorControl_TurnOnWallFollow();
-      AML_MotorControl_TurnLeft90();
+      AML_MotorControl_TurnRight90();
       ReadButton = 2;
+
     }
     else if (ReadButton == 2)
     {
@@ -503,10 +456,10 @@ int main(void)
     {
       Run(EAST);
       // AML_MotorControl_MPUFollow();
-      // AML_MotorControl_TurnOnWallFollow();   
+      // AML_MotorControl_TurnOnWallFollow();
 
       // AML_MotorControl_TurnRight180();
-      ReadButton = 2;
+      // ReadButton = 2;
     }
 
     testAngle = AML_MPUSensor_GetAngle();
@@ -792,36 +745,6 @@ static void MX_TIM9_Init(void)
   /* USER CODE BEGIN TIM9_Init 2 */
 
   /* USER CODE END TIM9_Init 2 */
-}
-
-/**
- * @brief TIM10 Initialization Function
- * @param None
- * @retval None
- */
-static void MX_TIM10_Init(void)
-{
-
-  /* USER CODE BEGIN TIM10_Init 0 */
-
-  /* USER CODE END TIM10_Init 0 */
-
-  /* USER CODE BEGIN TIM10_Init 1 */
-
-  /* USER CODE END TIM10_Init 1 */
-  htim10.Instance = TIM10;
-  htim10.Init.Prescaler = 8399;
-  htim10.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim10.Init.Period = 1499;
-  htim10.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-  htim10.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-  if (HAL_TIM_Base_Init(&htim10) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN TIM10_Init 2 */
-
-  /* USER CODE END TIM10_Init 2 */
 }
 
 /**

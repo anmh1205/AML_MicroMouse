@@ -12,8 +12,6 @@ uint16_t PreviousBL, PreviousBR;
 
 extern TIM_HandleTypeDef htim2;
 extern TIM_HandleTypeDef htim9;
-extern TIM_HandleTypeDef htim10;
-
 extern int16_t debug[100];
 extern uint8_t ReadButton;
 extern VL53L0X_RangingMeasurementData_t SensorValue[7];
@@ -599,17 +597,13 @@ void AML_MotoControl_GoStraight4(void)
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
     // UNUSED(htim);
-    if (htim->Instance == htim9.Instance) // timer for wall follow
+    if (htim->Instance == htim9.Instance)
     {
         // AML_MotorControl_GoStraight();
         // AML_MotorControl_GoStraight2();
         // AML_MotorControl_GoStraight3();
         AML_LaserSensor_ReadAll();
         AML_MotoControl_GoStraight4();
-    }
-    else if (htim->Instance == htim10.Instance) // timer for led control
-    {
-        AML_DebugDevice_Handle();
     }
     // debug[11]++;
 }
@@ -675,20 +669,20 @@ void AML_MotorControl_TurnLeft90(void)
     AML_DebugDevice_TurnOffLED(6);
     AML_DebugDevice_TurnOffLED(7);
 
-    AML_MotorControl_ShortBreak('F');
+    // AML_MotorControl_ShortBreak('F');
 
-    uint8_t CalibFlag = AML_LaserSensor_ReadSingleWithoutFillter(BR) < (WALL_IN_RIGHT + 60);
+    uint8_t CalibFlag = AML_LaserSensor_ReadSingleWithoutFillter(BR) < WALL_IN_RIGHT;
     AML_MPUSensor_ResetAngle();
     AML_DebugDevice_BuzzerBeep(20);
 
     Input_TurnLeft = (double)AML_MPUSensor_GetAngle();
     Setpoint_TurnLeft = Input_TurnLeft + 90.0f;
 
-    // HAL_Delay(200);
+    HAL_Delay(200);
 
     uint32_t InitTime = HAL_GetTick();
 
-    while ((ReadButton != 2) && ABS(Input_TurnLeft - Setpoint_TurnLeft) > 10.0f && (HAL_GetTick() - InitTime < 700))
+    while ((ReadButton != 2) && (ABS(Input_TurnLeft - Setpoint_TurnLeft) > 10.0f) && (HAL_GetTick() - InitTime < 1500))
     {
         Input_TurnLeft = AML_MPUSensor_GetAngle();
         PID_Compute(&PID_TurnLeft);
@@ -731,7 +725,7 @@ void AML_MotorControl_TurnRight90(void)
     AML_DebugDevice_TurnOffLED(6);
     AML_DebugDevice_TurnOffLED(7);
 
-    AML_MotorControl_ShortBreak('F');
+    // AML_MotorControl_ShortBreak('F');
 
     uint8_t CalibFlag = AML_LaserSensor_ReadSingleWithoutFillter(BL) < WALL_IN_LEFT;
     AML_MPUSensor_ResetAngle();
@@ -767,6 +761,7 @@ void AML_MotorControl_TurnRight90(void)
     // *PID_TurnLeft.MyOutput = 0;
     // *PID_TurnRight.MyOutput = 0;
 
+    // AML_MotorControl_PIDReset(&PID_MPUFollow);
     TempSetpoint = 0;
 
     AML_DebugDevice_TurnOffLED(4);
@@ -785,7 +780,7 @@ void AML_MotorControl_TurnLeft180(void)
     AML_DebugDevice_TurnOffLED(6);
     AML_DebugDevice_TurnOffLED(7);
 
-    AML_MotorControl_ShortBreak('F');
+    // AML_MotorControl_ShortBreak('F');
 
     AML_MPUSensor_ResetAngle();
     AML_DebugDevice_BuzzerBeep(20);
@@ -833,7 +828,7 @@ void AML_MotorControl_TurnRight180(void)
     AML_DebugDevice_TurnOffLED(5);
     AML_DebugDevice_TurnOffLED(7);
 
-    AML_MotorControl_ShortBreak('F');
+    // AML_MotorControl_ShortBreak('F');
 
     AML_MPUSensor_ResetAngle();
     AML_DebugDevice_BuzzerBeep(20);

@@ -35,7 +35,7 @@ void AML_MPUSensor_ResetAngle(void)
     PreviousAngle = 0;
     Angle = 0;
     HAL_Delay(5);
-    
+
     HAL_UART_Receive_DMA(&huart3, MPUData, 33);
 }
 

@@ -59,4 +59,3 @@ void AMl_Remote_NumberToString(uint8_t *string, int32_t number)
         string[k++] = temp[j - 1];
     }
 }
-

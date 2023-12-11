@@ -58,6 +58,7 @@ TIM_HandleTypeDef htim1;
 TIM_HandleTypeDef htim2;
 TIM_HandleTypeDef htim4;
 TIM_HandleTypeDef htim9;
+TIM_HandleTypeDef htim10;
 
 UART_HandleTypeDef huart3;
 UART_HandleTypeDef huart6;
@@ -70,7 +71,7 @@ int16_t debug[100];
 uint8_t checkWorking[] = {0xFF, 0xAA, 0x52};
 
 // uint8_t ReadButton[5];
-uint8_t ReadButton;
+volatile uint8_t ReadButton;
 
 double testAngle;
 // int16_t LeftValue, RightValue;
@@ -100,6 +101,7 @@ static void MX_TIM1_Init(void);
 static void MX_TIM4_Init(void);
 static void MX_USART6_UART_Init(void);
 static void MX_TIM9_Init(void);
+static void MX_TIM10_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -112,21 +114,128 @@ static void MX_TIM9_Init(void);
 //   return (ch);
 // }
 
-void Run(int InitDirection)
+void TestLaser(void)
 {
+  AML_DebugDevice_SetAllLED(GPIO_PIN_RESET);
 
-  for (int i = 0; i < 3; i++)
+  AML_LaserSensor_ReadAll();
+
+  AML_DebugDevice_BuzzerBeep(100); // Beep âm thanh trong 100ms
+  HAL_Delay(200);
+
+  for (int i = 0; i < 5; i++)
   {
-    AML_DebugDevice_BuzzerBeep(100);
+    if (AML_LaserSensor_ReadSingleWithFillter(i) != 0)
+    {
+      AML_DebugDevice_TurnOnLED(i);
+    }
+  }
+
+  HAL_Delay(1000); // Đợi 1 giây
+
+  AML_DebugDevice_BuzzerBeep(100); // Beep âm thanh trong 100ms
+}
+
+void TestMotor(void)
+{
+  AML_DebugDevice_SetAllLED(GPIO_PIN_RESET);
+
+  AML_Encoder_ResetLeftValue();
+  AML_Encoder_ResetRightValue();
+
+  while (AML_Encoder_GetLeftValue() < 1000 | AML_Encoder_GetRightValue() < 1000)
+  {
+    AML_MotorControl_LeftPWM(20);
+    AML_MotorControl_RightPWM(20);
+  }
+
+  AML_MotorControl_Stop();
+
+  AML_DebugDevice_TurnOnLED(0);
+
+  AML_DebugDevice_BuzzerBeep(50);
+  HAL_Delay(50);
+  AML_DebugDevice_BuzzerBeep(50);
+  HAL_Delay(50);
+
+  AML_Encoder_ResetLeftValue();
+  AML_Encoder_ResetRightValue();
+
+  while (AML_Encoder_GetLeftValue() > -1000 | AML_Encoder_GetRightValue() > -1000)
+  {
+    AML_MotorControl_LeftPWM(-20);
+    AML_MotorControl_RightPWM(-20);
+  }
+
+  AML_MotorControl_Stop();
+
+  AML_DebugDevice_TurnOnLED(1);
+
+  AML_DebugDevice_BuzzerBeep(50);
+  HAL_Delay(50);
+  AML_DebugDevice_BuzzerBeep(50);
+  HAL_Delay(50);
+
+  HAL_Delay(1000);
+
+  AML_Encoder_ResetLeftValue();
+  AML_Encoder_ResetRightValue();
+}
+
+void TestMPU()
+{
+  AML_DebugDevice_SetAllLED(GPIO_PIN_SET);
+
+  while (AML_MPUSensor_GetAngle() == 0)
+  {
+    AML_DebugDevice_SetAllLED(GPIO_PIN_SET);
+
+    HAL_Delay(100);
+
+    AML_DebugDevice_SetAllLED(GPIO_PIN_RESET);
+
     HAL_Delay(100);
   }
 
-    AML_MPUSensor_ResetAngle();
+  AML_DebugDevice_BuzzerBeep(50);
+  HAL_Delay(50);
+  AML_DebugDevice_BuzzerBeep(50);
+  HAL_Delay(50);
+  AML_DebugDevice_BuzzerBeep(50);
+  HAL_Delay(50);
+
+  AML_DebugDevice_SetAllLED(GPIO_PIN_RESET);
+}
+
+void Run(int InitDirection)
+{
+
+  AML_DebugDevice_SetAllLED(GPIO_PIN_SET);
+  AML_DebugDevice_BuzzerBeep(100);
+  HAL_Delay(100);
+  AML_DebugDevice_BuzzerBeep(100);
+
+  ReadButton = 8;
+
+  while (ReadButton == 8)
+  {
+  }
+
+  algorithm = ReadButton; // huong di uu tien
+
+  for (int i = 0; i < 3; i++)
+  {
+    AML_DebugDevice_SetAllLED(GPIO_PIN_SET);
+    AML_DebugDevice_BuzzerBeep(150);
+    AML_DebugDevice_SetAllLED(GPIO_PIN_RESET);
+    HAL_Delay(150);
+  }
+
+  AML_MPUSensor_ResetAngle();
   HAL_Delay(1500);
 
   // algorithm = wallFavor();                 // thay bang ham doc laser
   // algorithm = AML_LaserSensor_WallFavor(); // can sua lai
-  algorithm = 0;
 
   // HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_RESET);
   // HAL_Delay(1000);
@@ -149,46 +258,51 @@ void Run(int InitDirection)
 
   if (direction == NORTH)
   {
-    if (AML_LaserSensor_ReadSingleWithoutFillter(BR) < WALL_IN_RIGHT)
-    {
-      cell_walls_info.cells[0][0].walls[EAST] = 1;
-    }
-    else
-    {
-      cell_walls_info.cells[0][0].walls[EAST] = 0;
-    }
+    // if (AML_LaserSensor_ReadSingleWithoutFillter(BR) < WALL_IN_RIGHT)
+    // {
+    //   cell_walls_info.cells[0][0].walls[EAST] = 1;
+    // }
+    // else
+    // {
+    //   cell_walls_info.cells[0][0].walls[EAST] = 0;
+    // }
+
+    cell_walls_info.cells[0][0].walls[EAST] = 1;
   }
 
   if (direction == EAST)
   {
-    if (AML_LaserSensor_ReadSingleWithoutFillter(BL) < WALL_IN_LEFT)
-    {
-      cell_walls_info.cells[0][0].walls[NORTH] = 1;
-    }
-    else
-    {
-      cell_walls_info.cells[0][0].walls[NORTH] = 0;
-    }
+    // if (AML_LaserSensor_ReadSingleWithoutFillter(BL) < WALL_IN_LEFT)
+    // {
+    //   cell_walls_info.cells[0][0].walls[NORTH] = 1;
+    // }
+    // else
+    // {
+    //   cell_walls_info.cells[0][0].walls[NORTH] = 0;
+    // }
+
+    cell_walls_info.cells[0][0].walls[NORTH] = 1;
   }
   // set east, south, west wall of start cell to true
+
   cell_walls_info.cells[0][0].walls[SOUTH] = 1;
   cell_walls_info.cells[0][0].walls[WEST] = 1;
+
+  // cell_walls_info.cells[0][0].visited = 1;
 
   struct coor c;
   init_coor(&c, 0, 0);
 
-  // MX_TIM3_Init(); // Software timer for tracking REMOVE THIS LATER
-
   direction = floodFill(&distances, &c, &cell_walls_info, algorithm, direction, &update_stack);
 
-  for (int i = 0; i < 10; i++)
+  for (int i = 0; i < 20; i++)
   {
     AML_DebugDevice_SetAllLED(GPIO_PIN_SET);
     AML_DebugDevice_BuzzerBeep(50);
     HAL_Delay(100);
+    AML_DebugDevice_SetAllLED(GPIO_PIN_RESET);
+    HAL_Delay(100);
   }
-
-  return;
 
   direction = centerMovement(&cell_walls_info, &c, direction);
 
@@ -196,6 +310,15 @@ void Run(int InitDirection)
   // Mouse has made it to center, so flood back to start
   init_coor(&target, 0, 0);
   init_distance_maze(&distances, &target, 0);
+
+  // for (int i = 0; i < 10; i++)
+  // {
+  //   AML_DebugDevice_SetAllLED(GPIO_PIN_SET);
+  //   AML_DebugDevice_BuzzerBeep(50);
+  //   HAL_Delay(100);
+  //   AML_DebugDevice_SetAllLED(GPIO_PIN_RESET);
+  //   HAL_Delay(100);
+  // }
 
   // center to start
   logicalFlood(&distances, &c, &cell_walls_info, direction, direction, &update_stack);
@@ -240,6 +363,7 @@ void Run(int InitDirection)
     // turnOnLEDS();
     break;
   }
+
   direction = NORTH;
   // start to center in "shortest path"
   init_distance_maze(&distances, &c, 1);
@@ -255,15 +379,42 @@ void Run(int InitDirection)
   AML_MotorControl_LeftPWM(-20);
   AML_MotorControl_RightPWM(-20);
   HAL_Delay(2000);
+  AML_MPUSensor_ResetAngle();
+  AML_Encoder_ResetLeftValue();
+  AML_Encoder_ResetRightValue();
 
   // motorStop();
   AML_MotorControl_Stop();
+  // HAL_Delay(100);
 
   // wallFavor();
 
+  for (int i = 0; i < 5; i++)
+  {
+    AML_DebugDevice_SetAllLED(GPIO_PIN_SET);
+    AML_DebugDevice_BuzzerBeep(50);
+    HAL_Delay(100);
+    AML_DebugDevice_SetAllLED(GPIO_PIN_RESET);
+    HAL_Delay(100);
+  }
+
+  return;
+
   // custom_delay(1000);
 
+  // cell_walls_info.cells[0][0].visited = 1;
+
   shortestPath(&distances, &c, &cell_walls_info, direction, direction, &update_stack);
+
+  for (int i = 0; i < 5; i++)
+  {
+    AML_DebugDevice_SetAllLED(GPIO_PIN_SET);
+    AML_DebugDevice_BuzzerBeep(50);
+    HAL_Delay(100);
+    AML_DebugDevice_SetAllLED(GPIO_PIN_RESET);
+    HAL_Delay(100);
+  }
+
   // motorStop();
   AML_MotorControl_Stop();
 
@@ -336,6 +487,68 @@ void TestSpeed()
   HAL_Delay(1000);
 }
 
+void SystemTest(void)
+{
+  TestLaser();
+  TestMotor();
+  TestMPU();
+}
+
+void SetTicks()
+{
+  ReadButton = 8;
+  HAL_Delay(300);
+
+  AML_DebugDevice_SetAllLED(GPIO_PIN_SET);
+
+  while (ReadButton == 8)
+  {
+  }
+
+  AML_DebugDevice_SetAllLED(GPIO_PIN_RESET);
+
+  if (ReadButton == 0)
+  {
+    AML_MotorControl_SetCenterPosition();
+    AML_DebugDevice_BuzzerBeep(20);
+    AML_DebugDevice_TurnOnLED(ReadButton);
+    HAL_Delay(300);
+    AML_DebugDevice_TurnOffLED(ReadButton);
+  }
+  else if (ReadButton == 1)
+  {
+    SetBeforeTurnTicks(0);
+    AML_DebugDevice_BuzzerBeep(20);
+    AML_DebugDevice_TurnOnLED(ReadButton);
+    HAL_Delay(300);
+    AML_DebugDevice_TurnOffLED(ReadButton);
+  }
+  else if (ReadButton == 2)
+  {
+    SetBeforeTurnTicks(120);
+    AML_DebugDevice_BuzzerBeep(20);
+    AML_DebugDevice_TurnOnLED(ReadButton);
+    HAL_Delay(300);
+    AML_DebugDevice_TurnOffLED(ReadButton);
+  }
+  else if (ReadButton == 3)
+  {
+    SetAfterTurnTicks(0);
+    AML_DebugDevice_BuzzerBeep(20);
+    AML_DebugDevice_TurnOnLED(ReadButton);
+    HAL_Delay(300);
+    AML_DebugDevice_TurnOffLED(ReadButton);
+  }
+  else if (ReadButton == 4)
+  {
+    SetAfterTurnTicks(70);
+    AML_DebugDevice_BuzzerBeep(20);
+    AML_DebugDevice_TurnOnLED(ReadButton);
+    HAL_Delay(300);
+    AML_DebugDevice_TurnOffLED(ReadButton);
+  }
+}
+
 /* USER CODE END 0 */
 
 /**
@@ -373,6 +586,7 @@ int main(void)
   MX_TIM4_Init();
   MX_USART6_UART_Init();
   MX_TIM9_Init();
+  MX_TIM10_Init();
   /* USER CODE BEGIN 2 */
   AML_MPUSensor_Setup();
   // AML_Keyboard_Setup();
@@ -394,6 +608,12 @@ int main(void)
   AML_LaserSensor_ReadAll();
 
   AML_DebugDevice_BuzzerBeep(20);
+
+  // AML_DebugDevice_TurnOnIT();
+
+  // HAL_Delay(5000);
+
+  // AML_DebugDevice_TurnOffIT();
 
   /* USER CODE END 2 */
 
@@ -419,50 +639,35 @@ int main(void)
 
     if (ReadButton == 0) // set left wall value
     {
-      // AML_MotorControl_SetLeftWallValue();
-      AML_MotorControl_SetCenterPosition();
-
-      // ReadButton = 8;
-
-      // AML_MotorControl_TurnLeft90();
-      ReadButton = 2;
+      SetTicks();
+      ReadButton = 8;
     }
     else if (ReadButton == 1) // set right wall value
     {
-      // AML_MotorControl_SetRightWallValue();
-      // AML_MotorControl_TurnOnWallFollow();
-      AML_MotorControl_TurnRight90();
-      ReadButton = 2;
+      // AML_MPUSensor_ResetAngle();
 
+      AML_MotorControl_TurnLeft90();
+      HAL_Delay(500);
+      AML_MotorControl_TurnRight90();
+      ReadButton = 8;
     }
     else if (ReadButton == 2)
     {
-      AML_MotorControl_Stop();
-
-      AML_DebugDevice_SetAllLED(GPIO_PIN_RESET);
-      AML_MotorControl_TurnOffWallFollow();
-
+      SystemTest();
       ReadButton = 8;
     }
     else if (ReadButton == 3)
     {
-      // AML_MotorControl_MPUFollow();
       Run(NORTH);
-
-      // AML_MotorControl_TurnLeft180();
-      ReadButton = 2;
+      ReadButton = 8;
     }
     else if (ReadButton == 4)
     {
       Run(EAST);
-      // AML_MotorControl_MPUFollow();
-      // AML_MotorControl_TurnOnWallFollow();
-
-      // AML_MotorControl_TurnRight180();
-      // ReadButton = 2;
+      ReadButton = 8;
     }
 
-    testAngle = AML_MPUSensor_GetAngle();
+    // testAngle = AML_MPUSensor_GetAngle();
 
     // debug[13] = AML_Encoder_GetLeftValue();
     // debug[14] = AML_Encoder_GetRightValue();
@@ -745,6 +950,36 @@ static void MX_TIM9_Init(void)
   /* USER CODE BEGIN TIM9_Init 2 */
 
   /* USER CODE END TIM9_Init 2 */
+}
+
+/**
+ * @brief TIM10 Initialization Function
+ * @param None
+ * @retval None
+ */
+static void MX_TIM10_Init(void)
+{
+
+  /* USER CODE BEGIN TIM10_Init 0 */
+
+  /* USER CODE END TIM10_Init 0 */
+
+  /* USER CODE BEGIN TIM10_Init 1 */
+
+  /* USER CODE END TIM10_Init 1 */
+  htim10.Instance = TIM10;
+  htim10.Init.Prescaler = 8399;
+  htim10.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim10.Init.Period = 1499;
+  htim10.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim10.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim10) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM10_Init 2 */
+
+  /* USER CODE END TIM10_Init 2 */
 }
 
 /**

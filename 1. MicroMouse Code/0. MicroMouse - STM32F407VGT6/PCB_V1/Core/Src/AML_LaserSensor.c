@@ -189,6 +189,12 @@ int32_t AML_LaserSensor_ReadSingleWithFillter(uint8_t name)
     // {
     //     SensorValue[name].RangeMilliMeter = (uint16_t)SimpleKalmanFilter_updateEstimate(&KalmanFilter[name], SensorValue[name].RangeMilliMeter);
     // }
+    // VL53L0X_GetRangingMeasurementData(Laser[name], &SensorValue[name]);
+
+    // if (SensorValue[name].RangeMilliMeter < 2000) // 2000 is the maximum range of the sensor
+    // {
+    //     SensorValue[name].RangeMilliMeter = (uint16_t)SimpleKalmanFilter_updateEstimate(&KalmanFilter[name], SensorValue[name].RangeMilliMeter);
+    // }
 
     // return (int32_t)SensorValue[name].RangeMilliMeter;
     return (int32_t)SensorValue[name].RangeMilliMeter;
@@ -196,16 +202,17 @@ int32_t AML_LaserSensor_ReadSingleWithFillter(uint8_t name)
 
 int32_t AML_LaserSensor_ReadSingleWithoutFillter(uint8_t name)
 {
-    // VL53L0X_GetRangingMeasurementData(Laser[name], &SensorValue[name]);
+    VL53L0X_GetRangingMeasurementData(Laser[name], &SensorValue[name]);
 
-    // if (SensorValue[name].RangeMilliMeter > 20)
-    // {
-    //     return (int32_t)SensorValue[name].RangeMilliMeter;
-    // }
-    // else
-    // {
-    //     return 2000;
-    // }
+    if (SensorValue[name].RangeMilliMeter > 25)
+    {
+        return (int32_t)SensorValue[name].RangeMilliMeter;
+    }
+    else
+    {
+        return 2000;
+    }
+    // AML_LaserSensor_ReadAll();
 
     return (int32_t)SensorValue[name].RangeMilliMeter;
 }
@@ -220,4 +227,63 @@ uint8_t AML_LaserSensor_WallFavor(void)
         return 2;
     else if (AML_LaserSensor_ReadSingleWithoutFillter(BR < 100)) // West
         return 3;
+}
+
+void AML_LaserSensor_TestLaser(void)
+{
+    int32_t t0 = AML_LaserSensor_ReadSingleWithoutFillter(FL);
+    int32_t t1 = AML_LaserSensor_ReadSingleWithoutFillter(FF);
+    int32_t t2 = AML_LaserSensor_ReadSingleWithoutFillter(FR);
+    int32_t t3 = AML_LaserSensor_ReadSingleWithoutFillter(BR);
+    int32_t t4 = AML_LaserSensor_ReadSingleWithoutFillter(BL);
+
+    for (int8_t i = 0; i < 5; i++)
+    {
+        if ((AML_LaserSensor_ReadSingleWithFillter(FL) - t0) != 0)
+        {
+            AML_DebugDevice_TurnOnLED(0);
+        }
+        else
+        {
+            AML_DebugDevice_TurnOffLED(0);
+        }
+
+        if ((AML_LaserSensor_ReadSingleWithFillter(FF) - t1) != 0)
+        {
+            AML_DebugDevice_TurnOnLED(1);
+        }
+        else
+        {
+            AML_DebugDevice_TurnOffLED(1);
+        }
+
+        if ((AML_LaserSensor_ReadSingleWithFillter(FR) - t2) != 0)
+        {
+            AML_DebugDevice_TurnOnLED(2);
+        }
+        else
+        {
+            AML_DebugDevice_TurnOffLED(2);
+        }
+
+        if ((AML_LaserSensor_ReadSingleWithFillter(BR) - t3) != 0)
+        {
+            AML_DebugDevice_TurnOnLED(3);
+        }
+        else
+        {
+            AML_DebugDevice_TurnOffLED(3);
+        }
+
+        if ((AML_LaserSensor_ReadSingleWithFillter(BL) - t4) != 0)
+        {
+            AML_DebugDevice_TurnOnLED(4);
+        }
+        else
+        {
+            AML_DebugDevice_TurnOffLED(4);
+        }
+
+        HAL_Delay(500);
+    }
 }

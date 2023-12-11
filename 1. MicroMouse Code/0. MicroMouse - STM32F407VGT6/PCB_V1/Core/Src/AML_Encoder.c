@@ -3,11 +3,10 @@
 extern TIM_HandleTypeDef htim1;
 extern TIM_HandleTypeDef htim4;
 
-
 void AML_Encoder_Setup(void)
 {
-    HAL_TIM_Encoder_Start(&htim1, TIM_CHANNEL_ALL);  // left encoder
-    HAL_TIM_Encoder_Start(&htim4, TIM_CHANNEL_ALL);  // right encoder
+    HAL_TIM_Encoder_Start(&htim1, TIM_CHANNEL_ALL); // left encoder
+    HAL_TIM_Encoder_Start(&htim4, TIM_CHANNEL_ALL); // right encoder
 }
 
 int16_t AML_Encoder_GetLeftValue(void)

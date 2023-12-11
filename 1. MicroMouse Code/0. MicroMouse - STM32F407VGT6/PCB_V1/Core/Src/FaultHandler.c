@@ -29,15 +29,13 @@ void ReportHardFault(uint32_t *hard_fault_values, uint32_t exc);
  */
 void HardFault_Handler(void)
 {
-  __asm volatile
-  (
+  __asm volatile(
       "TST    LR, #0b0100;      "
       "ITE    EQ;               "
       "MRSEQ  R0, MSP;          "
       "MRSNE  R0, PSP;          "
       "MOV    R1, LR;           "
-      "B      ReportHardFault;  "
-  );
+      "B      ReportHardFault;  ");
 }
 
 /**
@@ -48,14 +46,14 @@ void HardFault_Handler(void)
  */
 void ReportHardFault(uint32_t *stack_frame, uint32_t exc)
 {
-  uint32_t r0   = stack_frame[0];
-  uint32_t r1   = stack_frame[1];
-  uint32_t r2   = stack_frame[2];
-  uint32_t r3   = stack_frame[3];
-  uint32_t r12  = stack_frame[4];
-  uint32_t lr   = stack_frame[5];
-  uint32_t pc   = stack_frame[6];
-  uint32_t psr  = stack_frame[7];
+  uint32_t r0 = stack_frame[0];
+  uint32_t r1 = stack_frame[1];
+  uint32_t r2 = stack_frame[2];
+  uint32_t r3 = stack_frame[3];
+  uint32_t r12 = stack_frame[4];
+  uint32_t lr = stack_frame[5];
+  uint32_t pc = stack_frame[6];
+  uint32_t psr = stack_frame[7];
   uint32_t hfsr = SCB->HFSR;
   uint32_t cfsr = SCB->CFSR;
   uint32_t mmar = SCB->MMFAR;
@@ -186,5 +184,6 @@ void ReportHardFault(uint32_t *stack_frame, uint32_t exc)
   __asm volatile("BKPT #0");
 
   /* Infinite loop to stop the execution. */
-  while(1);
+  while (1)
+    ;
 }

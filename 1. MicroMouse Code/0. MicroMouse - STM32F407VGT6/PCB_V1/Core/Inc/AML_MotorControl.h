@@ -48,10 +48,13 @@ void AML_MotorControl_TurnRight90(void);
 void AML_MotorControl_TurnLeft180(void);
 void AML_MotorControl_TurnRight180(void);
 
+void AML_MotorControl_ResetTempSetpoint(void);
+
 void AML_MotorControl_LeftStillTurn(void);
 void AML_MotorControl_RightStillTurn(void);
 void AML_MotorControl_BackStillTurn(void);
 
 void AML_MotorControl_MoveForward_mm(uint16_t distance);
+
 
 #endif // AML_MOTORCONTROL_H

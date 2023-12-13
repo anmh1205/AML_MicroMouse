@@ -8,6 +8,8 @@
 #include "AML_Encoder.h"
 #include "AML_MPUSensor.h"
 #include "AML_Parameter.h"
+#include "AML_PID.h"
+
 #include "pid.h"
 #include "math.h"
 #include "flood.h"

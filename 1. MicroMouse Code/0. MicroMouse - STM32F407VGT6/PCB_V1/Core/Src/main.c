@@ -72,6 +72,7 @@ uint8_t checkWorking[] = {0xFF, 0xAA, 0x52};
 
 // uint8_t ReadButton[5];
 volatile uint8_t ReadButton;
+volatile uint8_t Mode = 0;
 
 double testAngle;
 // int16_t LeftValue, RightValue;

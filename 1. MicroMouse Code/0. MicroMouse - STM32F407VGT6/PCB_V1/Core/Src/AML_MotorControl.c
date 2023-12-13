@@ -14,6 +14,8 @@ extern TIM_HandleTypeDef htim2;
 extern TIM_HandleTypeDef htim9;
 extern TIM_HandleTypeDef htim10;
 
+extern uint8_t Mode = 0;
+
 extern int16_t debug[100];
 extern uint8_t ReadButton;
 extern VL53L0X_RangingMeasurementData_t SensorValue[7];
@@ -88,6 +90,21 @@ double TurnRight_Kp = 0.9;
 double TurnRight_Ki = 1.3;
 double TurnRight_Kd = 0.35;
 
+AML_PID_Struct AML_PID_TurnLeft;
+double AML_PID_TurnLeft_Kp = 1.0;
+double AML_PID_TurnLeft_Ki = 1.3;
+double AML_PID_TurnLeft_Kd = 0.35;
+double AML_PID_TurnLeft_tau = 0.1;
+
+AML_PID_Struct AML_PID_TurnRight;
+double AML_PID_TurnRight_Kp = 0.9;
+double AML_PID_TurnRight_Ki = 1.3;
+double AML_PID_TurnRight_Kd = 0.35;
+double AML_PID_TurnRight_tau = 0.1;
+
+
+////////////////////////////////////////
+
 int32_t MinLeftWallDistance = 93;
 
 uint16_t MaxLeftWallDistance;
@@ -124,6 +141,8 @@ int32_t double_to_int32_t(double value)
         return (int32_t)value;
     }
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // void AML_MotorControl_PIDSetTunings(double Kp, double Ki, double Kd)
 // {
@@ -256,7 +275,34 @@ void AML_MotorControl_PIDReset(PID_TypeDef *uPID)
     // uPID->LastTime = 0;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void AML_MotorControl_AMLPIDSetOutputLimits(double Min, double Max)
+{
+    AML_PID_TurnLeft.limMin = Min;
+    AML_PID_TurnLeft.limMax = Max;
+
+    AML_PID_TurnLeft.linMinInt = Min / 2;
+    AML_PID_TurnLeft.linMaxInt = Max / 2;
+
+    AML_PID_TurnRight.limMin = Min;
+    AML_PID_TurnRight.limMax = Max;
+
+    AML_PID_TurnRight.linMinInt = Min / 2;
+    AML_PID_TurnRight.linMaxInt = Max / 2;
+}
+
+void AML_MotorControl_AMLPIDSetup()
+{
+    AML_PID_Init(&AML_PID_TurnLeft, AML_PID_TurnLeft_Kp, AML_PID_TurnLeft_Ki, AML_PID_TurnLeft_Kd, AML_PID_TurnLeft_tau, 20);
+    AML_PID_Init(&AML_PID_TurnRight, AML_PID_TurnRight_Kp, AML_PID_TurnRight_Ki, AML_PID_TurnRight_Kd, AML_PID_TurnRight_tau, 20);
+
+    AML_MotorControl_AMLPIDSetOutputLimits(MinRotateSpeed, MaxRotateSpeed);
+}
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // init motor control
 void AML_MotorControl_Setup(void)
@@ -267,6 +313,7 @@ void AML_MotorControl_Setup(void)
     HAL_GPIO_WritePin(STBY_GPIO_Port, STBY_Pin, GPIO_PIN_SET);
 
     AML_MotorControl_PIDSetup();
+    AML_MotorControl_AMLPIDSetup();
 
     TurnFlag = 0;
     FinishFlag = 0;
@@ -710,90 +757,87 @@ void AML_MotorControl_TurnLeft90(void)
 
     AML_MotorControl_ShortBreak('F');
 
-    uint8_t CalibFlag = AML_LaserSensor_ReadSingleWithoutFillter(BR) < (WALL_IN_RIGHT + 20);
-    uint32_t delay;
-
-    // AML_MPUSensor_ResetAngle();
-
-    // if (CalibFlag)
-    // {
-    //     double TempAngle = AML_MPUSensor_GetAngle();
-    //     AML_MPUSensor_ResetAngle();
-    //     AML_DebugDevice_BuzzerBeep(20);
-    //     Input_TurnLeft = (double)AML_MPUSensor_GetAngle();
-    //     Setpoint_TurnLeft = Input_TurnLeft + 100 - TempAngle;
-    // }
-    // else
-    // {
-    //     AML_DebugDevice_BuzzerBeep(20);
-    //     Setpoint_TurnLeft = TempSetpoint + 100;
-    // }
-
-    if (CalibFlag == 1)
+    if (Mode == 0)
     {
-        delay = 1000;
-    }
-    else
-    {
-        delay = 2500;
-    }
 
-    AML_DebugDevice_BuzzerBeep(20);
-    Setpoint_TurnLeft = TempSetpoint + TurnLeftAngle;
+        uint8_t CalibFlag = AML_LaserSensor_ReadSingleWithoutFillter(BR) < (WALL_IN_RIGHT + 20);
+        uint32_t delay;
 
-    HAL_Delay(300);
-
-    uint32_t InitTime = HAL_GetTick();
-    uint32_t CurrentTime = HAL_GetTick();
-    uint32_t PreviousTime = CurrentTime;
-
-    while ((CurrentTime - PreviousTime) < 200 && (HAL_GetTick() - InitTime < delay))
-    {
-        Input_TurnLeft = AML_MPUSensor_GetAngle();
-        PID_Compute(&PID_TurnLeft);
-
-        AML_MotorControl_LeftPWM(-(int32_t)Output_TurnLeft);
-        AML_MotorControl_RightPWM((int32_t)Output_TurnLeft);
-
-        if (ABS(Input_TurnLeft - Setpoint_TurnLeft) < 2.0f)
+        if (CalibFlag == 1)
         {
-            CurrentTime = HAL_GetTick();
+            delay = 1000;
         }
         else
         {
-            CurrentTime = HAL_GetTick();
-            PreviousTime = CurrentTime;
+            delay = 2500;
         }
-    }
 
-    // AML_MotorControl_ShortBreak('L');
-    AML_MotorControl_Stop();
+        AML_DebugDevice_BuzzerBeep(20);
+        Setpoint_TurnLeft = TempSetpoint + TurnLeftAngle;
 
-    // HAL_Delay(150);
+        HAL_Delay(300);
 
-    if (CalibFlag == 1)
-    {
-        AML_MotorControl_LeftPWM(-20);
-        AML_MotorControl_RightPWM(-20);
-        HAL_Delay(1000);
-        AML_MPUSensor_ResetAngle();
-        HAL_Delay(70);
+        uint32_t InitTime = HAL_GetTick();
+        uint32_t CurrentTime = HAL_GetTick();
+        uint32_t PreviousTime = CurrentTime;
+
+        while ((CurrentTime - PreviousTime) < 200 && (HAL_GetTick() - InitTime < delay))
+        {
+            Input_TurnLeft = AML_MPUSensor_GetAngle();
+            PID_Compute(&PID_TurnLeft);
+
+            AML_MotorControl_LeftPWM(-(int32_t)Output_TurnLeft);
+            AML_MotorControl_RightPWM((int32_t)Output_TurnLeft);
+
+            if (ABS(Input_TurnLeft - Setpoint_TurnLeft) < 2.0f)
+            {
+                CurrentTime = HAL_GetTick();
+            }
+            else
+            {
+                CurrentTime = HAL_GetTick();
+                PreviousTime = CurrentTime;
+            }
+        }
+
         AML_MotorControl_Stop();
+
+        if (CalibFlag == 1)
+        {
+            AML_MotorControl_LeftPWM(-20);
+            AML_MotorControl_RightPWM(-20);
+            HAL_Delay(1000);
+            AML_MPUSensor_ResetAngle();
+            HAL_Delay(70);
+            AML_MotorControl_Stop();
+            *PID_MPUFollow.MyOutput = 0;
+            TempSetpoint = 0;
+            HAL_Delay(50);
+        }
+        else
+        {
+            TempSetpoint += TurnLeftAngle;
+        }
+
         *PID_MPUFollow.MyOutput = 0;
-        TempSetpoint = 0;
-        HAL_Delay(50);
     }
-    else
+    else if (Mode == 1)
     {
+        Setpoint_TurnLeft = TempSetpoint + TurnLeftAngle;
+
+        HAL_Delay(300);
+
+        uint32_t InitTime = HAL_GetTick();
+        
+        while ((HAL_GetTick - InitTime) < 1000 && ABS(AML_MPUSensor_GetAngle() - Setpoint_TurnLeft) > 1.5f)
+        {
+            Input_TurnLeft = AML_MPUSensor_GetAngle();
+
+            AML_PID_Update(&AML_PID_TurnLeft, Setpoint_TurnLeft, Input_TurnLeft);
+        }
+
         TempSetpoint += TurnLeftAngle;
     }
-
-    // *PID_TurnLeft.MyOutput = 0;
-    // *PID_TurnRight.MyOutput = 0;
-    *PID_MPUFollow.MyOutput = 0;
-
-    // AML_MotorControl_PIDReset(&PID_MPUFollow);
-    // TempSetpoint = 0;
 
     AML_DebugDevice_TurnOffLED(3);
 }
@@ -815,24 +859,6 @@ void AML_MotorControl_TurnRight90(void)
 
     uint8_t CalibFlag = AML_LaserSensor_ReadSingleWithoutFillter(BL) < (WALL_IN_LEFT + 20);
     uint32_t delay;
-
-    // if (CalibFlag)
-    // {
-    //     double TempAngle = AML_MPUSensor_GetAngle();
-
-    //     AML_MPUSensor_ResetAngle();
-
-    //     AML_DebugDevice_BuzzerBeep(20);
-
-    //     Input_TurnRight = (double)AML_MPUSensor_GetAngle();
-    //     Setpoint_TurnRight = Input_TurnRight - 85.0f - TempAngle;
-
-    // }
-    // else
-    // {
-    //     AML_DebugDevice_BuzzerBeep(20);
-    //     Setpoint_TurnRight = TempSetpoint - 85.0f;
-    // }
 
     if (CalibFlag)
     {

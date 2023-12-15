@@ -1,10 +1,9 @@
 #ifndef AML_PID_H
 #define AML_PID_H
 
-
 #include "stm32f407xx.h"
 
-typedef struct 
+typedef struct
 {
     double Kp;
     double Ki;
@@ -21,7 +20,6 @@ typedef struct
     uint32_t sampleTime;
     uint32_t lastTime;
 
-
     double integratol;
     double prevError;
     double differentiator;
@@ -30,10 +28,7 @@ typedef struct
     double out;
 } AML_PID_Struct;
 
-
-void AML_PID_Init(AML_PID_Struct *pid, double ki, double kp, double kd, double tau, double sampleTime);
-double AML_PID_Update(AML_PID_Struct *pid, double setpoint, double measurement);
-
-
+void AML_PID_Init(AML_PID_Struct *pid, double kp, double ki, double kd, double tau, double sampleTime);
+double AML_PID_Compute(AML_PID_Struct *pid, double measurement, double setpoint);
 
 #endif // AML_PID_H

@@ -1,6 +1,7 @@
 #include "AML_PID.h"
 
 
+
 void AML_PID_Init(AML_PID_Struct *pid, double kp, double ki, double kd, double tau, double sampleTime)
 {
     pid->Kp = kp;
@@ -19,7 +20,7 @@ void AML_PID_Init(AML_PID_Struct *pid, double kp, double ki, double kd, double t
     pid->out = 0;
 }
 
-double AML_PID_Update(AML_PID_Struct *pid, double setpoint, double measurement)
+double AML_PID_Compute(AML_PID_Struct *pid, double measurement, double setpoint)
 {
     uint32_t now = HAL_GetTick();
     uint32_t timeChange = (now - pid->lastTime);
@@ -46,14 +47,15 @@ double AML_PID_Update(AML_PID_Struct *pid, double setpoint, double measurement)
             pid->integratol = pid->linMinInt;
         }
 
-        // double iTerm = pid->Ki * pid->integratol;
+        double iTerm = pid->Ki * pid->integratol;
 
         pid->differentiator = -(2.0f * pid->Kd * (measurement - pid->prevMeasurement) + (2.0f * pid->tau - pid->sampleTime) * pid->differentiator) / (2.0f * pid->tau + pid->sampleTime);
         
-        // double dTerm = pid->Kd * pid->differentiator;
+        double dTerm = pid->Kd * pid->differentiator;
 
 
-        pid->out = pTerm + pid->integratol + pid->differentiator;
+        // pid->out = pTerm + pid->integratol + pid->differentiator;
+        pid->out = pTerm + iTerm + dTerm;
 
         if (pid->out > pid->limMax)
         {

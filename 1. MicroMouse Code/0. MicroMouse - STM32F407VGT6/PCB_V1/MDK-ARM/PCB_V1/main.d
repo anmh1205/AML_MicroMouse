@@ -54,6 +54,7 @@ pcb_v1\main.o: ../Core/Inc/AML_Remote.h
 pcb_v1\main.o: ../Core/Inc/AML_Parameter.h
 pcb_v1\main.o: ../Core/Inc/AML_Encoder.h
 pcb_v1\main.o: ../Core/Inc/AML_MPUSensor.h
+pcb_v1\main.o: ../Core/Inc/AML_PID.h
 pcb_v1\main.o: ../Core/Inc/flood.h
 pcb_v1\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
 pcb_v1\main.o: ../Core/Inc/AML_DebugDevice.h

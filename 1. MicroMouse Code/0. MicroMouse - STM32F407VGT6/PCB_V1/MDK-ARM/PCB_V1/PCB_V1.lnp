@@ -20,6 +20,7 @@
 "pcb_v1\vl53l0x_platform_log.o"
 "pcb_v1\vl53l0x_platform.o"
 "pcb_v1\flood.o"
+"pcb_v1\aml_pid.o"
 "pcb_v1\stm32f4xx_hal_i2c.o"
 "pcb_v1\stm32f4xx_hal_i2c_ex.o"
 "pcb_v1\stm32f4xx_hal_rcc.o"

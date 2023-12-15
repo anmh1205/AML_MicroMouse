@@ -56,6 +56,7 @@ pcb_v1\flood.o: ../Core/Inc/AML_MPUSensor.h
 pcb_v1\flood.o: ../Core/Inc/pid.h
 pcb_v1\flood.o: ../Core/Inc/AML_Remote.h
 pcb_v1\flood.o: ../Core/Inc/AML_Parameter.h
+pcb_v1\flood.o: ../Core/Inc/AML_PID.h
 pcb_v1\flood.o: ../Core/Inc/flood.h
 pcb_v1\flood.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\limits.h
 pcb_v1\flood.o: ../Core/Inc/AML_DebugDevice.h

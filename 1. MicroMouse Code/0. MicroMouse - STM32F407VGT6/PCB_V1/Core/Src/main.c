@@ -72,7 +72,7 @@ uint8_t checkWorking[] = {0xFF, 0xAA, 0x52};
 
 // uint8_t ReadButton[5];
 volatile uint8_t ReadButton;
-volatile uint8_t Mode = 0;
+volatile uint8_t Mode = 1;
 
 double testAngle;
 // int16_t LeftValue, RightValue;
@@ -645,11 +645,26 @@ int main(void)
     }
     else if (ReadButton == 1) // set right wall value
     {
-      // AML_MPUSensor_ResetAngle();
+      AML_MPUSensor_ResetAngle();
 
       AML_MotorControl_TurnLeft90();
-      HAL_Delay(500);
+      AML_MotorControl_Stop();
+
+      HAL_Delay(1000);
+
       AML_MotorControl_TurnRight90();
+      AML_MotorControl_Stop();
+
+      HAL_Delay(1000);
+
+      AML_MotorControl_TurnLeft180();
+      AML_MotorControl_Stop();
+
+      HAL_Delay(1000);
+
+      AML_MotorControl_TurnRight180();
+      AML_MotorControl_Stop();
+
       ReadButton = 8;
     }
     else if (ReadButton == 2)
@@ -659,16 +674,50 @@ int main(void)
     }
     else if (ReadButton == 3)
     {
-      Run(NORTH);
+      // AML_MotorControl_MoveForward_mm(80);
+      AML_MPUSensor_ResetAngle();
+
+      advanceOneCellVisited();
+      
+
+      AML_MotorControl_ShortBreak('F');
+
       ReadButton = 8;
     }
     else if (ReadButton == 4)
     {
-      Run(EAST);
+
+      ReadButton = 8;
+
+      AML_DebugDevice_BuzzerBeep(20);
+      AML_DebugDevice_SetAllLED(GPIO_PIN_SET);
+
+      HAL_Delay(100);
+
+      AML_DebugDevice_SetAllLED(GPIO_PIN_RESET);
+   
+      HAL_Delay(100);
+
+      AML_DebugDevice_SetAllLED(GPIO_PIN_SET);
+
+
+      while (ReadButton == 8)
+      {
+      }
+
+      if (ReadButton == 0)
+      {
+        Run(NORTH);
+      }
+      else if (ReadButton == 1)
+      {
+        Run(EAST);
+      }
+
       ReadButton = 8;
     }
 
-    // testAngle = AML_MPUSensor_GetAngle();
+    testAngle = AML_MPUSensor_GetAngle();
 
     // debug[13] = AML_Encoder_GetLeftValue();
     // debug[14] = AML_Encoder_GetRightValue();

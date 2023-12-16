@@ -44,6 +44,8 @@ compiling flood.c...
   #endif // AML_PID_H
 ../Core/Inc/AML_MotorControl.h(62): warning:  #1-D: last line of file ends without a newline
   #endif // AML_MOTORCONTROL_H
+../Core/Inc/AML_DebugDevice.h(29): warning:  #1295-D: Deprecated declaration AML_DebugDevice_ToggleAllLED - give arg types
+  void AML_DebugDevice_ToggleAllLED();
 ../Core/Inc/AML_Remote.h(17): warning:  #1-D: last line of file ends without a newline
   #endif // AML_REMOTE_H
 ../Core/Inc/AML_LaserSensor.h(29): warning:  #1-D: last line of file ends without a newline
@@ -52,37 +54,37 @@ compiling flood.c...
   #define FLOOD_LEFT_WALL 300
 ../Core/Inc/flood.h(33): warning:  #47-D: incompatible redefinition of macro "FLOOD_RIGHT_WALL"  (declared at line 26 of "../Core/Inc/AML_Parameter.h")
   #define FLOOD_RIGHT_WALL 300
-..\Core\Src\flood.c(431): warning:  #111-D: statement is unreachable
+..\Core\Src\flood.c(499): warning:  #111-D: statement is unreachable
   			break;
-..\Core\Src\flood.c(655): warning:  #940-D: missing return statement at end of non-void function "floodFill" 
+..\Core\Src\flood.c(723): warning:  #940-D: missing return statement at end of non-void function "floodFill" 
   }
-..\Core\Src\flood.c(340): warning:  #177-D: variable "TempTicks"  was declared but never referenced
+..\Core\Src\flood.c(408): warning:  #177-D: variable "TempTicks"  was declared but never referenced
   	uint16_t TempTicks = 0;
-..\Core\Src\flood.c(341): warning:  #177-D: variable "ReCalibTicksFlag"  was declared but never referenced
+..\Core\Src\flood.c(409): warning:  #177-D: variable "ReCalibTicksFlag"  was declared but never referenced
   	uint16_t ReCalibTicksFlag = 0;
-..\Core\Src\flood.c(834): warning:  #550-D: variable "binaryx"  was set but never used
+..\Core\Src\flood.c(902): warning:  #550-D: variable "binaryx"  was set but never used
   	int binaryx[4];
-..\Core\Src\flood.c(835): warning:  #550-D: variable "binaryy"  was set but never used
+..\Core\Src\flood.c(903): warning:  #550-D: variable "binaryy"  was set but never used
   	int binaryy[4];
-..\Core\Src\flood.c(907): warning:  #188-D: enumerated type mixed with another type
+..\Core\Src\flood.c(975): warning:  #188-D: enumerated type mixed with another type
   	AML_DebugDevice_TurnOnLED(0);
-..\Core\Src\flood.c(928): warning:  #188-D: enumerated type mixed with another type
+..\Core\Src\flood.c(996): warning:  #188-D: enumerated type mixed with another type
   	AML_DebugDevice_TurnOffLED(0);
-..\Core\Src\flood.c(938): warning:  #188-D: enumerated type mixed with another type
+..\Core\Src\flood.c(1006): warning:  #188-D: enumerated type mixed with another type
   	AML_DebugDevice_TurnOnLED(1);
-..\Core\Src\flood.c(965): warning:  #188-D: enumerated type mixed with another type
+..\Core\Src\flood.c(1033): warning:  #188-D: enumerated type mixed with another type
   	AML_DebugDevice_TurnOffLED(1);
-..\Core\Src\flood.c(975): warning:  #177-D: variable "turn"  was declared but never referenced
+..\Core\Src\flood.c(1043): warning:  #177-D: variable "turn"  was declared but never referenced
   	int turn = 0;
-..\Core\Src\flood.c(1257): warning:  #111-D: statement is unreachable
+..\Core\Src\flood.c(1325): warning:  #111-D: statement is unreachable
   			break;
-..\Core\Src\flood.c(1298): warning:  #940-D: missing return statement at end of non-void function "logicalFlood" 
+..\Core\Src\flood.c(1366): warning:  #940-D: missing return statement at end of non-void function "logicalFlood" 
   }
-..\Core\Src\flood.c: 25 warnings, 0 errors
+..\Core\Src\flood.c: 26 warnings, 0 errors
 linking...
-Program Size: Code=46578 RO-data=922 RW-data=1408 ZI-data=11336  
+Program Size: Code=47054 RO-data=922 RW-data=1392 ZI-data=11136  
 FromELF: creating hex file...
-"PCB_V1\PCB_V1.axf" - 0 Error(s), 25 Warning(s).
+"PCB_V1\PCB_V1.axf" - 0 Error(s), 26 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -105,7 +107,7 @@ Package Vendor: Keil
 <h2>Collection of Component Files used:</h2>
 
    * Component: ARM::CMSIS:CORE:5.4.0
-Build Time Elapsed:  00:00:07
+Build Time Elapsed:  00:00:05
 </pre>
 </body>
 </html>

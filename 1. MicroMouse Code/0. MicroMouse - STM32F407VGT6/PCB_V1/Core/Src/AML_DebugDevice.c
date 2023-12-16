@@ -52,6 +52,18 @@ void AML_DebugDevice_SetAllLED(GPIO_PinState state)
     HAL_GPIO_WritePin(GPIOC, Led[7], state);
 }
 
+void AML_DebugDevice_ToggleAllLED()
+{
+    HAL_GPIO_TogglePin(GPIOC, Led[0]);
+    HAL_GPIO_TogglePin(GPIOC, Led[1]);
+    HAL_GPIO_TogglePin(GPIOC, Led[2]);
+    HAL_GPIO_TogglePin(GPIOC, Led[3]);
+    HAL_GPIO_TogglePin(GPIOC, Led[4]);
+    HAL_GPIO_TogglePin(GPIOC, Led[5]);
+    HAL_GPIO_TogglePin(GPIOC, Led[6]);
+    HAL_GPIO_TogglePin(GPIOC, Led[7]);
+}
+
 void AML_DebugDevice_Handle()
 {
     // if (LedIndexFlag)

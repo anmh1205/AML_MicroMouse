@@ -214,7 +214,7 @@ int32_t AML_LaserSensor_ReadSingleWithoutFillter(uint8_t name)
     }
     // AML_LaserSensor_ReadAll();
 
-    return (int32_t)SensorValue[name].RangeMilliMeter;
+    // return (int32_t)SensorValue[name].RangeMilliMeter;
 }
 
 uint8_t AML_LaserSensor_WallFavor(void)

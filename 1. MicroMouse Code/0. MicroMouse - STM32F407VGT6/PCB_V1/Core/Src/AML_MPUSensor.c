@@ -88,6 +88,5 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 
 double AML_MPUSensor_GetAngle(void)
 {
-
     return Angle - SaveAngle;
 }

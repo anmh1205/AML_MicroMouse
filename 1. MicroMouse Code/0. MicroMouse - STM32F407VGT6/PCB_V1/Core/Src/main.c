@@ -208,6 +208,29 @@ void TestMPU()
   AML_DebugDevice_SetAllLED(GPIO_PIN_RESET);
 }
 
+void TestTurning()
+{
+  AML_MPUSensor_ResetAngle();
+
+  AML_MotorControl_TurnLeft90();
+  AML_MotorControl_Stop();
+
+  HAL_Delay(1000);
+
+  AML_MotorControl_TurnRight90();
+  AML_MotorControl_Stop();
+
+  HAL_Delay(1000);
+
+  AML_MotorControl_TurnLeft180();
+  AML_MotorControl_Stop();
+
+  HAL_Delay(1000);
+
+  AML_MotorControl_TurnRight180();
+  AML_MotorControl_Stop();
+}
+
 void Run(int InitDirection)
 {
 
@@ -472,20 +495,14 @@ void EncoderTest()
   HAL_Delay(1500);
 }
 
-void TestSpeed()
+void TestMPUFollow()
 {
-  AML_MotorControl_LeftPWM(20);
-  AML_MotorControl_RightPWM(20);
+  AML_MPUSensor_ResetAngle();
 
-  debug[30] = AML_Encoder_GetLeftValue();
-  debug[31] = AML_Encoder_GetRightValue();
-
-  LeftSpeed = debug[30] / 190;
-  RightSpeed = debug[31] / 190;
-  AML_Encoder_ResetLeftValue();
-  AML_Encoder_ResetRightValue();
-
-  HAL_Delay(1000);
+  while (1)
+  {
+    AML_MotorControl_MPUFollow(0);
+  }
 }
 
 void SystemTest(void)
@@ -497,8 +514,9 @@ void SystemTest(void)
 
 void SetTicks()
 {
-  ReadButton = 8;
   HAL_Delay(300);
+
+  ReadButton = 8;
 
   AML_DebugDevice_SetAllLED(GPIO_PIN_SET);
 
@@ -526,7 +544,7 @@ void SetTicks()
   }
   else if (ReadButton == 2)
   {
-    SetBeforeTurnTicks(120);
+    SetBeforeTurnTicks(320);
     AML_DebugDevice_BuzzerBeep(20);
     AML_DebugDevice_TurnOnLED(ReadButton);
     HAL_Delay(300);
@@ -547,6 +565,73 @@ void SetTicks()
     AML_DebugDevice_TurnOnLED(ReadButton);
     HAL_Delay(300);
     AML_DebugDevice_TurnOffLED(ReadButton);
+  }
+}
+
+void TestMode()
+{
+
+  AML_DebugDevice_SetAllLED(GPIO_PIN_SET);
+
+  HAL_Delay(300);
+  ReadButton = 8;
+
+  while (ReadButton == 8)
+  {
+  }
+
+  AML_DebugDevice_SetAllLED(GPIO_PIN_RESET);
+
+  if (ReadButton == 0)
+  {
+    SystemTest();
+  }
+  else if (ReadButton == 1)
+  {
+    TestTurning();
+  }
+  else if (ReadButton == 2)
+  {
+    TestMPUFollow();
+  }
+}
+
+void RunMode()
+{
+
+  AML_DebugDevice_BuzzerBeep(20);
+  AML_DebugDevice_SetAllLED(GPIO_PIN_SET);
+
+  HAL_Delay(100);
+
+  AML_DebugDevice_SetAllLED(GPIO_PIN_RESET);
+
+  HAL_Delay(100);
+
+  AML_DebugDevice_SetAllLED(GPIO_PIN_SET);
+
+  HAL_Delay(200);
+
+  ReadButton = 8;
+
+  uint32_t now = HAL_GetTick();
+
+  while (ReadButton == 8)
+  {
+    if (HAL_GetTick() - now > 150)
+    {
+      AML_DebugDevice_ToggleAllLED();
+      now = HAL_GetTick();
+    }
+  }
+
+  if (ReadButton == 0)
+  {
+    Run(NORTH);
+  }
+  else if (ReadButton == 1)
+  {
+    Run(EAST);
   }
 }
 
@@ -645,26 +730,7 @@ int main(void)
     }
     else if (ReadButton == 1) // set right wall value
     {
-      AML_MPUSensor_ResetAngle();
-
-      AML_MotorControl_TurnLeft90();
-      AML_MotorControl_Stop();
-
-      HAL_Delay(1000);
-
-      AML_MotorControl_TurnRight90();
-      AML_MotorControl_Stop();
-
-      HAL_Delay(1000);
-
-      AML_MotorControl_TurnLeft180();
-      AML_MotorControl_Stop();
-
-      HAL_Delay(1000);
-
-      AML_MotorControl_TurnRight180();
-      AML_MotorControl_Stop();
-
+      TestMode();
       ReadButton = 8;
     }
     else if (ReadButton == 2)
@@ -678,7 +744,6 @@ int main(void)
       AML_MPUSensor_ResetAngle();
 
       advanceOneCellVisited();
-      
 
       AML_MotorControl_ShortBreak('F');
 
@@ -686,38 +751,14 @@ int main(void)
     }
     else if (ReadButton == 4)
     {
-
-      ReadButton = 8;
-
-      AML_DebugDevice_BuzzerBeep(20);
-      AML_DebugDevice_SetAllLED(GPIO_PIN_SET);
-
-      HAL_Delay(100);
-
-      AML_DebugDevice_SetAllLED(GPIO_PIN_RESET);
-   
-      HAL_Delay(100);
-
-      AML_DebugDevice_SetAllLED(GPIO_PIN_SET);
-
-
-      while (ReadButton == 8)
-      {
-      }
-
-      if (ReadButton == 0)
-      {
-        Run(NORTH);
-      }
-      else if (ReadButton == 1)
-      {
-        Run(EAST);
-      }
-
+      RunMode();
       ReadButton = 8;
     }
 
     testAngle = AML_MPUSensor_GetAngle();
+
+    // AML_MotorControl_LeftPWM(-6);
+    // AML_MotorControl_RightPWM(6);
 
     // debug[13] = AML_Encoder_GetLeftValue();
     // debug[14] = AML_Encoder_GetRightValue();

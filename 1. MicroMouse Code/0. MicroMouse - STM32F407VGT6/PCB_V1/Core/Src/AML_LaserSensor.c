@@ -131,6 +131,8 @@ void AML_LaserSensor_Setup(void)
 
         Giá trị ban đầu x: Giá trị này là ước lượng ban đầu của trạng thái. Nếu giá trị này không chính xác, bộ lọc có thể mất thời gian để "hội tụ" với giá trị thực sự.
     */
+
+   
 }
 
 void AML_LaserSensor_ReadAll(void)

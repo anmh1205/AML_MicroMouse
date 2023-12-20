@@ -13,10 +13,10 @@ extern uint8_t ReadButton;
 extern uint8_t TurnFlag;
 extern uint8_t FinishFlag;
 
-uint32_t BeforeTurnTicks = 300;
+uint32_t BeforeTurnTicks = 450;
 uint32_t AfterTurnTicks = 70;
 
-uint8_t DistanceMovement = 68;
+uint8_t DistanceMovement = 70;
 
 int32_t PreviousLeftLaserValue = 0;
 int32_t PreviousRightLaserValue = 0;
@@ -24,7 +24,8 @@ int32_t LeftLaserValue = 0;
 int32_t RightLaserValue = 0;
 
 uint8_t DebugMode = 0;
-extern uint8_t Mode;
+extern uint8_t RemarkAfterTurnMode;
+extern uint8_t RemarkWallMode;
 
 void SetBeforeTurnTicks(uint32_t ticks)
 {
@@ -144,7 +145,7 @@ void uncontrolledAdvanceTicks(uint32_t ticks)
 	// uint32_t encoder_val = 0;
 	AML_Encoder_ResetLeftValue();
 
-	HAL_Delay(25);
+	HAL_Delay(35);
 
 	if (ticks > 1000)
 	{
@@ -153,15 +154,15 @@ void uncontrolledAdvanceTicks(uint32_t ticks)
 		PreviousLeftLaserValue = AML_LaserSensor_ReadSingleWithFillter(BL);
 		PreviousRightLaserValue = AML_LaserSensor_ReadSingleWithFillter(BR);
 
-		while (((uint32_t)AML_Encoder_GetLeftValue()) < ticks && (HAL_GetTick() - InitTime) < delay && AML_LaserSensor_ReadSingleWithFillter(FF) > 50)
+		while (((uint32_t)AML_Encoder_GetLeftValue()) < ticks && (HAL_GetTick() - InitTime) < delay && AML_LaserSensor_ReadSingleWithFillter(FF) > 75)
 		{
-			if ((HAL_GetTick() - PreviousTime) > 45)
+			if ((HAL_GetTick() - PreviousTime) > 65)
 			{
 				LeftLaserValue = AML_LaserSensor_ReadSingleWithFillter(BL);
 				RightLaserValue = AML_LaserSensor_ReadSingleWithFillter(BR);
 
-				if (((Mode == 1) && ((LeftLaserValue > WALL_NOT_IN_LEFT && PreviousLeftLaserValue < WALL_IN_LEFT) || (RightLaserValue > WALL_NOT_IN_RIGHT && PreviousRightLaserValue < WALL_IN_RIGHT)))
-					|| ((Mode == 1) && ((LeftLaserValue < WALL_IN_LEFT && PreviousLeftLaserValue > WALL_NOT_IN_LEFT && AML_LaserSensor_ReadSingleWithFillter(FL) < WALL_IN_FRONT_LEFT) || (RightLaserValue < WALL_IN_RIGHT && PreviousRightLaserValue > WALL_NOT_IN_RIGHT && AML_LaserSensor_ReadSingleWithFillter(FR) < WALL_IN_FRONT_RIGHT))))
+				if (((RemarkWallMode == 1) && ((LeftLaserValue > WALL_NOT_IN_LEFT && PreviousLeftLaserValue < WALL_IN_LEFT) || (RightLaserValue > WALL_NOT_IN_RIGHT && PreviousRightLaserValue < WALL_IN_RIGHT))) || 
+				((RemarkWallMode == 1) && ((LeftLaserValue < WALL_IN_LEFT && PreviousLeftLaserValue > WALL_NOT_IN_LEFT && AML_LaserSensor_ReadSingleWithFillter(FL) < WALL_IN_FRONT_LEFT) || (RightLaserValue < WALL_IN_RIGHT && PreviousRightLaserValue > WALL_NOT_IN_RIGHT && AML_LaserSensor_ReadSingleWithFillter(FR) < WALL_IN_FRONT_RIGHT))))
 
 				{
 					AML_Encoder_ResetLeftValue();
@@ -190,6 +191,8 @@ void uncontrolledAdvanceTicks(uint32_t ticks)
 			AML_MotorControl_MoveForward_mm((uint16_t)DistanceMovement);
 
 			AML_DebugDevice_SetAllLED(GPIO_PIN_RESET);
+			BreakFlag = 0;
+
 			// AML_MotorControl_ShortBreak('F');
 		}
 	}
@@ -275,20 +278,40 @@ void advanceTicksFlood(uint32_t ticks, int d, struct coor *c, struct wall_maze *
 
 	// while we have not finished moving one cell length
 	// while (encoder_val > (MAX_ENCODER_VALUE - ticks))
-	while (((uint32_t)AML_Encoder_GetLeftValue()) < ticks && HAL_GetTick() - InitTime < 2500 && AML_LaserSensor_ReadSingleWithFillter(FF) > 50
-		   //    (AML_LaserSensor_ReadSingleWithoutFillter(FL) > WALL_IN_FRONT_LEFT || AML_LaserSensor_ReadSingleWithoutFillter(FR) > WALL_IN_FRONT_RIGHT)
-	)
+	while (((uint32_t)AML_Encoder_GetLeftValue()) < ticks && HAL_GetTick() - InitTime < 2500 && AML_LaserSensor_ReadSingleWithFillter(FF) > 75)
 	{
-		if (HAL_GetTick() - PreviousTime > 45)
+		if (HAL_GetTick() - PreviousTime > 65)
 		{
 			LeftLaserValue = AML_LaserSensor_ReadSingleWithFillter(BL);
 			RightLaserValue = AML_LaserSensor_ReadSingleWithFillter(BR);
 
-			if (((Mode == 1) && ((LeftLaserValue > WALL_NOT_IN_LEFT && PreviousLeftLaserValue < WALL_IN_LEFT) || (RightLaserValue > WALL_NOT_IN_RIGHT && PreviousRightLaserValue < WALL_IN_RIGHT))) || 
-			((Mode == 1) && ((LeftLaserValue < WALL_IN_LEFT && PreviousLeftLaserValue > WALL_NOT_IN_LEFT && AML_LaserSensor_ReadSingleWithFillter(FL) < WALL_IN_FRONT_LEFT) || (RightLaserValue < WALL_IN_RIGHT && PreviousRightLaserValue > WALL_NOT_IN_RIGHT && AML_LaserSensor_ReadSingleWithFillter(FR) < WALL_IN_FRONT_RIGHT))))
+			if (((RemarkWallMode == 1) && ((LeftLaserValue > WALL_NOT_IN_LEFT && PreviousLeftLaserValue < WALL_IN_LEFT) || (RightLaserValue > WALL_NOT_IN_RIGHT && PreviousRightLaserValue < WALL_IN_RIGHT))) ||
+				((RemarkWallMode == 1) && ((LeftLaserValue < WALL_IN_LEFT && PreviousLeftLaserValue > WALL_NOT_IN_LEFT && AML_LaserSensor_ReadSingleWithFillter(FL) < WALL_IN_FRONT_LEFT) || (RightLaserValue < WALL_IN_RIGHT && PreviousRightLaserValue > WALL_NOT_IN_RIGHT && AML_LaserSensor_ReadSingleWithFillter(FR) < WALL_IN_FRONT_RIGHT))))
 			{
 				AML_Encoder_ResetLeftValue();
 				BreakFlag = 1;
+
+				for (int i = 0; i < 2; i++)
+				{
+					switch (d)
+					{
+					case NORTH:
+						checkForWalls(wm, c, d, NORTH, EAST, SOUTH, WEST);
+						break;
+					case EAST:
+						checkForWalls(wm, c, d, EAST, SOUTH, WEST, NORTH);
+						break;
+					case SOUTH:
+						checkForWalls(wm, c, d, SOUTH, WEST, NORTH, EAST);
+						break;
+					case WEST:
+						checkForWalls(wm, c, d, WEST, NORTH, EAST, SOUTH);
+						break;
+					default:
+						break;
+					}
+				}
+
 				break;
 			}
 			else
@@ -301,7 +324,7 @@ void advanceTicksFlood(uint32_t ticks, int d, struct coor *c, struct wall_maze *
 
 		// if we have moved half of a cell length
 		// if (encoder_val < (MAX_ENCODER_VALUE - (ticks / 2)))
-		if (AML_Encoder_GetLeftValue() > (int16_t)(ticks * 0.6f) && ((uint32_t)AML_Encoder_GetLeftValue()) < (int16_t)(ticks * 0.9f)) // can check
+		if (AML_Encoder_GetLeftValue() > (int16_t)(ticks * 0.7f) && ((uint32_t)AML_Encoder_GetLeftValue()) < (int16_t)(ticks * 0.95f)) // can check
 		{
 			// check for walls to the east and the west
 			switch (d)
@@ -327,7 +350,7 @@ void advanceTicksFlood(uint32_t ticks, int d, struct coor *c, struct wall_maze *
 		// encoder_val = AML_Encoder_GetLeftValue();
 	}
 
-	if (HAL_GetTick() - InitTime > 2500 || AML_LaserSensor_ReadSingleWithFillter(FF) < 45)
+	if (HAL_GetTick() - InitTime > 2500 || AML_LaserSensor_ReadSingleWithFillter(FF) < 55)
 	{
 		switch (d)
 		{
@@ -346,19 +369,17 @@ void advanceTicksFlood(uint32_t ticks, int d, struct coor *c, struct wall_maze *
 		default:
 			break;
 		}
+
+		AML_MotorControl_TurnOffWallFollow();
+		AML_MotorControl_ShortBreak('F');
 	}
 
 	if (BreakFlag)
 	{
-		// AML_MotorControl_TurnOffWallFollow();
-		// AML_MotorControl_ShortBreak('F');
-		// AML_DebugDevice_SetAllLED(GPIO_PIN_SET);
-
+		AML_DebugDevice_SetAllLED(GPIO_PIN_SET);
 		AML_MotorControl_MoveForward_mm((uint16_t)DistanceMovement);
+		AML_DebugDevice_SetAllLED(GPIO_PIN_RESET);
 
-		AML_DebugDevice_BuzzerBeep(20);
-
-		// check for walls to the east and the west
 		switch (d)
 		{
 		case NORTH:
@@ -377,14 +398,9 @@ void advanceTicksFlood(uint32_t ticks, int d, struct coor *c, struct wall_maze *
 			break;
 		}
 
-		// HAL_Delay(1000);
-
-		// AML_DebugDevice_SetAllLED(GPIO_PIN_RESET);
-
-		// AML_MotorControl_ShortBreak('F');
+		BreakFlag = 0;
 	}
 
-	// resetLeftEncoder();
 	AML_Encoder_ResetLeftValue();
 }
 
@@ -527,6 +543,7 @@ int floodFill(struct dist_maze *dm, struct coor *c, struct wall_maze *wm, int a,
 			next_move = minusOneNeighbor(dm, wm, c, upst, a);
 			// HAL_GPIO_WritePin(GPIOC, GPIO_PIN_4, GPIO_PIN_RESET);
 		}
+
 
 		// lockInterruptEnable_Gyro_Delay();
 		// Move to next cell
@@ -977,9 +994,10 @@ void advanceOneCell(int direction, struct coor *c, struct wall_maze *wm)
 	// advanceTicksFlood(FLOOD_ONE_CELL, direction, c, wm);
 	advanceTicksFlood(MAZE_ENCODER_TICKS_ONE_CELL, direction, c, wm);
 
+	AML_MotorControl_TurnOffWallFollow();
+
 	AML_DebugDevice_BuzzerBeep(20);
 	// lockInterruptDisable_TIM3();
-	AML_MotorControl_TurnOffWallFollow();
 
 	// motorStop();
 	// AML_MotorControl_Stop();

@@ -72,7 +72,8 @@ uint8_t checkWorking[] = {0xFF, 0xAA, 0x52};
 
 // uint8_t ReadButton[5];
 volatile uint8_t ReadButton;
-volatile uint8_t Mode = 1;
+volatile uint8_t RemarkAfterTurnMode = 1;
+volatile uint8_t RemarkWallMode = 1;
 
 double testAngle;
 // int16_t LeftValue, RightValue;
@@ -132,7 +133,7 @@ void TestLaser(void)
     }
   }
 
-  HAL_Delay(1000); // Đợi 1 giây
+  HAL_Delay(1000); // �?ợi 1 giây
 
   AML_DebugDevice_BuzzerBeep(100); // Beep âm thanh trong 100ms
 }
@@ -231,6 +232,205 @@ void TestTurning()
   AML_MotorControl_Stop();
 }
 
+void EncoderTest()
+{
+  AML_MotorControl_TurnOnWallFollow();
+
+  while (AML_Encoder_GetLeftValue() < ENCODER_TICKS_ONE_CELL && ReadButton != 2)
+  {
+  }
+
+  AML_MotorControl_TurnOffWallFollow();
+  AML_MotorControl_ShortBreak('F');
+  AML_Encoder_ResetLeftValue();
+  AML_DebugDevice_BuzzerBeep(30);
+
+  HAL_Delay(1500);
+}
+
+void TestMPUFollow()
+{
+  AML_MPUSensor_ResetAngle();
+
+  while (1)
+  {
+    AML_MotorControl_MPUFollow(0);
+  }
+}
+
+void SystemTest(void)
+{
+  TestLaser();
+  TestMotor();
+  TestMPU();
+}
+
+/////////////////////////////////////////////////////////////////////////////////////
+
+void TurnOnRemarkAfterTurn()
+{
+  RemarkAfterTurnMode = 0;
+}
+
+void TurnOffRemarkAfterTurn()
+{
+  RemarkAfterTurnMode = 1;
+
+  SetBeforeTurnTicks(120);
+}
+
+
+void TurnOnRemarkWall()
+{
+  RemarkWallMode = 1;
+}
+
+void TurnOffRemarkWall()
+{
+  RemarkWallMode = 0;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////
+
+void SetTicks()
+{
+  HAL_Delay(300);
+
+  ReadButton = 8;
+
+  AML_DebugDevice_SetAllLED(GPIO_PIN_SET);
+
+  while (ReadButton == 8)
+  {
+  }
+
+  AML_DebugDevice_SetAllLED(GPIO_PIN_RESET);
+
+  if (ReadButton == 0)
+  {
+    AML_MotorControl_SetCenterPosition();
+    AML_DebugDevice_BuzzerBeep(20);
+    AML_DebugDevice_TurnOnLED(ReadButton);
+    HAL_Delay(300);
+    AML_DebugDevice_TurnOffLED(ReadButton);
+  }
+  else if (ReadButton == 1)
+  {
+    SetBeforeTurnTicks(0);
+    AML_DebugDevice_BuzzerBeep(20);
+    AML_DebugDevice_TurnOnLED(ReadButton);
+    HAL_Delay(300);
+    AML_DebugDevice_TurnOffLED(ReadButton);
+  }
+  else if (ReadButton == 2)
+  {
+    SetBeforeTurnTicks(400);
+    AML_DebugDevice_BuzzerBeep(20);
+    AML_DebugDevice_TurnOnLED(ReadButton);
+    HAL_Delay(300);
+    AML_DebugDevice_TurnOffLED(ReadButton);
+  }
+  else if (ReadButton == 3)
+  {
+    SetAfterTurnTicks(0);
+    AML_DebugDevice_BuzzerBeep(20);
+    AML_DebugDevice_TurnOnLED(ReadButton);
+    HAL_Delay(300);
+    AML_DebugDevice_TurnOffLED(ReadButton);
+  }
+  else if (ReadButton == 4)
+  {
+    SetAfterTurnTicks(70);
+    AML_DebugDevice_BuzzerBeep(20);
+    AML_DebugDevice_TurnOnLED(ReadButton);
+    HAL_Delay(300);
+    AML_DebugDevice_TurnOffLED(ReadButton);
+  }
+}
+
+void TestMode()
+{
+
+  AML_DebugDevice_SetAllLED(GPIO_PIN_SET);
+
+  HAL_Delay(300);
+  ReadButton = 8;
+
+  while (ReadButton == 8)
+  {
+  }
+
+  AML_DebugDevice_SetAllLED(GPIO_PIN_RESET);
+
+  if (ReadButton == 0)
+  {
+    SystemTest();
+  }
+  else if (ReadButton == 1)
+  {
+    TestTurning();
+  }
+  else if (ReadButton == 2)
+  {
+    TestMPUFollow();
+  }
+  else if (ReadButton == 3)
+  {
+    advanceOneCellVisited();
+    AML_MotorControl_ShortBreak('F');
+  }
+}
+
+void RemarkMode()
+{
+  HAL_Delay(300);
+
+  ReadButton = 8;
+
+  AML_DebugDevice_SetAllLED(GPIO_PIN_SET);
+
+  while (ReadButton == 8)
+  {
+  }
+
+  AML_DebugDevice_SetAllLED(GPIO_PIN_RESET);
+
+  if (ReadButton == 0)
+  {
+    TurnOffRemarkAfterTurn();
+    AML_DebugDevice_BuzzerBeep(20);
+    AML_DebugDevice_TurnOnLED(ReadButton);
+    HAL_Delay(300);
+    AML_DebugDevice_TurnOffLED(ReadButton);
+  }
+  else if (ReadButton == 1)
+  {
+    TurnOnRemarkAfterTurn();
+    AML_DebugDevice_BuzzerBeep(20);
+    AML_DebugDevice_TurnOnLED(ReadButton);
+    HAL_Delay(300);
+    AML_DebugDevice_TurnOffLED(ReadButton);
+  }
+  else if (ReadButton == 2)
+  {
+    TurnOffRemarkWall();
+    AML_DebugDevice_BuzzerBeep(20);
+    AML_DebugDevice_TurnOnLED(ReadButton);
+    HAL_Delay(300);
+    AML_DebugDevice_TurnOffLED(ReadButton);
+  }
+  else if (ReadButton == 3)
+  {
+    TurnOnRemarkAfterTurn();
+    AML_DebugDevice_BuzzerBeep(20);
+    AML_DebugDevice_TurnOnLED(ReadButton);
+    HAL_Delay(300);
+    AML_DebugDevice_TurnOffLED(ReadButton);
+  }
+}
+
+////////////////////////////////////////////////////////////////////////////////////
+
 void Run(int InitDirection)
 {
 
@@ -327,6 +527,47 @@ void Run(int InitDirection)
     AML_DebugDevice_SetAllLED(GPIO_PIN_RESET);
     HAL_Delay(100);
   }
+
+  ////////////////////////////////////////////
+  AML_MotorControl_Stop();
+
+  direction = NORTH;
+  init_coor(&c, 0, 0);
+  logicalFlood(&distances, &c, &cell_walls_info, direction, direction, &update_stack);
+
+  ReadButton = 8;
+
+  while (ReadButton == 8)
+  {
+  }
+
+  for (int i = 0; i < 3; i++)
+  {
+    AML_DebugDevice_SetAllLED(GPIO_PIN_SET);
+    AML_DebugDevice_BuzzerBeep(50);
+    HAL_Delay(100);
+    AML_DebugDevice_SetAllLED(GPIO_PIN_RESET);
+    HAL_Delay(100);
+  }
+
+  HAL_Delay(1000);
+
+
+
+  direction = floodFill(&distances, &c, &cell_walls_info, direction, direction, &update_stack);
+
+  for (int i = 0; i < 20; i++)
+  {
+    AML_DebugDevice_SetAllLED(GPIO_PIN_SET);
+    AML_DebugDevice_BuzzerBeep(50);
+    HAL_Delay(100);
+    AML_DebugDevice_SetAllLED(GPIO_PIN_RESET);
+    HAL_Delay(100);
+  }
+
+  return;
+
+  /////////////////////////////////////////////////
 
   direction = centerMovement(&cell_walls_info, &c, direction);
 
@@ -479,123 +720,6 @@ void Move()
   }
 }
 
-void EncoderTest()
-{
-  AML_MotorControl_TurnOnWallFollow();
-
-  while (AML_Encoder_GetLeftValue() < ENCODER_TICKS_ONE_CELL && ReadButton != 2)
-  {
-  }
-
-  AML_MotorControl_TurnOffWallFollow();
-  AML_MotorControl_ShortBreak('F');
-  AML_Encoder_ResetLeftValue();
-  AML_DebugDevice_BuzzerBeep(30);
-
-  HAL_Delay(1500);
-}
-
-void TestMPUFollow()
-{
-  AML_MPUSensor_ResetAngle();
-
-  while (1)
-  {
-    AML_MotorControl_MPUFollow(0);
-  }
-}
-
-void SystemTest(void)
-{
-  TestLaser();
-  TestMotor();
-  TestMPU();
-}
-
-void SetTicks()
-{
-  HAL_Delay(300);
-
-  ReadButton = 8;
-
-  AML_DebugDevice_SetAllLED(GPIO_PIN_SET);
-
-  while (ReadButton == 8)
-  {
-  }
-
-  AML_DebugDevice_SetAllLED(GPIO_PIN_RESET);
-
-  if (ReadButton == 0)
-  {
-    AML_MotorControl_SetCenterPosition();
-    AML_DebugDevice_BuzzerBeep(20);
-    AML_DebugDevice_TurnOnLED(ReadButton);
-    HAL_Delay(300);
-    AML_DebugDevice_TurnOffLED(ReadButton);
-  }
-  else if (ReadButton == 1)
-  {
-    SetBeforeTurnTicks(0);
-    AML_DebugDevice_BuzzerBeep(20);
-    AML_DebugDevice_TurnOnLED(ReadButton);
-    HAL_Delay(300);
-    AML_DebugDevice_TurnOffLED(ReadButton);
-  }
-  else if (ReadButton == 2)
-  {
-    SetBeforeTurnTicks(320);
-    AML_DebugDevice_BuzzerBeep(20);
-    AML_DebugDevice_TurnOnLED(ReadButton);
-    HAL_Delay(300);
-    AML_DebugDevice_TurnOffLED(ReadButton);
-  }
-  else if (ReadButton == 3)
-  {
-    SetAfterTurnTicks(0);
-    AML_DebugDevice_BuzzerBeep(20);
-    AML_DebugDevice_TurnOnLED(ReadButton);
-    HAL_Delay(300);
-    AML_DebugDevice_TurnOffLED(ReadButton);
-  }
-  else if (ReadButton == 4)
-  {
-    SetAfterTurnTicks(70);
-    AML_DebugDevice_BuzzerBeep(20);
-    AML_DebugDevice_TurnOnLED(ReadButton);
-    HAL_Delay(300);
-    AML_DebugDevice_TurnOffLED(ReadButton);
-  }
-}
-
-void TestMode()
-{
-
-  AML_DebugDevice_SetAllLED(GPIO_PIN_SET);
-
-  HAL_Delay(300);
-  ReadButton = 8;
-
-  while (ReadButton == 8)
-  {
-  }
-
-  AML_DebugDevice_SetAllLED(GPIO_PIN_RESET);
-
-  if (ReadButton == 0)
-  {
-    SystemTest();
-  }
-  else if (ReadButton == 1)
-  {
-    TestTurning();
-  }
-  else if (ReadButton == 2)
-  {
-    TestMPUFollow();
-  }
-}
-
 void RunMode()
 {
 
@@ -635,12 +759,17 @@ void RunMode()
   }
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+
 /* USER CODE END 0 */
 
 /**
- * @brief  The application entry point.
- * @retval int
- */
+  * @brief  The application entry point.
+  * @retval int
+  */
 int main(void)
 {
   /* USER CODE BEGIN 1 */
@@ -680,6 +809,8 @@ int main(void)
   AML_Encoder_Setup();
   AML_MotorControl_Setup();
   AML_Remote_Setup();
+
+  HAL_TIM_Base_Start_IT(&htim10);
 
   ReadButton = 8;
 
@@ -730,22 +861,16 @@ int main(void)
     }
     else if (ReadButton == 1) // set right wall value
     {
-      TestMode();
+      RemarkMode();
       ReadButton = 8;
     }
     else if (ReadButton == 2)
     {
-      SystemTest();
+      TestMode();
       ReadButton = 8;
     }
     else if (ReadButton == 3)
     {
-      // AML_MotorControl_MoveForward_mm(80);
-      AML_MPUSensor_ResetAngle();
-
-      advanceOneCellVisited();
-
-      AML_MotorControl_ShortBreak('F');
 
       ReadButton = 8;
     }
@@ -771,22 +896,22 @@ int main(void)
 }
 
 /**
- * @brief System Clock Configuration
- * @retval None
- */
+  * @brief System Clock Configuration
+  * @retval None
+  */
 void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
 
   /** Configure the main internal regulator output voltage
-   */
+  */
   __HAL_RCC_PWR_CLK_ENABLE();
   __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
 
   /** Initializes the RCC Oscillators according to the specified parameters
-   * in the RCC_OscInitTypeDef structure.
-   */
+  * in the RCC_OscInitTypeDef structure.
+  */
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
@@ -801,8 +926,9 @@ void SystemClock_Config(void)
   }
 
   /** Initializes the CPU, AHB and APB buses clocks
-   */
-  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
+  */
+  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
+                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
@@ -815,10 +941,10 @@ void SystemClock_Config(void)
 }
 
 /**
- * @brief I2C1 Initialization Function
- * @param None
- * @retval None
- */
+  * @brief I2C1 Initialization Function
+  * @param None
+  * @retval None
+  */
 static void MX_I2C1_Init(void)
 {
 
@@ -845,13 +971,14 @@ static void MX_I2C1_Init(void)
   /* USER CODE BEGIN I2C1_Init 2 */
 
   /* USER CODE END I2C1_Init 2 */
+
 }
 
 /**
- * @brief TIM1 Initialization Function
- * @param None
- * @retval None
- */
+  * @brief TIM1 Initialization Function
+  * @param None
+  * @retval None
+  */
 static void MX_TIM1_Init(void)
 {
 
@@ -894,13 +1021,14 @@ static void MX_TIM1_Init(void)
   /* USER CODE BEGIN TIM1_Init 2 */
 
   /* USER CODE END TIM1_Init 2 */
+
 }
 
 /**
- * @brief TIM2 Initialization Function
- * @param None
- * @retval None
- */
+  * @brief TIM2 Initialization Function
+  * @param None
+  * @retval None
+  */
 static void MX_TIM2_Init(void)
 {
 
@@ -956,13 +1084,14 @@ static void MX_TIM2_Init(void)
 
   /* USER CODE END TIM2_Init 2 */
   HAL_TIM_MspPostInit(&htim2);
+
 }
 
 /**
- * @brief TIM4 Initialization Function
- * @param None
- * @retval None
- */
+  * @brief TIM4 Initialization Function
+  * @param None
+  * @retval None
+  */
 static void MX_TIM4_Init(void)
 {
 
@@ -1004,13 +1133,14 @@ static void MX_TIM4_Init(void)
   /* USER CODE BEGIN TIM4_Init 2 */
 
   /* USER CODE END TIM4_Init 2 */
+
 }
 
 /**
- * @brief TIM9 Initialization Function
- * @param None
- * @retval None
- */
+  * @brief TIM9 Initialization Function
+  * @param None
+  * @retval None
+  */
 static void MX_TIM9_Init(void)
 {
 
@@ -1041,13 +1171,14 @@ static void MX_TIM9_Init(void)
   /* USER CODE BEGIN TIM9_Init 2 */
 
   /* USER CODE END TIM9_Init 2 */
+
 }
 
 /**
- * @brief TIM10 Initialization Function
- * @param None
- * @retval None
- */
+  * @brief TIM10 Initialization Function
+  * @param None
+  * @retval None
+  */
 static void MX_TIM10_Init(void)
 {
 
@@ -1061,7 +1192,7 @@ static void MX_TIM10_Init(void)
   htim10.Instance = TIM10;
   htim10.Init.Prescaler = 8399;
   htim10.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim10.Init.Period = 1499;
+  htim10.Init.Period = 220;
   htim10.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim10.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim10) != HAL_OK)
@@ -1071,13 +1202,14 @@ static void MX_TIM10_Init(void)
   /* USER CODE BEGIN TIM10_Init 2 */
 
   /* USER CODE END TIM10_Init 2 */
+
 }
 
 /**
- * @brief USART3 Initialization Function
- * @param None
- * @retval None
- */
+  * @brief USART3 Initialization Function
+  * @param None
+  * @retval None
+  */
 static void MX_USART3_UART_Init(void)
 {
 
@@ -1103,13 +1235,14 @@ static void MX_USART3_UART_Init(void)
   /* USER CODE BEGIN USART3_Init 2 */
 
   /* USER CODE END USART3_Init 2 */
+
 }
 
 /**
- * @brief USART6 Initialization Function
- * @param None
- * @retval None
- */
+  * @brief USART6 Initialization Function
+  * @param None
+  * @retval None
+  */
 static void MX_USART6_UART_Init(void)
 {
 
@@ -1135,11 +1268,12 @@ static void MX_USART6_UART_Init(void)
   /* USER CODE BEGIN USART6_Init 2 */
 
   /* USER CODE END USART6_Init 2 */
+
 }
 
 /**
- * Enable DMA controller clock
- */
+  * Enable DMA controller clock
+  */
 static void MX_DMA_Init(void)
 {
 
@@ -1150,18 +1284,19 @@ static void MX_DMA_Init(void)
   /* DMA1_Stream1_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(DMA1_Stream1_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(DMA1_Stream1_IRQn);
+
 }
 
 /**
- * @brief GPIO Initialization Function
- * @param None
- * @retval None
- */
+  * @brief GPIO Initialization Function
+  * @param None
+  * @retval None
+  */
 static void MX_GPIO_Init(void)
 {
   GPIO_InitTypeDef GPIO_InitStruct = {0};
-  /* USER CODE BEGIN MX_GPIO_Init_1 */
-  /* USER CODE END MX_GPIO_Init_1 */
+/* USER CODE BEGIN MX_GPIO_Init_1 */
+/* USER CODE END MX_GPIO_Init_1 */
 
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOE_CLK_ENABLE();
@@ -1172,20 +1307,25 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOD_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 | GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_8 | GPIO_PIN_10 | STBY_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_3
+                          |GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_8|GPIO_PIN_10
+                          |STBY_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_13 | XSHUT_FF_Pin | BIN2_Pin | XSHUT_BR_Pin | BIN1_Pin | XSHUT_BL_Pin | AIN2_Pin | XSHUT_FR_Pin | AIN1_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_13|XSHUT_FF_Pin|BIN2_Pin|XSHUT_BR_Pin
+                          |BIN1_Pin|XSHUT_BL_Pin|AIN2_Pin|XSHUT_FR_Pin
+                          |AIN1_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(XSHUT_FL_GPIO_Port, XSHUT_FL_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pins : PE2 PE3 PE4 PE5
                            PE1 */
-  GPIO_InitStruct.Pin = GPIO_PIN_2 | GPIO_PIN_3 | GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_1;
+  GPIO_InitStruct.Pin = GPIO_PIN_2|GPIO_PIN_3|GPIO_PIN_4|GPIO_PIN_5
+                          |GPIO_PIN_1;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
@@ -1193,7 +1333,9 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pins : PC0 PC1 PC2 PC3
                            PC4 PC5 PC8 PC10
                            STBY_Pin */
-  GPIO_InitStruct.Pin = GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 | GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_8 | GPIO_PIN_10 | STBY_Pin;
+  GPIO_InitStruct.Pin = GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_3
+                          |GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_8|GPIO_PIN_10
+                          |STBY_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -1209,7 +1351,9 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pins : PD13 XSHUT_FF_Pin BIN2_Pin XSHUT_BR_Pin
                            BIN1_Pin XSHUT_BL_Pin AIN2_Pin XSHUT_FR_Pin
                            AIN1_Pin */
-  GPIO_InitStruct.Pin = GPIO_PIN_13 | XSHUT_FF_Pin | BIN2_Pin | XSHUT_BR_Pin | BIN1_Pin | XSHUT_BL_Pin | AIN2_Pin | XSHUT_FR_Pin | AIN1_Pin;
+  GPIO_InitStruct.Pin = GPIO_PIN_13|XSHUT_FF_Pin|BIN2_Pin|XSHUT_BR_Pin
+                          |BIN1_Pin|XSHUT_BL_Pin|AIN2_Pin|XSHUT_FR_Pin
+                          |AIN1_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -1238,8 +1382,8 @@ static void MX_GPIO_Init(void)
   HAL_NVIC_SetPriority(EXTI9_5_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
 
-  /* USER CODE BEGIN MX_GPIO_Init_2 */
-  /* USER CODE END MX_GPIO_Init_2 */
+/* USER CODE BEGIN MX_GPIO_Init_2 */
+/* USER CODE END MX_GPIO_Init_2 */
 }
 
 /* USER CODE BEGIN 4 */
@@ -1247,9 +1391,9 @@ static void MX_GPIO_Init(void)
 /* USER CODE END 4 */
 
 /**
- * @brief  This function is executed in case of error occurrence.
- * @retval None
- */
+  * @brief  This function is executed in case of error occurrence.
+  * @retval None
+  */
 void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
@@ -1261,14 +1405,14 @@ void Error_Handler(void)
   /* USER CODE END Error_Handler_Debug */
 }
 
-#ifdef USE_FULL_ASSERT
+#ifdef  USE_FULL_ASSERT
 /**
- * @brief  Reports the name of the source file and the source line number
- *         where the assert_param error has occurred.
- * @param  file: pointer to the source file name
- * @param  line: assert_param error line source number
- * @retval None
- */
+  * @brief  Reports the name of the source file and the source line number
+  *         where the assert_param error has occurred.
+  * @param  file: pointer to the source file name
+  * @param  line: assert_param error line source number
+  * @retval None
+  */
 void assert_failed(uint8_t *file, uint32_t line)
 {
   /* USER CODE BEGIN 6 */

@@ -141,7 +141,7 @@ void AML_LaserSensor_ReadAll(void)
 
     VL53L0X_GetRangingMeasurementData(Laser[i], &SensorValue[i]);
 
-    if (SensorValue[i].RangeMilliMeter < 2000) // 2000 is the maximum range of the sensor
+    if (SensorValue[i].RangeMilliMeter < 2000 && SensorValue[i].RangeMilliMeter > 10) // 2000 is the maximum range of the sensor
     {
         SensorValue[i].RangeMilliMeter = (uint16_t)SimpleKalmanFilter_updateEstimate(&KalmanFilter[i], SensorValue[i].RangeMilliMeter);
     }
@@ -150,7 +150,7 @@ void AML_LaserSensor_ReadAll(void)
 
     VL53L0X_GetRangingMeasurementData(Laser[i], &SensorValue[i]);
 
-    if (SensorValue[i].RangeMilliMeter < 2000) // 2000 is the maximum range of the sensor
+    if (SensorValue[i].RangeMilliMeter < 2000 && SensorValue[i].RangeMilliMeter > 10) // 2000 is the maximum range of the sensor
     {
         SensorValue[i].RangeMilliMeter = (uint16_t)SimpleKalmanFilter_updateEstimate(&KalmanFilter[i], SensorValue[i].RangeMilliMeter);
     }
@@ -159,7 +159,7 @@ void AML_LaserSensor_ReadAll(void)
 
     VL53L0X_GetRangingMeasurementData(Laser[i], &SensorValue[i]);
 
-    if (SensorValue[i].RangeMilliMeter < 2000) // 2000 is the maximum range of the sensor
+    if (SensorValue[i].RangeMilliMeter < 2000 && SensorValue[i].RangeMilliMeter > 10) // 2000 is the maximum range of the sensor
     {
         SensorValue[i].RangeMilliMeter = (uint16_t)SimpleKalmanFilter_updateEstimate(&KalmanFilter[i], SensorValue[i].RangeMilliMeter);
     }
@@ -168,7 +168,7 @@ void AML_LaserSensor_ReadAll(void)
 
     VL53L0X_GetRangingMeasurementData(Laser[i], &SensorValue[i]);
 
-    if (SensorValue[i].RangeMilliMeter < 2000) // 2000 is the maximum range of the sensor
+    if (SensorValue[i].RangeMilliMeter < 2000 && SensorValue[i].RangeMilliMeter > 10) // 2000 is the maximum range of the sensor
     {
         SensorValue[i].RangeMilliMeter = (uint16_t)SimpleKalmanFilter_updateEstimate(&KalmanFilter[i], SensorValue[i].RangeMilliMeter);
     }
@@ -177,7 +177,7 @@ void AML_LaserSensor_ReadAll(void)
 
     VL53L0X_GetRangingMeasurementData(Laser[i], &SensorValue[i]);
 
-    if (SensorValue[i].RangeMilliMeter < 2000) // 2000 is the maximum range of the sensor
+    if (SensorValue[i].RangeMilliMeter < 2000 && SensorValue[i].RangeMilliMeter > 10) // 2000 is the maximum range of the sensor
     {
         SensorValue[i].RangeMilliMeter = (uint16_t)SimpleKalmanFilter_updateEstimate(&KalmanFilter[i], SensorValue[i].RangeMilliMeter);
     }

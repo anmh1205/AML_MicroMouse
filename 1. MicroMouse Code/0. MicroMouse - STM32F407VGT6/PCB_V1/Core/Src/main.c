@@ -72,7 +72,7 @@ uint8_t checkWorking[] = {0xFF, 0xAA, 0x52};
 
 // uint8_t ReadButton[5];
 volatile uint8_t ReadButton;
-volatile uint8_t RemarkAfterTurnMode = 1;
+volatile uint8_t RemarkAfterTurnMode = 0;
 volatile uint8_t RemarkWallMode = 1;
 
 double testAngle;
@@ -275,8 +275,6 @@ void TurnOnRemarkAfterTurn()
 void TurnOffRemarkAfterTurn()
 {
   RemarkAfterTurnMode = 1;
-
-  SetBeforeTurnTicks(120);
 }
 
 
@@ -318,33 +316,33 @@ void SetTicks()
   {
     SetBeforeTurnTicks(0);
     AML_DebugDevice_BuzzerBeep(20);
-    AML_DebugDevice_TurnOnLED(ReadButton);
-    HAL_Delay(300);
-    AML_DebugDevice_TurnOffLED(ReadButton);
+    // AML_DebugDevice_TurnOnLED(ReadButton);
+    // HAL_Delay(300);
+    // AML_DebugDevice_TurnOffLED(ReadButton);
   }
   else if (ReadButton == 2)
   {
-    SetBeforeTurnTicks(400);
+    SetBeforeTurnTicks(1);
     AML_DebugDevice_BuzzerBeep(20);
-    AML_DebugDevice_TurnOnLED(ReadButton);
-    HAL_Delay(300);
-    AML_DebugDevice_TurnOffLED(ReadButton);
+    // AML_DebugDevice_TurnOnLED(ReadButton);
+    // HAL_Delay(300);
+    // AML_DebugDevice_TurnOffLED(ReadButton);
   }
   else if (ReadButton == 3)
   {
     SetAfterTurnTicks(0);
     AML_DebugDevice_BuzzerBeep(20);
-    AML_DebugDevice_TurnOnLED(ReadButton);
-    HAL_Delay(300);
-    AML_DebugDevice_TurnOffLED(ReadButton);
+    // AML_DebugDevice_TurnOnLED(ReadButton);
+    // HAL_Delay(300);
+    // AML_DebugDevice_TurnOffLED(ReadButton);
   }
   else if (ReadButton == 4)
   {
-    SetAfterTurnTicks(70);
+    SetAfterTurnTicks(1);
     AML_DebugDevice_BuzzerBeep(20);
-    AML_DebugDevice_TurnOnLED(ReadButton);
-    HAL_Delay(300);
-    AML_DebugDevice_TurnOffLED(ReadButton);
+    // AML_DebugDevice_TurnOnLED(ReadButton);
+    // HAL_Delay(300);
+    // AML_DebugDevice_TurnOffLED(ReadButton);
   }
 }
 
@@ -519,6 +517,9 @@ void Run(int InitDirection)
 
   direction = floodFill(&distances, &c, &cell_walls_info, algorithm, direction, &update_stack);
 
+  advanceOneCellVisited();
+  AML_MotorControl_ShortBreak('F');
+
   for (int i = 0; i < 20; i++)
   {
     AML_DebugDevice_SetAllLED(GPIO_PIN_SET);
@@ -529,42 +530,8 @@ void Run(int InitDirection)
   }
 
   ////////////////////////////////////////////
+
   AML_MotorControl_Stop();
-
-  direction = NORTH;
-  init_coor(&c, 0, 0);
-  logicalFlood(&distances, &c, &cell_walls_info, direction, direction, &update_stack);
-
-  ReadButton = 8;
-
-  while (ReadButton == 8)
-  {
-  }
-
-  for (int i = 0; i < 3; i++)
-  {
-    AML_DebugDevice_SetAllLED(GPIO_PIN_SET);
-    AML_DebugDevice_BuzzerBeep(50);
-    HAL_Delay(100);
-    AML_DebugDevice_SetAllLED(GPIO_PIN_RESET);
-    HAL_Delay(100);
-  }
-
-  HAL_Delay(1000);
-
-
-
-  direction = floodFill(&distances, &c, &cell_walls_info, direction, direction, &update_stack);
-
-  for (int i = 0; i < 20; i++)
-  {
-    AML_DebugDevice_SetAllLED(GPIO_PIN_SET);
-    AML_DebugDevice_BuzzerBeep(50);
-    HAL_Delay(100);
-    AML_DebugDevice_SetAllLED(GPIO_PIN_RESET);
-    HAL_Delay(100);
-  }
-
   return;
 
   /////////////////////////////////////////////////
@@ -686,6 +653,43 @@ void Run(int InitDirection)
   // turnOnLEDS();
 
   // HAL_Delay(3000);
+}
+
+void ShortestPath()
+{
+  for (int i = 0; i < 5; i++)
+  {
+    AML_DebugDevice_SetAllLED(GPIO_PIN_SET);
+    AML_DebugDevice_BuzzerBeep(50);
+    HAL_Delay(100);
+    AML_DebugDevice_SetAllLED(GPIO_PIN_RESET);
+    HAL_Delay(100);
+  }
+
+  AML_MPUSensor_ResetAngle();
+  AML_MotorControl_ResetTempSetpoint();
+
+
+  int direction = NORTH;
+  struct coor c;
+  init_coor(&c, 0, 0);
+
+  logicalFlood(&distances, &c, &cell_walls_info, direction, direction, &update_stack);
+
+  HAL_Delay(1000);
+
+  shortestPath(&distances, &c, &cell_walls_info, direction, direction, &update_stack);
+
+  for (int i = 0; i < 20; i++)
+  {
+    AML_DebugDevice_SetAllLED(GPIO_PIN_SET);
+    AML_DebugDevice_BuzzerBeep(50);
+    HAL_Delay(100);
+    AML_DebugDevice_SetAllLED(GPIO_PIN_RESET);
+    HAL_Delay(100);
+  }
+
+  return;
 }
 
 void Move()
@@ -871,7 +875,7 @@ int main(void)
     }
     else if (ReadButton == 3)
     {
-
+      ShortestPath();
       ReadButton = 8;
     }
     else if (ReadButton == 4)
@@ -1192,7 +1196,7 @@ static void MX_TIM10_Init(void)
   htim10.Instance = TIM10;
   htim10.Init.Prescaler = 8399;
   htim10.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim10.Init.Period = 220;
+  htim10.Init.Period = 200;
   htim10.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim10.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim10) != HAL_OK)

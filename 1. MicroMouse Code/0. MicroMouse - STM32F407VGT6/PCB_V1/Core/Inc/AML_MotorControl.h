@@ -26,6 +26,7 @@ void AML_MotorControl_RightPWM(int32_t PWMValue);
 
 void AML_MotorControl_SetDirection(GPIO_PinState dir);
 void AML_MotorControl_SetMouseSpeed(int32_t speed);
+void AML_MotorControl_ResetTempSetpoint(void);
 
 void AML_MotorControl_SetLeftSpeed(double speed, GPIO_PinState direction);
 void AML_MotorControl_SetRightSpeed(double speed, GPIO_PinState direction);

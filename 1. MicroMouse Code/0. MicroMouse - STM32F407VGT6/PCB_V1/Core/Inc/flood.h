@@ -84,11 +84,15 @@ struct coor pop_stack(struct stack *s);
 // Push coordinates into stack
 void push_stack(struct stack *s, struct coor c);
 
+void SetBeforeTurnTicks(uint32_t ticks);
+void SetAfterTurnTicks(uint32_t ticks);
+
 // Advances one cell forward and checks walls
 void advanceTicksFlood(uint32_t ticks, int d, struct coor *c, struct wall_maze *wm);
 
 // Called to flood to a target cell
 int floodFill(struct dist_maze *dm, struct coor *c, struct wall_maze *wm, int a, int direction, struct stack *upst);
+int floodFill2(struct dist_maze *dm, struct coor *c, struct wall_maze *wm, int a, int direction, struct stack *upst);
 
 // Used to check for walls in current cell
 void checkForWalls(struct wall_maze *wm, struct coor *c, int direction, int n, int e, int s, int w);

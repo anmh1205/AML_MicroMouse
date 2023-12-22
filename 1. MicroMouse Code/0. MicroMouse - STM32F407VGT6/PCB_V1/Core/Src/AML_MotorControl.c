@@ -83,26 +83,26 @@ double BackwardRightAngle = -175;
 PID_TypeDef PID_TurnLeft;
 double Input_TurnLeft, Output_TurnLeft, Setpoint_TurnLeft;
 double TurnLeft_Kp = 1.0;
-double TurnLeft_Ki = 1.3;
+double TurnLeft_Ki = 1.2;
 double TurnLeft_Kd = 0.35;
 
 PID_TypeDef PID_TurnRight;
 double Input_TurnRight, Output_TurnRight, Setpoint_TurnRight;
 double TurnRight_Kp = 0.9;
-double TurnRight_Ki = 1.3;
+double TurnRight_Ki = 1.1;
 double TurnRight_Kd = 0.35;
 
 AML_PID_Struct AML_PID_TurnLeft;
-double AML_PID_TurnLeft_Kp = 0.3;
-double AML_PID_TurnLeft_Ki = 0.65;
-double AML_PID_TurnLeft_Kd = 0.27;
-double AML_PID_TurnLeft_tau = 1.2;
+double AML_PID_TurnLeft_Kp = 0.28;
+double AML_PID_TurnLeft_Ki = 0.6;
+double AML_PID_TurnLeft_Kd = 0.3;
+double AML_PID_TurnLeft_tau = 1.0;
 
 AML_PID_Struct AML_PID_TurnRight;
-double AML_PID_TurnRight_Kp = 0.3;
-double AML_PID_TurnRight_Ki = 0.65;
-double AML_PID_TurnRight_Kd = 0.27;
-double AML_PID_TurnRight_tau = 1.2;
+double AML_PID_TurnRight_Kp = 0.28;
+double AML_PID_TurnRight_Ki = 0.6;
+double AML_PID_TurnRight_Kd = 0.3;
+double AML_PID_TurnRight_tau = 1.0;
 
 ////////////////////////////////////////
 
@@ -285,14 +285,14 @@ void AML_MotorControl_AMLPIDSetOutputLimits(double Min, double Max)
     AML_PID_TurnLeft.limMin = Min;
     AML_PID_TurnLeft.limMax = Max;
 
-    AML_PID_TurnLeft.linMinInt = -8;
-    AML_PID_TurnLeft.linMaxInt = 8;
+    AML_PID_TurnLeft.linMinInt = -9;
+    AML_PID_TurnLeft.linMaxInt = 9;
 
     AML_PID_TurnRight.limMin = Min;
     AML_PID_TurnRight.limMax = Max;
 
-    AML_PID_TurnRight.linMinInt = -8;
-    AML_PID_TurnRight.linMaxInt = 8;
+    AML_PID_TurnRight.linMinInt = -9;
+    AML_PID_TurnRight.linMaxInt = 9;
 }
 
 void AML_MotorControl_AMLPIDSetup()
@@ -397,6 +397,11 @@ void AML_MotorControl_ToggleDirection(void)
 void AML_MotorControl_SetMouseSpeed(int32_t speed)
 {
     MouseSpeed = speed;
+}
+
+void AML_MotorControl_ResetTempSetpoint(void)
+{
+    TempSetpoint = 0;
 }
 
 void AML_MotorControl_SetLeftSpeed(double speed, GPIO_PinState direction)
@@ -692,6 +697,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     {
         // AML_DebugDevice_Handle();
         AML_LaserSensor_ReadAll();
+        // debug[30]++;
     }
     // debug[11]++;
 }
@@ -714,7 +720,9 @@ void AML_MotorControl_MoveForward_mm(uint16_t distance)
 
     uint16_t ticks = (uint16_t)((double)distance / (Pi * WheelDiameter) * PulsePerRound * Ratio);
 
-    while (AML_Encoder_GetLeftValue() < ticks && AML_LaserSensor_ReadSingleWithoutFillter(FF) > 55)
+    // ticks = 330;
+
+    while (AML_Encoder_GetLeftValue() < ticks)
     {
     }
 
@@ -775,13 +783,13 @@ void AML_MotorControl_TurnLeft90(void)
         AML_DebugDevice_BuzzerBeep(20);
         Setpoint_TurnLeft = TempSetpoint + TurnLeftAngle;
 
-        HAL_Delay(300);
+        HAL_Delay(200);
 
         uint32_t InitTime = HAL_GetTick();
         uint32_t CurrentTime = HAL_GetTick();
         uint32_t PreviousTime = CurrentTime;
 
-        while ((CurrentTime - PreviousTime) < 200 && (HAL_GetTick() - InitTime < delay))
+        while ((CurrentTime - PreviousTime) < 150 && (HAL_GetTick() - InitTime < delay))
         {
             Input_TurnLeft = AML_MPUSensor_GetAngle();
 
@@ -807,7 +815,7 @@ void AML_MotorControl_TurnLeft90(void)
         {
             AML_MotorControl_LeftPWM(-20);
             AML_MotorControl_RightPWM(-20);
-            HAL_Delay(1000);
+            HAL_Delay(550);
             AML_MPUSensor_ResetAngle();
             HAL_Delay(70);
             AML_MotorControl_Stop();
@@ -840,7 +848,7 @@ void AML_MotorControl_TurnLeft90(void)
         uint32_t CurrentTime = HAL_GetTick();
         uint32_t PreviousTime = CurrentTime;
 
-        while ((CurrentTime - PreviousTime) < 250 && (HAL_GetTick() - InitTime < 2500))
+        while ((CurrentTime - PreviousTime) < 200 && (HAL_GetTick() - InitTime < 1000))
         {
             Input_TurnLeft = AML_MPUSensor_GetAngle();
 
@@ -902,7 +910,7 @@ void AML_MotorControl_TurnRight90(void)
         AML_DebugDevice_BuzzerBeep(20);
         Setpoint_TurnRight = TempSetpoint + TurnRightAngle;
 
-        HAL_Delay(300);
+        HAL_Delay(150);
 
         uint32_t InitTime = HAL_GetTick();
         uint32_t CurrentTime = HAL_GetTick();
@@ -937,7 +945,7 @@ void AML_MotorControl_TurnRight90(void)
         {
             AML_MotorControl_LeftPWM(-20);
             AML_MotorControl_RightPWM(-20);
-            HAL_Delay(1000);
+            HAL_Delay(550);
             AML_MPUSensor_ResetAngle();
             HAL_Delay(70);
             AML_MotorControl_Stop();
@@ -970,7 +978,7 @@ void AML_MotorControl_TurnRight90(void)
         uint32_t CurrentTime = HAL_GetTick();
         uint32_t PreviousTime = CurrentTime;
 
-        while ((CurrentTime - PreviousTime) < 250 && (HAL_GetTick() - InitTime < 2500))
+        while ((CurrentTime - PreviousTime) < 200 && (HAL_GetTick() - InitTime < 1000))
         {
             Input_TurnRight = AML_MPUSensor_GetAngle();
             // PID_Compute(&PID_TurnRight);
@@ -1029,7 +1037,7 @@ void AML_MotorControl_TurnLeft180(void)
 
         // AML_MotorControl_TurnOffWallFollow();
 
-        HAL_Delay(300);
+        HAL_Delay(150);
 
         uint32_t InitTime = HAL_GetTick();
         uint32_t CurrentTime = HAL_GetTick();
@@ -1084,7 +1092,7 @@ void AML_MotorControl_TurnLeft180(void)
         uint32_t CurrentTime = HAL_GetTick();
         uint32_t PreviousTime = CurrentTime;
 
-        while ((CurrentTime - PreviousTime) < 200 && (HAL_GetTick() - InitTime < 2500))
+        while ((CurrentTime - PreviousTime) < 200 && (HAL_GetTick() - InitTime < 1300))
         {
             Input_TurnLeft = AML_MPUSensor_GetAngle();
             // PID_Compute(&PID_TurnLeft);
@@ -1136,17 +1144,17 @@ void AML_MotorControl_TurnRight180(void)
         // AML_MPUSensor_ResetAngle();
         AML_DebugDevice_BuzzerBeep(20);
 
-        Setpoint_TurnRight = TempSetpoint - BackwardLeftAngle;
+        Setpoint_TurnRight = TempSetpoint + BackwardRightAngle;
 
         AML_MotorControl_TurnOffWallFollow();
 
-        HAL_Delay(300);
+        HAL_Delay(150);
 
         uint32_t InitTime = HAL_GetTick();
         uint32_t CurrentTime = HAL_GetTick();
         uint32_t PreviousTime = CurrentTime;
 
-        while ((CurrentTime - PreviousTime) < 200 && (HAL_GetTick() - InitTime < 2500))
+        while ((CurrentTime - PreviousTime) < 200 && (HAL_GetTick() - InitTime < 1300))
         {
             Input_TurnRight = AML_MPUSensor_GetAngle();
 
@@ -1195,7 +1203,7 @@ void AML_MotorControl_TurnRight180(void)
         uint32_t CurrentTime = HAL_GetTick();
         uint32_t PreviousTime = CurrentTime;
 
-        while ((CurrentTime - PreviousTime) < 200 && (HAL_GetTick() - InitTime < 2500))
+        while ((CurrentTime - PreviousTime) < 200 && (HAL_GetTick() - InitTime < 1300))
         {
             Input_TurnRight = AML_MPUSensor_GetAngle();
             // PID_Compute(&PID_TurnRight);
@@ -1224,10 +1232,6 @@ void AML_MotorControl_TurnRight180(void)
     AML_DebugDevice_TurnOffLED(6);
 }
 
-void AML_MotorControl_ResetTempSetpoint(void)
-{
-    TempSetpoint = 0;
-}
 
 void AML_MotorControl_LeftStillTurn(void)
 {

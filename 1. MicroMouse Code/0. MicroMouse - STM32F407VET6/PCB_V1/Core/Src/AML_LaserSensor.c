@@ -57,6 +57,10 @@ void AML_LaserSensor_Init(uint8_t i)
 
 void AML_LaserSensor_Setup(void)
 {
+    /*
+        NOT USE FOR LOOP BECAUSE PERFORMANCE ISSUE
+    */
+
     uint8_t DelayTime = 70;
     // disable all laser
     HAL_GPIO_WritePin(XSHUT_FL_GPIO_Port, XSHUT_FL_Pin, GPIO_PIN_RESET);
@@ -137,6 +141,11 @@ void AML_LaserSensor_Setup(void)
 
 void AML_LaserSensor_ReadAll(void)
 {
+    /*
+        NOT USE FOR LOOP BECAUSE PERFORMANCE ISSUE
+    */
+
+
     uint8_t i = 0;
 
     VL53L0X_GetRangingMeasurementData(Laser[i], &SensorValue[i]);
@@ -185,20 +194,6 @@ void AML_LaserSensor_ReadAll(void)
 
 int32_t AML_LaserSensor_ReadSingleWithFillter(uint8_t name)
 {
-    // VL53L0X_GetRangingMeasurementData(Laser[name], &SensorValue[name]);
-
-    // if (SensorValue[name].RangeMilliMeter < 2000) // 2000 is the maximum range of the sensor
-    // {
-    //     SensorValue[name].RangeMilliMeter = (uint16_t)SimpleKalmanFilter_updateEstimate(&KalmanFilter[name], SensorValue[name].RangeMilliMeter);
-    // }
-    // VL53L0X_GetRangingMeasurementData(Laser[name], &SensorValue[name]);
-
-    // if (SensorValue[name].RangeMilliMeter < 2000) // 2000 is the maximum range of the sensor
-    // {
-    //     SensorValue[name].RangeMilliMeter = (uint16_t)SimpleKalmanFilter_updateEstimate(&KalmanFilter[name], SensorValue[name].RangeMilliMeter);
-    // }
-
-    // return (int32_t)SensorValue[name].RangeMilliMeter;
     return (int32_t)SensorValue[name].RangeMilliMeter;
 }
 
@@ -214,9 +209,6 @@ int32_t AML_LaserSensor_ReadSingleWithoutFillter(uint8_t name)
     {
         return 2000;
     }
-    // AML_LaserSensor_ReadAll();
-
-    // return (int32_t)SensorValue[name].RangeMilliMeter;
 }
 
 uint8_t AML_LaserSensor_WallFavor(void)

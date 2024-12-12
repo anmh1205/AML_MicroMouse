@@ -55,9 +55,6 @@ pcb_v1\aml_lasersensor.o: ../Core/Inc/pid.h
 pcb_v1\aml_lasersensor.o: ../Core/Inc/AML_Remote.h
 pcb_v1\aml_lasersensor.o: ../Core/Inc/AML_Parameter.h
 pcb_v1\aml_lasersensor.o: ../Core/Inc/AML_PID.h
-pcb_v1\aml_lasersensor.o: ../Core/Inc/flood.h
-pcb_v1\aml_lasersensor.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
-pcb_v1\aml_lasersensor.o: ../Core/Inc/AML_DebugDevice.h
-pcb_v1\aml_lasersensor.o: ../Core/Inc/AML_MotorControl.h
 pcb_v1\aml_lasersensor.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\limits.h
+pcb_v1\aml_lasersensor.o: ../Core/Inc/AML_DebugDevice.h
 pcb_v1\aml_lasersensor.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h

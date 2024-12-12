@@ -21,178 +21,13 @@ Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V3.0.7.0
 Dialog DLL:      TCM.DLL V1.46.0.0
  
 <h2>Project:</h2>
-E:\1. Phenikaa University\AML\0. Project\5. MicroMouse\3. Github Repo\1. MicroMouse Code\0. MicroMouse - STM32F407VGT6\PCB_V1\MDK-ARM\PCB_V1.uvprojx
-Project File Date:  12/22/2023
+E:\1. Phenikaa University\AML\0. Project\7. MicroMouse_2024\1. MicroMouse Code\2. MicroMouse - STM32F407VGT6\PCB_V1\MDK-ARM\PCB_V1.uvprojx
+Project File Date:  12/11/2024
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 6 (build 750)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'PCB_V1'
-compiling AML_MotorControl.c...
-../Core/Inc/main.h(58): warning:  #1295-D: Deprecated declaration Move - give arg types
-  void Move();
-../Core/Inc/KalmanFilter.h(25): warning:  #1-D: last line of file ends without a newline
-  #endif
-../Core/Inc/AML_MotorControl.h(63): warning:  #1-D: last line of file ends without a newline
-  #endif // AML_MOTORCONTROL_H
-../Core/Inc/AML_DebugDevice.h(29): warning:  #1295-D: Deprecated declaration AML_DebugDevice_ToggleAllLED - give arg types
-  void AML_DebugDevice_ToggleAllLED();
-../Core/Inc/AML_Remote.h(17): warning:  #1-D: last line of file ends without a newline
-  #endif // AML_REMOTE_H
-../Core/Inc/AML_Parameter.h(62): warning:  #1-D: last line of file ends without a newline
-  #endif // AML_Parameter_H
-../Core/Inc/AML_LaserSensor.h(29): warning:  #1-D: last line of file ends without a newline
-  #endif
-../Core/Inc/AML_Encoder.h(13): warning:  #1-D: last line of file ends without a newline
-  #endif // AML_ENCODER_H
-../Core/Inc/AML_PID.h(34): warning:  #1-D: last line of file ends without a newline
-  #endif // AML_PID_H
-../Core/Inc/flood.h(32): warning:  #47-D: incompatible redefinition of macro "FLOOD_LEFT_WALL"  (declared at line 27 of "../Core/Inc/AML_Parameter.h")
-  #define FLOOD_LEFT_WALL 300
-../Core/Inc/flood.h(33): warning:  #47-D: incompatible redefinition of macro "FLOOD_RIGHT_WALL"  (declared at line 26 of "../Core/Inc/AML_Parameter.h")
-  #define FLOOD_RIGHT_WALL 300
-../Core/Inc/AML_MotorControl.h(63): warning:  #1-D: last line of file ends without a newline
-  #endif // AML_MOTORCONTROL_H
-..\Core\Src\AML_MotorControl.c(337): warning:  #188-D: enumerated type mixed with another type
-          HAL_GPIO_WritePin(AIN2_GPIO_Port, AIN2_Pin, !direction);
-..\Core\Src\AML_MotorControl.c(342): warning:  #188-D: enumerated type mixed with another type
-          HAL_GPIO_WritePin(AIN1_GPIO_Port, AIN1_Pin, !direction);
-..\Core\Src\AML_MotorControl.c(369): warning:  #188-D: enumerated type mixed with another type
-          HAL_GPIO_WritePin(BIN1_GPIO_Port, BIN1_Pin, !direction);
-..\Core\Src\AML_MotorControl.c(376): warning:  #188-D: enumerated type mixed with another type
-          HAL_GPIO_WritePin(BIN2_GPIO_Port, BIN2_Pin, !direction);
-..\Core\Src\AML_MotorControl.c(394): warning:  #188-D: enumerated type mixed with another type
-      direction = ~direction;
-..\Core\Src\AML_MotorControl.c(537): warning:  #188-D: enumerated type mixed with another type
-      AML_DebugDevice_TurnOnLED(0);
-..\Core\Src\AML_MotorControl.c(539): warning:  #188-D: enumerated type mixed with another type
-      AML_DebugDevice_TurnOffLED(1);
-..\Core\Src\AML_MotorControl.c(540): warning:  #188-D: enumerated type mixed with another type
-      AML_DebugDevice_TurnOffLED(2);
-..\Core\Src\AML_MotorControl.c(541): warning:  #188-D: enumerated type mixed with another type
-      AML_DebugDevice_TurnOffLED(3);
-..\Core\Src\AML_MotorControl.c(542): warning:  #188-D: enumerated type mixed with another type
-      AML_DebugDevice_TurnOffLED(4);
-..\Core\Src\AML_MotorControl.c(543): warning:  #188-D: enumerated type mixed with another type
-      AML_DebugDevice_TurnOffLED(5);
-..\Core\Src\AML_MotorControl.c(544): warning:  #188-D: enumerated type mixed with another type
-      AML_DebugDevice_TurnOffLED(6);
-..\Core\Src\AML_MotorControl.c(545): warning:  #188-D: enumerated type mixed with another type
-      AML_DebugDevice_TurnOffLED(7);
-..\Core\Src\AML_MotorControl.c(560): warning:  #188-D: enumerated type mixed with another type
-      AML_DebugDevice_TurnOnLED(1);
-..\Core\Src\AML_MotorControl.c(562): warning:  #188-D: enumerated type mixed with another type
-      AML_DebugDevice_TurnOffLED(0);
-..\Core\Src\AML_MotorControl.c(563): warning:  #188-D: enumerated type mixed with another type
-      AML_DebugDevice_TurnOffLED(2);
-..\Core\Src\AML_MotorControl.c(564): warning:  #188-D: enumerated type mixed with another type
-      AML_DebugDevice_TurnOffLED(3);
-..\Core\Src\AML_MotorControl.c(565): warning:  #188-D: enumerated type mixed with another type
-      AML_DebugDevice_TurnOffLED(4);
-..\Core\Src\AML_MotorControl.c(566): warning:  #188-D: enumerated type mixed with another type
-      AML_DebugDevice_TurnOffLED(5);
-..\Core\Src\AML_MotorControl.c(567): warning:  #188-D: enumerated type mixed with another type
-      AML_DebugDevice_TurnOffLED(6);
-..\Core\Src\AML_MotorControl.c(568): warning:  #188-D: enumerated type mixed with another type
-      AML_DebugDevice_TurnOffLED(7);
-..\Core\Src\AML_MotorControl.c(583): warning:  #188-D: enumerated type mixed with another type
-      AML_DebugDevice_TurnOnLED(2);
-..\Core\Src\AML_MotorControl.c(585): warning:  #188-D: enumerated type mixed with another type
-      AML_DebugDevice_TurnOffLED(0);
-..\Core\Src\AML_MotorControl.c(586): warning:  #188-D: enumerated type mixed with another type
-      AML_DebugDevice_TurnOffLED(1);
-..\Core\Src\AML_MotorControl.c(587): warning:  #188-D: enumerated type mixed with another type
-      AML_DebugDevice_TurnOffLED(3);
-..\Core\Src\AML_MotorControl.c(588): warning:  #188-D: enumerated type mixed with another type
-      AML_DebugDevice_TurnOffLED(4);
-..\Core\Src\AML_MotorControl.c(589): warning:  #188-D: enumerated type mixed with another type
-      AML_DebugDevice_TurnOffLED(5);
-..\Core\Src\AML_MotorControl.c(590): warning:  #188-D: enumerated type mixed with another type
-      AML_DebugDevice_TurnOffLED(6);
-..\Core\Src\AML_MotorControl.c(591): warning:  #188-D: enumerated type mixed with another type
-      AML_DebugDevice_TurnOffLED(7);
-..\Core\Src\AML_MotorControl.c(757): warning:  #188-D: enumerated type mixed with another type
-      AML_DebugDevice_TurnOnLED(3);
-..\Core\Src\AML_MotorControl.c(759): warning:  #188-D: enumerated type mixed with another type
-      AML_DebugDevice_TurnOffLED(0);
-..\Core\Src\AML_MotorControl.c(760): warning:  #188-D: enumerated type mixed with another type
-      AML_DebugDevice_TurnOffLED(1);
-..\Core\Src\AML_MotorControl.c(761): warning:  #188-D: enumerated type mixed with another type
-      AML_DebugDevice_TurnOffLED(2);
-..\Core\Src\AML_MotorControl.c(762): warning:  #188-D: enumerated type mixed with another type
-      AML_DebugDevice_TurnOffLED(4);
-..\Core\Src\AML_MotorControl.c(763): warning:  #188-D: enumerated type mixed with another type
-      AML_DebugDevice_TurnOffLED(5);
-..\Core\Src\AML_MotorControl.c(764): warning:  #188-D: enumerated type mixed with another type
-      AML_DebugDevice_TurnOffLED(6);
-..\Core\Src\AML_MotorControl.c(765): warning:  #188-D: enumerated type mixed with another type
-      AML_DebugDevice_TurnOffLED(7);
-..\Core\Src\AML_MotorControl.c(888): warning:  #188-D: enumerated type mixed with another type
-      AML_DebugDevice_TurnOffLED(3);
-..\Core\Src\AML_MotorControl.c(894): warning:  #188-D: enumerated type mixed with another type
-      AML_DebugDevice_TurnOnLED(4);
-..\Core\Src\AML_MotorControl.c(896): warning:  #188-D: enumerated type mixed with another type
-      AML_DebugDevice_TurnOffLED(0);
-..\Core\Src\AML_MotorControl.c(897): warning:  #188-D: enumerated type mixed with another type
-      AML_DebugDevice_TurnOffLED(1);
-..\Core\Src\AML_MotorControl.c(898): warning:  #188-D: enumerated type mixed with another type
-      AML_DebugDevice_TurnOffLED(2);
-..\Core\Src\AML_MotorControl.c(899): warning:  #188-D: enumerated type mixed with another type
-      AML_DebugDevice_TurnOffLED(3);
-..\Core\Src\AML_MotorControl.c(900): warning:  #188-D: enumerated type mixed with another type
-      AML_DebugDevice_TurnOffLED(5);
-..\Core\Src\AML_MotorControl.c(901): warning:  #188-D: enumerated type mixed with another type
-      AML_DebugDevice_TurnOffLED(6);
-..\Core\Src\AML_MotorControl.c(902): warning:  #188-D: enumerated type mixed with another type
-      AML_DebugDevice_TurnOffLED(7);
-..\Core\Src\AML_MotorControl.c(1031): warning:  #188-D: enumerated type mixed with another type
-      AML_DebugDevice_TurnOffLED(4);
-..\Core\Src\AML_MotorControl.c(1037): warning:  #188-D: enumerated type mixed with another type
-      AML_DebugDevice_TurnOnLED(5);
-..\Core\Src\AML_MotorControl.c(1039): warning:  #188-D: enumerated type mixed with another type
-      AML_DebugDevice_TurnOffLED(0);
-..\Core\Src\AML_MotorControl.c(1040): warning:  #188-D: enumerated type mixed with another type
-      AML_DebugDevice_TurnOffLED(1);
-..\Core\Src\AML_MotorControl.c(1041): warning:  #188-D: enumerated type mixed with another type
-      AML_DebugDevice_TurnOffLED(2);
-..\Core\Src\AML_MotorControl.c(1042): warning:  #188-D: enumerated type mixed with another type
-      AML_DebugDevice_TurnOffLED(3);
-..\Core\Src\AML_MotorControl.c(1043): warning:  #188-D: enumerated type mixed with another type
-      AML_DebugDevice_TurnOffLED(4);
-..\Core\Src\AML_MotorControl.c(1044): warning:  #188-D: enumerated type mixed with another type
-      AML_DebugDevice_TurnOffLED(6);
-..\Core\Src\AML_MotorControl.c(1045): warning:  #188-D: enumerated type mixed with another type
-      AML_DebugDevice_TurnOffLED(7);
-..\Core\Src\AML_MotorControl.c(1144): warning:  #188-D: enumerated type mixed with another type
-      AML_DebugDevice_TurnOffLED(5);
-..\Core\Src\AML_MotorControl.c(1150): warning:  #188-D: enumerated type mixed with another type
-      AML_DebugDevice_TurnOnLED(6);
-..\Core\Src\AML_MotorControl.c(1152): warning:  #188-D: enumerated type mixed with another type
-      AML_DebugDevice_TurnOffLED(0);
-..\Core\Src\AML_MotorControl.c(1153): warning:  #188-D: enumerated type mixed with another type
-      AML_DebugDevice_TurnOffLED(1);
-..\Core\Src\AML_MotorControl.c(1154): warning:  #188-D: enumerated type mixed with another type
-      AML_DebugDevice_TurnOffLED(2);
-..\Core\Src\AML_MotorControl.c(1155): warning:  #188-D: enumerated type mixed with another type
-      AML_DebugDevice_TurnOffLED(3);
-..\Core\Src\AML_MotorControl.c(1156): warning:  #188-D: enumerated type mixed with another type
-      AML_DebugDevice_TurnOffLED(4);
-..\Core\Src\AML_MotorControl.c(1157): warning:  #188-D: enumerated type mixed with another type
-      AML_DebugDevice_TurnOffLED(5);
-..\Core\Src\AML_MotorControl.c(1158): warning:  #188-D: enumerated type mixed with another type
-      AML_DebugDevice_TurnOffLED(7);
-..\Core\Src\AML_MotorControl.c(1254): warning:  #188-D: enumerated type mixed with another type
-      AML_DebugDevice_TurnOffLED(6);
-..\Core\Src\AML_MotorControl.c(1292): warning:  #188-D: enumerated type mixed with another type
-      AML_DebugDevice_TurnOffLED(6);
-..\Core\Src\AML_MotorControl.c(1314): warning:  #188-D: enumerated type mixed with another type
-      AML_DebugDevice_TurnOffLED(7);
-..\Core\Src\AML_MotorControl.c(1337): warning:  #188-D: enumerated type mixed with another type
-      AML_DebugDevice_TurnOffLED(5);
-..\Core\Src\AML_MotorControl.c: 80 warnings, 0 errors
-linking...
-Program Size: Code=47262 RO-data=922 RW-data=1392 ZI-data=11136  
-FromELF: creating hex file...
-"PCB_V1\PCB_V1.axf" - 0 Error(s), 80 Warning(s).
+"PCB_V1\PCB_V1.axf" - 0 Error(s), 0 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -215,7 +50,7 @@ Package Vendor: Keil
 <h2>Collection of Component Files used:</h2>
 
    * Component: ARM::CMSIS:CORE:5.4.0
-Build Time Elapsed:  00:00:04
+Build Time Elapsed:  00:00:00
 </pre>
 </body>
 </html>

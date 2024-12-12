@@ -281,3 +281,19 @@ void AML_LaserSensor_TestLaser(void)
         HAL_Delay(500);
     }
 }
+
+
+uint8_t AML_LaserSensor_IsLeftWall()
+{
+    return AML_LaserSensor_ReadSingleWithFillter(BL) < WALL_IN_LEFT;
+}
+
+uint8_t AML_LaserSensor_IsFrontWall()
+{
+    return AML_LaserSensor_ReadSingleWithFillter(FF) < WALL_IN_FRONT;
+}
+
+uint8_t AML_LaserSensor_IsRightWall()
+{
+    return AML_LaserSensor_ReadSingleWithFillter(BR) < WALL_IN_RIGHT;
+}

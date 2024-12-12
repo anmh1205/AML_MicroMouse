@@ -26,4 +26,8 @@ int32_t AML_LaserSensor_ReadSingleWithoutFillter(uint8_t name);
 
 uint8_t AML_LaserSensor_WallFavor(void);
 
+uint8_t AML_LaserSensor_IsLeftWall();
+uint8_t AML_LaserSensor_IsFrontWall();
+uint8_t AML_LaserSensor_IsRightWall();
+
 #endif

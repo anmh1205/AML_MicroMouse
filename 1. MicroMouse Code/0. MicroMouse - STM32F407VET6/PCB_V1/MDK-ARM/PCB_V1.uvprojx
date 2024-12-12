@@ -489,14 +489,19 @@
               <FilePath>..\Core\Src\vl53l0x_platform.c</FilePath>
             </File>
             <File>
-              <FileName>flood.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\flood.c</FilePath>
-            </File>
-            <File>
               <FileName>AML_PID.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Core\Src\AML_PID.c</FilePath>
+            </File>
+            <File>
+              <FileName>queue.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\queue.c</FilePath>
+            </File>
+            <File>
+              <FileName>solver.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\solver.c</FilePath>
             </File>
           </Files>
         </Group>

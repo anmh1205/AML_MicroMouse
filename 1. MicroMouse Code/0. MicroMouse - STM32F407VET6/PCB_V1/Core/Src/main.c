@@ -74,9 +74,12 @@ uint8_t checkWorking[] = {0xFF, 0xAA, 0x52};
 // 1 to turn on, 0 to turn off
 
 volatile uint8_t ReadButton;
-volatile uint8_t RemarkAfterTurnMode = 0;
+volatile uint8_t RemarkAfterTurnMode = 1;
 volatile uint8_t RemarkWallMode = 1;
 volatile uint8_t RemarkAfterBackwardMode = 1;
+
+volatile uint8_t CalibBeforeTurn = 1;
+volatile uint8_t CalibAfterTurn = 1;
 
 double testAngle;
 // int16_t LeftValue, RightValue;
@@ -128,10 +131,10 @@ void TestMode(void);
 void RemarkMode(void);
 
 void Run(int);
-void ShortestPath();
-void RunMode();
+void ShortestPath(void);
+void RunMode(void);
 
-void RunNewAlgorithm();
+void RunNewAlgorithm(void);
 
 /* USER CODE END PFP */
 
@@ -195,18 +198,17 @@ int main(void)
 
   ReadButton = 8;
 
-  // for (int i = 0; i < 3; i++)
-  // {
-  //   AML_LaserSensor_ReadAll();
-  //   HAL_Delay(35);
-  // }
+  for (int i = 0; i < 3; i++)
+  {
+    AML_LaserSensor_ReadAll();
+    HAL_Delay(35);
+  }
 
   AML_LaserSensor_ReadAll();
   AML_LaserSensor_ReadAll();
   AML_LaserSensor_ReadAll();
 
   AML_DebugDevice_BuzzerBeep(20);
-
 
   // AML_DebugDevice_TurnOnIT();
 
@@ -227,10 +229,10 @@ int main(void)
     }
 
     // AML_LaserSensor_ReadAll();
-    // for (int i = 0; i < 5; i++)
-    // {
-    //   debug[i] = AML_LaserSensor_ReadSingleWithFillter(i);
-    // }
+    for (int i = 0; i < 5; i++)
+    {
+      debug[i] = AML_LaserSensor_ReadSingleWithFillter(i);
+    }
 
     // AML_LaserSensor_ReadAll();
 
@@ -253,14 +255,16 @@ int main(void)
     }
     else if (ReadButton == 3)
     {
-      // ShortestPath();
       ReadButton = 8;
+      AML_MotorControl_MoveForward(100, 10);
     }
     else if (ReadButton == 4)
     {
       // RunMode();
       ReadButton = 8;
       RunNewAlgorithm();
+
+      // AML_MotorControl_TurnOnWallFollow();
     }
 
     testAngle = AML_MPUSensor_GetAngle();
@@ -819,7 +823,7 @@ void TestMotor(void)
   AML_Encoder_ResetRightValue();
 }
 
-void TestMPU()
+void TestMPU(void)
 {
   AML_DebugDevice_SetAllLED(GPIO_PIN_SET);
 
@@ -844,7 +848,7 @@ void TestMPU()
   AML_DebugDevice_SetAllLED(GPIO_PIN_RESET);
 }
 
-void TestTurning()
+void TestTurning(void)
 {
   RemarkAfterTurnMode = 1;
 
@@ -871,7 +875,7 @@ void TestTurning()
   RemarkAfterTurnMode = 0;
 }
 
-void EncoderTest()
+void EncoderTest(void)
 {
   AML_MotorControl_TurnOnWallFollow();
 
@@ -887,7 +891,7 @@ void EncoderTest()
   HAL_Delay(1500);
 }
 
-void TestMPUFollow()
+void TestMPUFollow(void)
 {
   AML_MPUSensor_ResetAngle();
 
@@ -906,29 +910,29 @@ void SystemTest(void)
 
 /////////////////////////////////////////////////////////////////////////////////////
 
-void TurnOnRemarkAfterTurn()
+void TurnOnRemarkAfterTurn(void)
 {
   RemarkAfterTurnMode = 1;
 }
 
-void TurnOffRemarkAfterTurn()
+void TurnOffRemarkAfterTurn(void)
 {
   RemarkAfterTurnMode = 0;
 }
 
-void TurnOnRemarkWall()
+void TurnOnRemarkWall(void)
 {
   RemarkWallMode = 1;
 }
 
-void TurnOffRemarkWall()
+void TurnOffRemarkWall(void)
 {
   RemarkWallMode = 0;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////
 
-void SetTicks()
+void SetTicks(void)
 {
   HAL_Delay(300);
 
@@ -984,7 +988,7 @@ void SetTicks()
   }
 }
 
-void TestMode()
+void TestMode(void)
 {
 
   AML_DebugDevice_SetAllLED(GPIO_PIN_SET);
@@ -1017,7 +1021,7 @@ void TestMode()
   }
 }
 
-void RemarkMode()
+void RemarkMode(void)
 {
   HAL_Delay(300);
 
@@ -1306,7 +1310,7 @@ void Run(int InitDirection)
   // // HAL_Delay(3000);
 }
 
-void ShortestPath()
+void ShortestPath(void)
 {
   // for (int i = 0; i < 5; i++)
   // {
@@ -1342,7 +1346,7 @@ void ShortestPath()
   // return;
 }
 
-void RunMode()
+void RunMode(void)
 {
 
   // AML_DebugDevice_BuzzerBeep(20);
@@ -1381,10 +1385,15 @@ void RunMode()
   // }
 }
 
-void RunNewAlgorithm()
+void RunNewAlgorithm(void)
 {
   // debug_log("Running...");
+
+  setPriorityHeading(NORTH);
+
+  setPosition(0, 0, NORTH);
   initialize();
+
 
   // start the search
   searchRun();
